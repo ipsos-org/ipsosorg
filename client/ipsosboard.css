@@ -1,0 +1,91 @@
+ul {
+    list-style-type: circle;
+    background: none;
+    padding: 20px;
+    margin: 0;
+    padding: 0;
+    top: 220;
+    height: 220;
+}
+
+button {
+    white-space: pre;
+    white-space: pre-wrap;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+select-data {
+  background: transparent;
+    width: 410px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1;
+    border: 0;
+    border-radius: 0;
+    height: 34px;
+    -webkit-appearance: none;
+}
+
+select-synth {
+    background: transparent;
+    width: 40px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 1;
+    border: 0;
+    border-radius: 0;
+    height: 34px;
+    -webkit-appearance: none;
+}
+
+slider-wrapper {
+    position: relative
+    display: block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    overflow: hidden;
+    margin: 40px 15px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+#range-slider {
+    position: relative;
+    height: 20px;
+    width: 50%;
+}
+
+table { 
+    width: 25%; 
+    border-collapse: collapse; 
+}
+/* Zebra striping */
+tr:nth-of-type(odd) { 
+    background: white; 
+}
+th { 
+    background: #333; 
+    color: white; 
+    font-weight: bold; 
+}
+td, th { 
+    padding: 3px; 
+    border: 1px solid #ccc; 
+    text-align: left;
+    vertical-align: top;
+}
+
+
+#responsive-table-input-matrix {
+		display: block;
+		position: relative;
+		width: 50%;
+}

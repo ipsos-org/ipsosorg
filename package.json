@@ -1,0 +1,18 @@
+{
+  "name": "ipsosboard",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.20.0",
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.4.0",
+    "ion-rangeslider": "^2.2.0",
+    "meteor-node-stubs": "~0.2.4",
+    "vue": "^1.0.24",
+    "vue-json-tree-view": "^2.1.1",
+    "vue-meteor-tracker": "^1.0.3"
+  },
+  "devDependencies": {}
+}

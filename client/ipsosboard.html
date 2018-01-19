@@ -1,0 +1,71 @@
+<head>
+    <title>Ipsosboard</title>
+    <meta charset="utf-8">
+   </head>
+
+   <body>
+       {{> ipsosboard}}
+   </body>
+   <template name="ipsosboard">
+
+       <select id="category-select">
+           <option disabled="enabled" selected="selected">select data</option>
+           {{#each categories}}
+           <option value="{{this}}">{{this}}</option>
+           {{/each}}
+       </select>
+       <select id="synth-select">
+           <option disabled="enabled" selected="selected">select synth</option>
+           {{#each synths}}
+           <option value="{{this}}">{{this}}</option>
+           {{/each}}
+       </select>
+
+       <table id="matrix-input" class="responsive-table-input-matrix">
+		<thead>
+        <tr>
+            {{#each field in listParams}}
+			      <th>{{field}}</th>
+            {{/each}}
+        </tr>
+		</thead>
+
+    <tbody>
+        {{#each item in dataItems}}
+		    <tr>
+                   			{{#each field in listParams}}
+			      <!-- <td>{{item[field]}} <input type="radio" value={{item[field]}}></td> -->
+            <td>{{item[field]}} <input class="{{field}}" type="checkbox" value={{item[field]}}></td>
+
+            {{/each}}
+        </tr>
+        {{/each}}
+    </tbody>
+	     </table>
+<!--  <p align="left">
+        <ul>
+            {{#each dataItems}}
+            <li> pt: {{pt}}
+                <input name="checkbox" value={{pt}} type="checkbox">
+            </li>
+            <li> eta: {{eta}}
+                <input name="checkbox" value={{eta}} type="checkbox">
+            </li>
+            <li> phi: {{phi}}
+                <input name="checkbox" value={{phi}} type="checkbox">
+            </li>
+            <li> charge: {{charge}}
+                <input name="checkbox" id="charge" value={{charge}} type="checkbox">
+            </li>
+            {{/each}}
+        </ul>
+       </p>
+       -->
+    <button class="button" id="play">Play</Button>
+    <button class="button" id="stop" value=0>Stop</Button>
+    <div class="slider-wrapper">
+        <input type="range" min="1" max="10" id="speed" value="1" step="0.01" orient="vertical">
+    </div>
+    <div id="range-slider"></div>
+        <p>Left value: {{slider.[0]}}, right value: {{slider.[1]}}</p>
+  </template>

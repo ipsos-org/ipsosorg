@@ -1,0 +1,12 @@
+  /Users/Home_KV/Dev/Meteor/ipsosboard:
+  total used in directory 40 available 96938744
+  drwxr-xr-x  10 Home_KV  staff   340  2 Nov 20:21 .
+  drwxr-xr-x   4 Home_KV  staff   136  2 Nov 23:27 ..
+  -rw-r--r--@  1 Home_KV  staff  8196  2 Nov 20:21 .DS_Store
+  -rw-r--r--   1 Home_KV  staff    14 17 Oct 13:22 .gitignore
+  drwxr-xr-x  10 Home_KV  staff   340  1 Nov 21:50 .meteor
+  drwxr-xr-x   7 Home_KV  staff   238  3 Nov 10:44 client
+  drwxr-xr-x   4 Home_KV  staff   136  2 Nov 21:17 lib
+  drwxr-xr-x  23 Home_KV  staff   782 18 Oct 19:21 node_modules
+  -rw-r--r--   1 Home_KV  staff   209  1 Nov 21:43 package.json
+  drwxr-xr-x   3 Home_KV  staff   102 18 Oct 19:07 server
