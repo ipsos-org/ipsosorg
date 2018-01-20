@@ -43,6 +43,11 @@ if (Meteor.isClient) {
         };
     });
 
+    Template.ipsosboard.onCreated(function(){
+        var instance = this;
+        instance.matrix = { };
+    });
+
     Template.ipsosboard.rendered = function () {
         this.$("#range-slider").noUiSlider({
             start: Session.get("slider"),
@@ -62,9 +67,8 @@ if (Meteor.isClient) {
     function synthParams() {
         var params = Object.keys(eval(Session.get('synthID')));
         Session.set('synthProperties', params);
-        console.log(Session.get('synthProperties'));
         return params;
-    }
+    };
 
     Template.ipsosboard.helpers({
         'categories': function() {
@@ -113,18 +117,30 @@ if (Meteor.isClient) {
             seq.timings = [11025, 11025].map(val => val / Session.get('speed'));
         },
 
-        'click #matrix-input': function(event, template){
+      /*  'click #matrix-input': function(event, instance){
+            var input = event.currentTarget;
+            var item = input.dataset.item;
+            var field = input.dataset.field;
+            instance.matrix[item][field] = item.value;
+            console.log(modifier);
+        }
+      */
+
+        'click #matrix-input': function(event, template){ //this is working
             //event.preventDefault();
             var selected = template.findAll("input[type=checkbox]:checked");
             var label = $(event.target).attr('class');
-            var array = _.map(selected, function(item){
-                var modifier = {};
+           var array = _.map(selected, function(item){
                 return item.defaultValue;
             });
             var modifier = {};
-            modifier[label] = Number(event.target.value);
-            console.log(modifier);
+            var fieldValue = event.target.value;
+            if(!label == false){
+            modifier[label] = Number(fieldValue);
+                console.log(modifier);
+            }
         }
+
          /*   if(checked){
                 console.log(event.target);
             } else {

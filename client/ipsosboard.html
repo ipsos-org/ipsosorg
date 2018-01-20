@@ -33,10 +33,10 @@
     <tbody>
         {{#each item in dataItems}}
 		    <tr>
-                   			{{#each field in listParams}}
+            {{#each field in listParams}}
 			      <!-- <td>{{item[field]}} <input type="radio" value={{item[field]}}></td> -->
-            <td>{{item[field]}} <input class="{{field}}" type="checkbox" value={{item[field]}}></td>
-
+            <!-- <td>{{item[field]}} <input class="{{field}}" type="checkbox" value={{item[field]}}></td> this was working-->
+            <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
             {{/each}}
         </tr>
         {{/each}}
