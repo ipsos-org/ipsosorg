@@ -1,19 +1,32 @@
 import { noUiSlider } from 'meteor/rcy:nouislider';
 
 let json = require('../lib/ev119516329_run199318.json');
+
+let scaleValue = require('scale-value');
+
 event = json['muons'];
 Data = new Mongo.Collection('data', { connection: null });
 const array = event.map( item => JSON.stringify(item) );
-const selected = new Array();
-const synthArray = new Array('saw', 'pulse', 'sine');
+const selected = [];
+const synthArray = new Array('saw', 'pulse', 'sine', 'square');
+
+const specs = {
+    attack: scaleValue(0, 1, 100, 44100),
+    decay: scaleValue(0, 1, 100, 22050),
+    sustain: scaleValue(0, 1, 100, 44100),
+    release: scaleValue(0, 1, 1, 100),
+    gain: scaleValue(0, 1, 0.1, 0.8),
+    frequency: scaleValue(0, 1, 120.0, 1220.0),
+    triggerRelease: scaleValue(0, 1, 0.1, 10)
+};
 
 if (Meteor.isClient) {
 
     Session.setDefault("slider", [1, 5]);
-   // Session.setDefault('synthID', eval('saw'));
+    //Session.setDefault('synthID', eval('saw'));
     Session.setDefault('synthProperties', [' ', 'amp','freq','mod']);
     Session.setDefault('selected', Data.find().fetch());
-    
+
     function normalize(val, max=1, min=0.1) {
         return (val - min) / (max - min);
     };
@@ -28,25 +41,18 @@ if (Meteor.isClient) {
             var array = JSON.parse(arrayIn);
             array = Object.values(array);
             return array;
-        } else {
-            console.log("input is not array", arrayIn);
-            alert(typeof arrayIn);
-        };
+        }
     };
 
- Meteor.startup(function (){
+    Meteor.startup(function (){
         if(Data.find().count() === 0) {
             console.log("importing data to db");
-            var data = json['muons']; //muons is an array of objects.
+            var data = json['muons'];
             data = data.forEach(items => Data.insert(items));
             console.log(data);
         };
     });
 
-    Template.ipsosboard.onCreated(function(){
-        var instance = this;
-        instance.matrix = { };
-    });
 
     Template.ipsosboard.rendered = function () {
         this.$("#range-slider").noUiSlider({
@@ -60,7 +66,6 @@ if (Meteor.isClient) {
             Session.set('slider', [Math.round(val[0]), Math.round(val[1])]);
             var setValues = normalize_scale_offset(Session.get('selected'), val[0], val[1]);
             seq.values = setValues;
-            //console.log(val);
         });
     };
 
@@ -96,8 +101,7 @@ if (Meteor.isClient) {
             var selectedArray = $( event.currentTarget ).val();
             selectedArray = arrayVal(selectedArray);
             Session.set('selected', selectedArray);
-            console.log(selectedArray);
-           seq.values = normalize_scale_offset(selectedArray, Session.get('slider')[0], Session.get('slider')[1]);
+            seq.values = normalize_scale_offset(selectedArray, Session.get('slider')[0], Session.get('slider')[1]);
         },
         'change #synth-select': function(event) {
             var selected = $(event.currentTarget).val();
@@ -114,48 +118,19 @@ if (Meteor.isClient) {
         },
         'input input[type="range"]': function(event){
             Session.set(event.target.id, event.target.value);
-            seq.timings = [11025, 11025].map(val => val / Session.get('speed'));
+            seq.timings = [44100, 44100].map(val => val / Session.get('speed'));
         },
-
-      /*  'click #matrix-input': function(event, instance){
-            var input = event.currentTarget;
-            var item = input.dataset.item;
-            var field = input.dataset.field;
-            instance.matrix[item][field] = item.value;
-            console.log(modifier);
-        }
-      */
-
-        'click #matrix-input': function(event, template){ //this is working
-            //event.preventDefault();
+        'click #matrix-input': function(event, template){
             var selected = template.findAll("input[type=checkbox]:checked");
-            var label = $(event.target).attr('class');
-           var array = _.map(selected, function(item){
-                return item.defaultValue;
-            });
-            var modifier = {};
+            var par = $(event.target).attr('class');
             var fieldValue = event.target.value;
-            if(!label == false){
-            modifier[label] = Number(fieldValue);
-                console.log(modifier);
+            var modifier = { };
+            if(par !== ""){
+                if(_.contains (['attack', 'decay', 'sustain', 'release', 'triggerRelease', 'gain', 'frequency'], par)){
+                    modifier = eval(Session.get('synthID'))[par] = specs[par]( Number(fieldValue) );
+                    console.log(par + ':' + modifier);
+                }
             }
         }
-
-         /*   if(checked){
-                console.log(event.target);
-            } else {
-                selected.splice($.inArray(event.target.value, selected), 1);
-            };
-           // if( Array.isArray(selected) && selected.length > 1 ){ //the sequencer will keep the last two values when less than two are checked
-            seq.values = normalize_scale_offset(selected, Session.get('slider')[0], Session.get('slider')[1]);
-            console.log(selected);
-        }*/
     });
-
-}; //end of client code.
-
-if (Meteor.isServer) {
-    //code to run on server.
 };
-
-// TODO: Add a matrix to map data with parameters.
