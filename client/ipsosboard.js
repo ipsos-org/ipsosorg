@@ -121,7 +121,7 @@ if (Meteor.isClient) {
             var fieldValue = event.target.value;
             var modifier = { };
             if(par !== ""){
-                if(_.contains (getOnlyNeed(), par)){
+                if(_.contains (synthParams(), par)){
                     modifier = eval(Session.get('synthID'))[par] = specs[par]( Number(fieldValue) );
                     console.log(par + ':' + modifier);
                 }
