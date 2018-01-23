@@ -57,7 +57,7 @@ if (Meteor.isClient) {
     };
 
     function getOnlyNeed(input){
-        var lookFor = ['gain', 'frequency', 'attack', 'decay', 'sustain', 'release'];
+        var lookFor = ['gain', 'frequency', 'attack', 'decay', 'sustain', 'release']; //only this params will be available.
         var filter = input.filter(item => lookFor.includes(item));
         return filter;
     };
@@ -67,7 +67,6 @@ if (Meteor.isClient) {
         synthParams = Object.keys(synthParams);
         synthParams = getOnlyNeed(synthParams);
         Session.set('synthParameters', synthParams);
-        console.log(synthParams);
         return synthParams;
     };
 
@@ -122,7 +121,7 @@ if (Meteor.isClient) {
             var fieldValue = event.target.value;
             var modifier = { };
             if(par !== ""){
-                if(_.contains (synthParams(), par)){
+                if(_.contains (getOnlyNeed(), par)){
                     modifier = eval(Session.get('synthID'))[par] = specs[par]( Number(fieldValue) );
                     console.log(par + ':' + modifier);
                 }
