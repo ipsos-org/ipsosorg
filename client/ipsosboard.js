@@ -1,8 +1,7 @@
 import { noUiSlider } from 'meteor/rcy:nouislider';
+import specs from '../imports/specs.js';
 
 let json = require('../lib/ev119516329_run199318.json');
-
-let scaleValue = require('scale-value');
 
 event = json['muons'];
 Data = new Mongo.Collection('data', { connection: null });
@@ -10,21 +9,10 @@ const array = event.map( item => JSON.stringify(item) );
 const selected = [];
 const synthArray = new Array('saw', 'pulse', 'sine', 'square');
 
-const specs = {
-    attack: scaleValue(0, 1, 100, 44100),
-    decay: scaleValue(0, 1, 100, 22050),
-    sustain: scaleValue(0, 1, 100, 44100),
-    release: scaleValue(0, 1, 1, 100),
-    gain: scaleValue(0, 1, 0.1, 0.8),
-    frequency: scaleValue(0, 1, 120.0, 1220.0),
-    triggerRelease: scaleValue(0, 1, 0.1, 10)
-};
-
 if (Meteor.isClient) {
 
     Session.setDefault("slider", [1, 5]);
-    //Session.setDefault('synthID', eval('saw'));
-    Session.setDefault('synthProperties', [' ', 'amp','freq','mod']);
+    Session.setDefault('synthParameters', [' ', 'amp','freq','mod']);
     Session.setDefault('selected', Data.find().fetch());
 
     function normalize(val, max=1, min=0.1) {
@@ -53,7 +41,6 @@ if (Meteor.isClient) {
         };
     });
 
-
     Template.ipsosboard.rendered = function () {
         this.$("#range-slider").noUiSlider({
             start: Session.get("slider"),
@@ -69,15 +56,24 @@ if (Meteor.isClient) {
         });
     };
 
+    function getOnlyNeed(input){
+        var lookFor = ['gain', 'frequency', 'attack', 'decay', 'sustain', 'release'];
+        var filter = input.filter(item => lookFor.includes(item));
+        return filter;
+    };
+
     function synthParams() {
-        var params = Object.keys(eval(Session.get('synthID')));
-        Session.set('synthProperties', params);
-        return params;
+        var synthParams = eval(Session.get('synthID'));
+        synthParams = Object.keys(synthParams);
+        synthParams = getOnlyNeed(synthParams);
+        Session.set('synthParameters', synthParams);
+        console.log(synthParams);
+        return synthParams;
     };
 
     Template.ipsosboard.helpers({
         'categories': function() {
-            return array; //reading from JSON file.
+            return array;
         },
         'dataItems': function(){
             return Session.get('selected'); //reading from db.
@@ -89,7 +85,7 @@ if (Meteor.isClient) {
             return Session.get("slider");
         },
         'listParams': function () {
-            return Session.get('synthProperties');
+            return Session.get('synthParameters');
         },
         getField(item, field){
             return item[field];
@@ -126,7 +122,7 @@ if (Meteor.isClient) {
             var fieldValue = event.target.value;
             var modifier = { };
             if(par !== ""){
-                if(_.contains (['attack', 'decay', 'sustain', 'release', 'triggerRelease', 'gain', 'frequency'], par)){
+                if(_.contains (synthParams(), par)){
                     modifier = eval(Session.get('synthID'))[par] = specs[par]( Number(fieldValue) );
                     console.log(par + ':' + modifier);
                 }
