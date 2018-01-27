@@ -1,20 +1,27 @@
-pulse = Synth({
-    useADSR: true,
-    waveform:'pwm'
-}).connect();
+someSynths = {
 
-saw = Synth({
-    waveform:'saw',
-    useADSR: true,
-    triggerRelease: false
-}).connect();
+    pulse : PolySynth({
+        waveform: 'saw',
+        maxVoices: 3,
+        useADSR: true
+    }),
 
-sine = Synth({
-    useADSR: true,
-    waveform:'sine'
-}).connect();
+    saw : Synth({
+        waveform:'saw',
+        useADSR: true,
+        triggerRelease: false
+    }).connect(),
 
-square = Synth({
-    useADSR: true,
-    waveform:'square'
-}).connect();
+    sine : Synth({
+        useADSR: true,
+        waveform:'sine'
+    }).connect(),
+
+    square : Synth({
+        useADSR: true,
+        waveform:'square'
+    }).connect()
+
+};
+
+export default someSynths;

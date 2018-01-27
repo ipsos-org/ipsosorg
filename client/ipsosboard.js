@@ -1,20 +1,18 @@
 import { noUiSlider } from 'meteor/rcy:nouislider';
 import specs from '../imports/specs.js';
+import someSynths from '../client/gibber/synths.js';
 
 let json = require('../lib/ev119516329_run199318.json');
-
 event = json['muons'];
 Data = new Mongo.Collection('data', { connection: null });
 const array = event.map( item => JSON.stringify(item) );
 const selected = [];
-const synthArray = new Array('saw', 'pulse', 'sine', 'square');
 
 if (Meteor.isClient) {
 
     Session.setDefault("slider", [1, 5]);
-    Session.setDefault('synthParameters', [' ', 'amp','freq','mod']);
     Session.setDefault('selected', Data.find().fetch());
-
+    
     function normalize(val, max=1, min=0.1) {
         return (val - min) / (max - min);
     };
@@ -38,7 +36,7 @@ if (Meteor.isClient) {
             var data = json['muons'];
             data = data.forEach(items => Data.insert(items));
             console.log(data);
-        };
+        }
     });
 
     Template.ipsosboard.rendered = function () {
@@ -52,22 +50,20 @@ if (Meteor.isClient) {
         }).on('slide', function (ev, val) {
             Session.set('slider', [Math.round(val[0]), Math.round(val[1])]);
             var setValues = normalize_scale_offset(Session.get('selected'), val[0], val[1]);
-            seq.values = setValues;
         });
     };
 
     function getOnlyNeed(input){
-        var lookFor = ['gain', 'frequency', 'attack', 'decay', 'sustain', 'release']; //only this params will be available.
+        var lookFor = ['frequency', 'gain', 'attack', 'decay']; //only this params will be available.
         var filter = input.filter(item => lookFor.includes(item));
         return filter;
     };
 
     function synthParams() {
-        var synthParams = eval(Session.get('synthID'));
-        synthParams = Object.keys(synthParams);
-        synthParams = getOnlyNeed(synthParams);
-        Session.set('synthParameters', synthParams);
-        return synthParams;
+        var params = someSynths[Session.get('synthID')];
+        params = Object.keys(params);
+        params = getOnlyNeed(params);
+        return params;
     };
 
     function getKeys() {
@@ -83,13 +79,13 @@ if (Meteor.isClient) {
             return Session.get('selected'); //reading from db.
         },
         'synths': function() {
-            return synthArray; //synths of the app.
+            return Object.keys(someSynths);
         },
         'slider': function () {
             return Session.get("slider");
         },
         'listParams': function () {
-            return Session.get('synthParameters');
+            return synthParams();
         },
         getField(item, field){
             return item[field];
@@ -104,12 +100,12 @@ if (Meteor.isClient) {
             var selectedArray = $( event.currentTarget ).val();
             selectedArray = arrayVal(selectedArray);
             Session.set('selected', selectedArray);
-            seq.values = normalize_scale_offset(selectedArray, Session.get('slider')[0], Session.get('slider')[1]);
+            //seq.values = normalize_scale_offset(selectedArray, Session.get('slider')[0], Session.get('slider')[1]);
         },
         'change #synth-select': function(event) {
             var selected = $(event.currentTarget).val();
-            Session.set('synthID', selected);
-            seq.target = eval(selected);
+            selected = Session.set('synthID', selected);
+            console.log(Session.get('synthID'));
             synthParams();
         },
         'click button': function(event) {
@@ -121,7 +117,7 @@ if (Meteor.isClient) {
         },
         'input input[type="range"]': function(event){
             Session.set(event.target.id, event.target.value);
-            seq.timings = [44100, 44100].map(val => val / Session.get('speed'));
+            //seq.timings = [44100, 44100].map(val => val / Session.get('speed'));
         },
         'click #matrix-input': function(event, template){
             var selected = template.findAll("input[type=checkbox]:checked");
@@ -130,7 +126,7 @@ if (Meteor.isClient) {
             var modifier = { };
             if(par !== ""){
                 if(_.contains (synthParams(), par)){
-                    modifier = eval(Session.get('synthID'))[par] = specs[par]( Number(fieldValue) );
+                    modifier = Session.get('synthID')[par] = specs[par]( Number(fieldValue) );
                     console.log(par + ':' + modifier);
                 }
             }
