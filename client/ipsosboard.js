@@ -70,6 +70,11 @@ if (Meteor.isClient) {
         return synthParams;
     };
 
+    function getKeys() {
+        var keys = event.map(items => Object.keys(items))[0];
+        return keys;
+    };
+
     Template.ipsosboard.helpers({
         'categories': function() {
             return array;
@@ -88,6 +93,9 @@ if (Meteor.isClient) {
         },
         getField(item, field){
             return item[field];
+        },
+        'dataKeys': function(key){
+            return getKeys();
         }
     });
 

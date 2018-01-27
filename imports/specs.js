@@ -1,7 +1,7 @@
 let scaleValue = require('scale-value');
 
 const specs = {
-    attack: scaleValue(0, 1, 0.1, 1.0 * 44100),
+    attack: scaleValue(0, 1, 0.1, 1.0),
     decay: scaleValue(0, 1, 0.1, 1.0 * 11025),
     sustain: scaleValue(0, 1, 0.1, 1.0 * 44100),
     release: scaleValue(0, 1, 0.1, 1.0 * 22050),
