@@ -40,7 +40,7 @@ select-synth {
 }
 
 slider-wrapper {
-    position: relative
+    position: relative;
     display: block;
     width: 20px;
     height: 150px;
