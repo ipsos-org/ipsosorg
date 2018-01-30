@@ -17,7 +17,7 @@
        <select id="synth-select">
            <option disabled="enabled" selected="selected">select synth</option>
            {{#each synths}}
-           <option value="{{this}}">{{this}}</option>
+           <option>{{this}}</option>
            {{/each}}
        </select>
 
@@ -30,17 +30,12 @@
             {{/each}}
         </tr>
 		</thead> 
-
     <tbody>
         {{#each item in dataItems}}
 		    <tr>
-            <th>
-                {{#each key in dataKeys}}
-                {{key}}
-                {{/each}}
-            </th>
+            <td>{{getKeys}}</td>
             {{#each field in listParams}}
-			      <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
+ <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
             {{/each}}
         </tr>
         {{/each}}

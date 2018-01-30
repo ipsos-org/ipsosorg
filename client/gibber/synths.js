@@ -1,13 +1,13 @@
 someSynths = {
 
-    pulse : PolySynth({
-        waveform: 'saw',
-        maxVoices: 3,
-        useADSR: true
-    }),
-
     saw : Synth({
         waveform:'saw',
+        useADSR: true,
+        triggerRelease: false
+    }).connect(),
+
+    pulse : Synth({
+        waveform:'pwm',
         useADSR: true,
         triggerRelease: false
     }).connect(),

@@ -66,14 +66,10 @@ if (Meteor.isClient) {
         return params;
     };
 
-    function getKeys() {
-        var keys = event.map(items => Object.keys(items))[0];
-        return keys;
-    };
-
     Template.ipsosboard.helpers({
         'categories': function() {
             return array;
+
         },
         'dataItems': function(){
             return Session.get('selected'); //reading from db.
@@ -90,14 +86,16 @@ if (Meteor.isClient) {
         getField(item, field){
             return item[field];
         },
-        'dataKeys': function(key){
-            return getKeys();
+        'getKeys': function(){
+            return Session.get('keys');
         }
     });
 
     Template.ipsosboard.events({
         "change #category-select": function(event, template) {
             var selectedArray = $( event.currentTarget ).val();
+            Session.set('keys', Object.keys(selectedArray));
+            console.log(selectedArray);
             selectedArray = arrayVal(selectedArray);
             Session.set('selected', selectedArray);
             //seq.values = normalize_scale_offset(selectedArray, Session.get('slider')[0], Session.get('slider')[1]);
