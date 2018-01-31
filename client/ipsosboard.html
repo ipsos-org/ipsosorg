@@ -8,16 +8,21 @@
    </body>
    <template name="ipsosboard">
 
-       <select id="category-select">
-           <option disabled="enabled" selected="selected">select data</option>
-           {{#each categories}}
-           <option value="{{this}}">{{this}}</option>
+       <ul>
+           <li>{{eventInfo}}</li>
+       </ul>
+
+       <select id="event-select">
+           <option disabled="enabled" selected="selected">select event</option>
+           {{#each events}}
+           <option>{{this}}</option>
            {{/each}}
        </select>
+
        <select id="synth-select">
            <option disabled="enabled" selected="selected">select synth</option>
            {{#each synths}}
-           <option>{{this}}</option>
+            <option>{{this}}</option>
            {{/each}}
        </select>
 
@@ -41,6 +46,7 @@
         {{/each}}
     </tbody>
 	     </table>
+
     <button class="button" id="play">Play</Button>
     <button class="button" id="stop" value=0>Stop</Button>
     <div class="slider-wrapper">

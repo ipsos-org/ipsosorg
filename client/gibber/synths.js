@@ -1,4 +1,4 @@
-someSynths = {
+const someSynths = {
 
     saw : Synth({
         waveform:'saw',
