@@ -1,21 +1,24 @@
 import { noUiSlider } from 'meteor/rcy:nouislider';
 import specs from '../imports/specs.js';
-import someSynths from '../client/gibber/synths.js';
+
 import events from '../lib/events_v0/events.js';
+
+var Tone = require("Tone");
+
+var polySynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
 
 //console.log(events.one['muons'].map(items => Object.keys(items)));
 
 function selectEventVal(event){
     var getValues = events[event].muons.map(items => Object.values(items));
     Session.set('muons', getValues);
-    return getValues;
+  return getValues;
 };
 
 selectEventVal('event_one');
 
 if (Meteor.isClient) {
     Session.setDefault("slider", [1, 5]);
-    Session.setDefault("currentEvent", 'event_one');
     
     Template.ipsosboard.rendered = function () {
         this.$("#range-slider").noUiSlider({
@@ -31,38 +34,20 @@ if (Meteor.isClient) {
         });
     };
 
-    function arrayVal(arrayIn) {
-        if(arrayIn.constructor === String) {
-            var array = Object.values(arrayIn);
-            return array;
-        }
-    };
-
     function getOnlyNeed(input){
-        var lookFor = ['frequency', 'gain', 'attack', 'decay']; //only this params will be available.
+        var lookFor = ['frequency', 'gain', 'attack', 'decay', 'voices']; //only this params will be available.
         var filter = input.filter(item => lookFor.includes(item));
         return filter;
     };
-
-    function synthParams() {
-        var params = someSynths[Session.get('synthID')];
-        params = Object.keys(params);
-        params = getOnlyNeed(params);
-        return params;
-    };
-
+ 
     function pushCurEventValToTable(){
         var curEvent = Session.get('muons');
         curEvent = [].concat.apply([], curEvent);
         return curEvent;
     };
 
-    function pushCurEventKeyToTable(){
-        var event = events['event_one'];
-        var muons = event['muons'][0];
-        muons = Object.keys(muons);
-        console.log(muons.length);
-        return muons;
+    function triggerSynth(array){
+        polySynth.triggerAttack(array);
     };
 
     Template.ipsosboard.helpers({
@@ -79,13 +64,14 @@ if (Meteor.isClient) {
             return Session.get("slider");
         },
         'listParams': function () {
-            return synthParams();
+            //return Object.keys(polySynth);
+            return ['attack', 'decay', 'sustain', 'release', 'modulationIndex', 'harmonicity', 'detune', 'voice_one','voice_two', 'voice_three'];
         },
         getField(item, field){
             return item[field];
         },
         'getKeys': function(){
-            return pushCurEventKeyToTable();
+            return Object.keys( events.event_one.muons[0]);
         },
         'eventInfo': function(){
             var eventData = event.time_date;
@@ -93,23 +79,24 @@ if (Meteor.isClient) {
         }
     });
 
+    var pattern = new Tone.Pattern(function(time, note){
+	      polySynth.triggerAttackRelease(note, 2);
+    }, ["C4", "E4", "G4", "A4"]);
+
     Template.ipsosboard.events({
         "change #event-select": function(event, template) {
             var selectedEvent = $( event.currentTarget ).val();
             selectedEvent = selectEventVal(selectedEvent);
-            console.log(selectedEvent);
-        },
-        'change #synth-select': function(event) {
-            var selected = $(event.currentTarget).val();
-            selected = Session.set('synthID', selected);
-            console.log(Session.get('synthID'));
-            synthParams();
         },
         'click button': function(event) {
             if(event.target.id == 'play'){
-                seq.start();
+                //polySynth.triggerAttack(['C4', 'E4', 'G4', 'B4'], '+0.05');
+                pattern.start(0);
+                Tone.Transport.start();
             } else {
-                seq.stop();
+                //Tone.Transport.stop();
+                pattern.stop();
+                Tone.Transport.stop(0);
             }
         },
         'input input[type="range"]': function(event){
@@ -119,13 +106,16 @@ if (Meteor.isClient) {
             var selected = template.findAll("input[type=checkbox]:checked");
             var par = $(event.target).attr('class');
             var fieldValue = event.target.value;
-            var modifier = { };
             if(par !== ""){
-                if(_.contains (synthParams(), par)){
-                    modifier = Session.get('synthID')[par] = specs[par]( Number(fieldValue) );
-                    console.log(par + ':' + modifier);
-                }
+                var envelope = {};
+                envelope[par] = specs[par](fieldValue);
+                polySynth.set({
+                    "envelope" : envelope
+                });
+                polySynth.set(par, specs[par](Number(fieldValue)));
+                console.log(envelope);
             }
         }
+
     });
 };
