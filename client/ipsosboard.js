@@ -35,8 +35,9 @@ if (Meteor.isClient) {
     };
 
     function getOnlyNeed(input){
-        var lookFor = ['frequency', 'gain', 'attack', 'decay', 'voices']; //only this params will be available.
+        var lookFor = ['frequency', 'frequency', 'frequency']; //only this params will be available.
         var filter = input.filter(item => lookFor.includes(item));
+        console.log(filter);
         return filter;
     };
  
@@ -65,7 +66,7 @@ if (Meteor.isClient) {
         },
         'listParams': function () {
             //return Object.keys(polySynth);
-            return ['attack', 'decay', 'sustain', 'release', 'modulationIndex', 'harmonicity', 'detune', 'voice_one','voice_two', 'voice_three'];
+            return ['attack', 'decay', 'sustain', 'release', 'modulationIndex', 'harmonicity', 'detune', 'voice_one', 'voice_two', 'voice_three'];
         },
         getField(item, field){
             return item[field];
@@ -79,9 +80,15 @@ if (Meteor.isClient) {
         }
     });
 
-    var pattern = new Tone.Pattern(function(time, note){
+   /* var pattern = new Tone.Pattern(function(time, note){
 	      polySynth.triggerAttackRelease(note, 2);
     }, ["C4", "E4", "G4", "A4"]);
+   */
+
+    function triggerSynthNotes(input){
+        console.log(input);
+        return input;
+    }
 
     Template.ipsosboard.events({
         "change #event-select": function(event, template) {
@@ -90,13 +97,14 @@ if (Meteor.isClient) {
         },
         'click button': function(event) {
             if(event.target.id == 'play'){
-                //polySynth.triggerAttack(['C4', 'E4', 'G4', 'B4'], '+0.05');
-                pattern.start(0);
-                Tone.Transport.start();
+                polySynth.triggerAttack([voice_one.value, voice_two.value, voice_three.value]);
+                //pattern.start(0);
+                //Tone.Transport.start();
             } else {
+                polySynth.triggerAttack([voice_one.value, voice_two.value, voice_three.value]);
                 //Tone.Transport.stop();
-                pattern.stop();
-                Tone.Transport.stop(0);
+                //pattern.stop();
+                //Tone.Transport.stop(0);
             }
         },
         'input input[type="range"]': function(event){
@@ -106,16 +114,21 @@ if (Meteor.isClient) {
             var selected = template.findAll("input[type=checkbox]:checked");
             var par = $(event.target).attr('class');
             var fieldValue = event.target.value;
+
+            var voice_one = template.find('input[name*="voice_one"]:checked'),
+                voice_two =  template.find('input[name*="voice_two"]:checked'),
+                voice_three = template.find('input[name*="voice_three"]:checked');
+            console.log(voice_one.value);
+            console.log(voice_two.value);
+            console.log(voice_three.value);
+
             if(par !== ""){
                 var envelope = {};
                 envelope[par] = specs[par](fieldValue);
                 polySynth.set({
                     "envelope" : envelope
                 });
-                polySynth.set(par, specs[par](Number(fieldValue)));
-                console.log(envelope);
             }
         }
-
     });
 };
