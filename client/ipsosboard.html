@@ -38,7 +38,7 @@
     <tbody>
         {{#each item in dataItems}}
 		    <tr>
-            <th>{{getKeys}}</th>
+            <th>{{getKeys.pt}}</th>
             {{#each field in listParams}}
             <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
             {{/each}}

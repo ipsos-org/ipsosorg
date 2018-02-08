@@ -4,8 +4,7 @@ import specs from '../imports/specs.js';
 import events from '../lib/events_v0/events.js';
 
 var Tone = require("Tone");
-
-var polySynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+var polySynth = new Tone.PolySynth(3, Tone.Synth).toMaster();
 
 //console.log(events.one['muons'].map(items => Object.keys(items)));
 
@@ -47,10 +46,6 @@ if (Meteor.isClient) {
         return curEvent;
     };
 
-    function triggerSynth(array){
-        polySynth.triggerAttack(array);
-    };
-
     Template.ipsosboard.helpers({
         'events': function() {
             return Object.keys(events);
@@ -86,9 +81,13 @@ if (Meteor.isClient) {
    */
 
     function triggerSynthNotes(input){
-        console.log(input);
-        return input;
-    }
+        if(Array.isArray(input)) {
+            var output = input;
+            console.log(output);
+        };
+        return output;
+    };
+
 
     Template.ipsosboard.events({
         "change #event-select": function(event, template) {
@@ -97,15 +96,10 @@ if (Meteor.isClient) {
         },
         'click button': function(event) {
             if(event.target.id == 'play'){
-                polySynth.triggerAttack([voice_one.value, voice_two.value, voice_three.value]);
-                //pattern.start(0);
-                //Tone.Transport.start();
-            } else {
-                polySynth.triggerAttack([voice_one.value, voice_two.value, voice_three.value]);
-                //Tone.Transport.stop();
-                //pattern.stop();
-                //Tone.Transport.stop(0);
-            }
+                ///do something when pressed play.
+              } else {
+                  polySynth.triggerRelease();
+              }
         },
         'input input[type="range"]': function(event){
             Session.set(event.target.id, event.target.value);
@@ -117,10 +111,8 @@ if (Meteor.isClient) {
 
             var voice_one = template.find('input[name*="voice_one"]:checked'),
                 voice_two =  template.find('input[name*="voice_two"]:checked'),
-                voice_three = template.find('input[name*="voice_three"]:checked');
-            console.log(voice_one.value);
-            console.log(voice_two.value);
-            console.log(voice_three.value);
+                voice_three = template.find('input[name*="voice_three"]:checked'),
+                voiceDur = template.find('input[name*="release"]:checked');
 
             if(par !== ""){
                 var envelope = {};
@@ -128,6 +120,16 @@ if (Meteor.isClient) {
                 polySynth.set({
                     "envelope" : envelope
                 });
+                polySynth.set(par, specs[par](fieldValue));
+                var voices = [];
+                voices.push(specs['voice_one'](voice_one.value),
+                            specs['voice_two'](voice_two.value),
+                            specs['voice_three'](voice_three.value),
+                           );
+                if(voices.length === 3){
+                    polySynth.triggerAttackRelease(voices, voiceDur.value);
+                    console.log(voices);
+                }
             }
         }
     });
