@@ -1,36 +1,66 @@
-import { noUiSlider } from 'meteor/rcy:nouislider';
+//import noUiSlider from 'nouislider';
 import specs from '../imports/specs.js';
 
 import events from '../lib/events_v0/events.js';
 
 var Tone = require("Tone");
+var noUiSlider = require('nouislider');
 var polySynth = new Tone.PolySynth(3, Tone.Synth).toMaster();
 
-//console.log(events.one['muons'].map(items => Object.keys(items)));
+let scaleValue = require('scale-value');
+
+Session.setDefault('slider', [0.1, 0.25]);
 
 function selectEventVal(event){
     var getValues = events[event].muons.map(items => Object.values(items));
     Session.set('muons', getValues);
-  return getValues;
+    return getValues;
 };
 
 selectEventVal('event_one');
 
 if (Meteor.isClient) {
-    Session.setDefault("slider", [1, 5]);
-    
+
     Template.ipsosboard.rendered = function () {
-        this.$("#range-slider").noUiSlider({
-            start: Session.get("slider"),
+        this.$("#voice-slider1").noUiSlider({
+            start: Session.get('slider'),
             connect: true,
+            step: 0.01,
             range: {
-                'min': 0.1,
-                'max': 10.0
+                'min': [0.01],
+                'max': [1.0]
             }
         }).on('slide', function (ev, val) {
-            Session.set('slider', [Math.round(val[0]), Math.round(val[1])]);
-            var setValues = normalize_scale_offset(Session.get('selected'), val[0], val[1]);
+            Session.set(this.id, [val[0], val[1]]);
+            console.log(this.id);
         });
+
+        this.$("#voice-slider2").noUiSlider({
+            start: Session.get('slider'),
+            connect: true,
+            step: 0.01,
+            range: {
+                'min': [0.01],
+                'max': [1.0]
+            }
+        }).on('slide', function (ev, val) {
+            Session.set(this.id, [val[0], val[1]]);
+            console.log(this.id);
+        });
+
+        this.$("#voice-slider3").noUiSlider({
+            start: Session.get('slider'),
+            connect: true,
+            step: 0.01,
+            range: {
+                'min': [0.01],
+                'max': [1.0]
+            }
+        }).on('slide', function (ev, val) {
+            Session.set(this.id, [val[0], val[1]]);
+            console.log(this.id);
+        });
+       
     };
 
     function getOnlyNeed(input){
@@ -39,7 +69,7 @@ if (Meteor.isClient) {
         console.log(filter);
         return filter;
     };
- 
+
     function pushCurEventValToTable(){
         var curEvent = Session.get('muons');
         curEvent = [].concat.apply([], curEvent);
@@ -61,7 +91,7 @@ if (Meteor.isClient) {
         },
         'listParams': function () {
             //return Object.keys(polySynth);
-            return ['attack', 'decay', 'sustain', 'release', 'modulationIndex', 'harmonicity', 'detune', 'voice_one', 'voice_two', 'voice_three'];
+            return ['attack', 'decay', 'sustain', 'release', 'detune', 'voice_one', 'voice_two', 'voice_three'];
         },
         getField(item, field){
             return item[field];
@@ -75,20 +105,6 @@ if (Meteor.isClient) {
         }
     });
 
-   /* var pattern = new Tone.Pattern(function(time, note){
-	      polySynth.triggerAttackRelease(note, 2);
-    }, ["C4", "E4", "G4", "A4"]);
-   */
-
-    function triggerSynthNotes(input){
-        if(Array.isArray(input)) {
-            var output = input;
-            console.log(output);
-        };
-        return output;
-    };
-
-
     Template.ipsosboard.events({
         "change #event-select": function(event, template) {
             var selectedEvent = $( event.currentTarget ).val();
@@ -97,11 +113,13 @@ if (Meteor.isClient) {
         'click button': function(event) {
             if(event.target.id == 'play'){
                 ///do something when pressed play.
-              } else {
-                  polySynth.triggerRelease();
-              }
+            } else {
+                polySynth.triggerRelease();
+            }
         },
         'input input[type="range"]': function(event){
+            console.log("id of the slider is: ", event.target.id);
+            console.log("its current value is: ", event.target.value);
             Session.set(event.target.id, event.target.value);
         },
         'click #matrix-input': function(event, template){
@@ -116,19 +134,21 @@ if (Meteor.isClient) {
 
             if(par !== ""){
                 var envelope = {};
-                envelope[par] = specs[par](fieldValue);
+                envelope[par] = specs[par](fieldValue, Session.get('slider')[0], Session.get('slider')[1]);
                 polySynth.set({
                     "envelope" : envelope
                 });
-                polySynth.set(par, specs[par](fieldValue));
+                polySynth.set(par, specs[par](fieldValue, Session.get('slider')[0], Session.get('slider')[1]));
                 var voices = [];
-                voices.push(specs['voice_one'](voice_one.value),
-                            specs['voice_two'](voice_two.value),
-                            specs['voice_three'](voice_three.value),
+                voices.push(specs['voice_one'](voice_one.value, Session.get('voice-slider1')[0], Session.get('voice-slider1')[1]),
+                            specs['voice_two'](voice_two.value, Session.get('voice-slider2')[0], Session.get('voice-slider2')[1]),
+                            specs['voice_three'](voice_three.value, Session.get('voice-slider3')[0], Session.get('voice-slider3')[1]),
                            );
                 if(voices.length === 3){
+                    voices = voices.map(values => Math.round(values));//beware round function!
                     polySynth.triggerAttackRelease(voices, voiceDur.value);
                     console.log(voices);
+                    console.log(envelope);
                 }
             }
         }

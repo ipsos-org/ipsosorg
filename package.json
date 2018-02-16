@@ -13,6 +13,7 @@
     "gulp-cli": "^1.4.0",
     "ion-rangeslider": "^2.2.0",
     "meteor-node-stubs": "~0.2.4",
+    "nouislider": "^11.0.3",
     "scale-value": "^1.0.0",
     "timbre": "^14.11.25",
     "tone": "^0.11.11",

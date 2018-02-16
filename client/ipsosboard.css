@@ -57,10 +57,28 @@ body {
     font-family: Arial, sans-serif;
     font-size: 12px;
 }
-#range-slider {
+#voice-slider1 {
     position: relative;
     height: 20px;
-    width: 50%;
+    width: 20%;
+    orientation: vertical;
+    margin: 0 27px;
+}
+
+#voice-slider2 {
+    position: relative;
+    height: 20px;
+    width: 20%;
+    orientation: vertical;
+    margin: 0 27px;
+}
+
+#voice-slider3 {
+    position: relative;
+    height: 20px;
+    width: 20%;
+    orientation: vertical;
+    margin: 0 27px;
 }
 
 table { 

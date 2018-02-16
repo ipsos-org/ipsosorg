@@ -3,55 +3,52 @@
     <meta charset="utf-8">
    </head>
 
-   <body>
-       {{> ipsosboard}}
+<body>
+    {{> ipsosboard}}
    </body>
-   <template name="ipsosboard">
+<template name="ipsosboard">
 
-       <ul>
-           <li>{{eventInfo}}</li>
-       </ul>
-
-       <select id="event-select">
-           <option disabled="enabled" selected="selected">select event</option>
-           {{#each events}}
-           <option>{{this}}</option>
-           {{/each}}
-       </select>
-
-       <select id="synth-select">
-           <option disabled="enabled" selected="selected">select synth</option>
-           {{#each synths}}
-            <option>{{this}}</option>
-           {{/each}}
-       </select>
-
-       <table id="matrix-input" class="responsive-table-input-matrix">
-		<thead>
-        <tr>
-            <th></th>
-            {{#each field in listParams}}
-			      <th>{{field}}</th>
-            {{/each}}
-        </tr>
-		</thead> 
-    <tbody>
-        {{#each item in dataItems}}
-		    <tr>
-            <th>{{getKeys.pt}}</th>
-            {{#each field in listParams}}
-            <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
-            {{/each}}
-        </tr>
+    <select id="event-select">
+        <option disabled="enabled" selected="selected">select event</option>
+        {{#each events}}
+        <option>{{this}}</option>
         {{/each}}
-    </tbody>
-	     </table>
+    </select>
+
+    <select id="synth-select">
+        <option disabled="enabled" selected="selected">select synth</option>
+        {{#each synths}}
+        <option>{{this}}</option>
+        {{/each}}
+    </select>
+
+    <table id="matrix-input" class="responsive-table-input-matrix">
+		    <thead>
+            <tr>
+                <th></th>
+                {{#each field in listParams}}
+			          <th>{{field}}</th>
+                {{/each}}
+            </tr>
+		    </thead> 
+        <tbody>
+            {{#each item in dataItems}}
+		        <tr>
+                <th>{{getKeys}}</th>
+                {{#each field in listParams}}
+                <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
+                {{/each}}
+            </tr>
+            {{/each}}
+        </tbody>
+	  </table>
 
     <button class="button" id="play">Play</Button>
     <button class="button" id="stop" value=0>Stop</Button>
-    <div class="slider-wrapper">
-        <input type="range" min="1" max="10" id="speed" value="1" step="0.01" orient="vertical">
-    </div>
-    <div id="range-slider"></div>
-        <p>Left value: {{slider.[0]}}, right value: {{slider.[1]}}</p>
-  </template>
+
+    <div id="voice-slider1"></div>
+    <div id="voice-slider2"></div>
+    <div id="voice-slider3"></div>
+
+
+</template>
