@@ -1,5 +1,6 @@
 <head>
-    <title>Ipsosboard</title>
+    <title>IPSOS</title>
+    <h1>Interactive Physics Sonification System</h1>
     <meta charset="utf-8">
    </head>
 
@@ -11,13 +12,6 @@
     <select id="event-select">
         <option disabled="enabled" selected="selected">select event</option>
         {{#each events}}
-        <option>{{this}}</option>
-        {{/each}}
-    </select>
-
-    <select id="synth-select">
-        <option disabled="enabled" selected="selected">select synth</option>
-        {{#each synths}}
         <option>{{this}}</option>
         {{/each}}
     </select>
@@ -43,12 +37,17 @@
         </tbody>
 	  </table>
 
-    <button class="button" id="play">Play</Button>
-    <button class="button" id="stop" value=0>Stop</Button>
-
+    <!-- <button class="button" id="play">Play</Button> -->
+    
+    <!-- voice sliders -->
+    <div id="attack"></div>
+    <div id="decay"></div>
+    <div id="sustain"></div>
+    <div id="voice-dur"></div>
+    <div id="detune"></div>
     <div id="voice-slider1"></div>
     <div id="voice-slider2"></div>
     <div id="voice-slider3"></div>
-
+    <div id="voice-slider4"></div>
 
 </template>

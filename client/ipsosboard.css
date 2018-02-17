@@ -13,6 +13,8 @@ button {
     white-space: pre-wrap;
     white-space: pre-line;
     word-wrap: break-word;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 select-data {
@@ -57,32 +59,99 @@ body {
     font-family: Arial, sans-serif;
     font-size: 12px;
 }
-#voice-slider1 {
+
+#attack {
+    position: sticky;
+    margin: 20px;
+    margin-left: 125px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+}
+
+#decay {
+    position: sticky;
+    margin: 20px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+}
+
+#sustain {
     position: relative;
-    height: 20px;
-    width: 20%;
-    orientation: vertical;
-    margin: 0 27px;
+    margin: 20px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+}
+
+#voice-dur {
+    margin: 20px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+}
+
+#detune {
+    margin: 20px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+}
+
+
+#voice-slider1 {
+    position: sticky;
+    margin: 20px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
 }
 
 #voice-slider2 {
-    position: relative;
-    height: 20px;
-    width: 20%;
-    orientation: vertical;
-    margin: 0 27px;
+    float: left;
+    margin: 20px;
+    margin-left: 20px;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
 }
 
 #voice-slider3 {
-    position: relative;
-    height: 20px;
-    width: 20%;
-    orientation: vertical;
-    margin: 0 27px;
+    margin: 20px;
+    margin-left: 40px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
+}
+
+#voice-slider4 {
+    margin: 20px;
+    margin-left: 30px;
+    float: left;
+    display: inline-block;
+    width: 20px;
+    height: 150px;
+    padding: 0;
 }
 
 table { 
-    width: 25%; 
+    width: 50%; 
     border-collapse: collapse; 
 }
 /* Zebra striping */

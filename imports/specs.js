@@ -20,6 +20,9 @@ const specs = {
     voice_three: function(val, min, max){
         return (val - min) * (max - min) * 1220.0;
     },
+    voice_four: function(val, min, max){
+        return (val - min) * (max - min) * 1220.0;
+    },
     detune: function(val, min, max){
         return (val - min) * (max - min) * 1000;
     }
