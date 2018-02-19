@@ -8,6 +8,8 @@ function selectEventVal(event){
     return getValues;
 };
 
+var Voices = [];
+
 //selectEventVal('event_one');
 
 
@@ -17,14 +19,15 @@ Session.setDefault('voice-slider2', [0.1, 0.6]);
 Session.setDefault('voice-slider3', [0.1, 0.6]);
 Session.setDefault('voice-slider4', [0.1, 0.6]);
 Session.setDefault('voice-dur', [0.1, 0.6]);
-Session.setDefault('attack', [0.1, 0.6]);
+Session.setDefault('attack', [0.01, 0.1]);
 Session.setDefault('decay', [0.1, 0.6]);
 Session.setDefault('sustain', [0.1, 0.6]);
-Session.setDefault('release', [0.1, 0.6]);
 Session.setDefault('detune', [0.1, 0.6]);
+Session.setDefault('release', [0.01, 0.1]);
 
 if (Meteor.isClient) {
-    
+
+       
     function getOnlyNeed(input){
         var lookFor = ['frequency', 'frequency', 'frequency']; //only this params will be available.
         var filter = input.filter(item => lookFor.includes(item));
@@ -72,10 +75,15 @@ if (Meteor.isClient) {
             var selectedEvent = $( event.currentTarget ).val();
             selectedEvent = selectEventVal(selectedEvent);
         },
-        'click button': function(event) {
-            if(event.target.id == 'stop'){
-                polySynth.triggerRelease();
-            }
+        'click .play': function(event) {
+            console.log('play pressed');
+            polySynth.triggerAttack(Voices);
+            console.log(Voices);
+        },
+
+        'click .stop': function(event) {
+            console.log('stop pressed');
+            polySynth.triggerRelease(Voices);
         },
 
         'input input[type="range"]': function(event){
@@ -89,35 +97,35 @@ if (Meteor.isClient) {
             var fieldValue = event.target.value;
             var envelope = {};
             var sliders = Session.get(par);
-            var voices = [];
-
 
             var voice_one = template.find('input[name*="voice_one"]:checked'),
-                voice_two =  template.find('input[name*="voice_two"]:checked'),
+                voice_two = template.find('input[name*="voice_two"]:checked'),
                 voice_three = template.find('input[name*="voice_three"]:checked'),
-                voice_four = template.find('input[name*="voice_four"]:checked'),
-                voiceDur = template.find('input[name*="release"]:checked');
+                voice_four = template.find('input[name*="voice_four"]:checked');
 
-            if(par !== ""){
-                envelope[par] = specs[par](fieldValue, sliders[0], sliders[1]);
-                polySynth.set({
-                    "envelope" : envelope
-                });
-                polySynth.set(par, specs[par](fieldValue, sliders[0], sliders[1]));
-                
-                voices.push(specs['voice_one'](voice_one.value, Session.get('voice-slider1')[0], Session.get('voice-slider1')[1]),
-                            specs['voice_two'](voice_two.value, Session.get('voice-slider2')[0], Session.get('voice-slider2')[1]),
-                            specs['voice_three'](voice_three.value, Session.get('voice-slider3')[0], Session.get('voice-slider3')[1]),
-                            specs['voice_four'](voice_four.value, Session.get('voice-slider4')[0], Session.get('voice-slider4')[1]),
-                           );
+            Voices = [
+                    specs['voice_one'](voice_one.value, Session.get('voice-slider1')[0], Session.get('voice-slider1')[1]),
+                    specs['voice_two'](voice_two.value, Session.get('voice-slider2')[0], Session.get('voice-slider2')[1]),
+                    specs['voice_three'](voice_three.value, Session.get('voice-slider3')[0], Session.get('voice-slider3')[1]),
+                    specs['voice_four'](voice_four.value, Session.get('voice-slider4')[0], Session.get('voice-slider4')[1])
+                ];
 
-                if(voices.length === 4){
-                    voices = voices.map(values => Math.round(values));//beware round function!
-                    polySynth.triggerAttackRelease(voices, specs['release'](voiceDur.value, Session.get('voice-dur')[0], Session.get('voice-dur')[1]));
-                    console.log(voices);
+
+            if(par != null || par !== ""){
+                if(Voices != null || Voices.length === 4){
+                    if(sliders != null){ 
+                        envelope[par] = specs[par](fieldValue, sliders[0], sliders[1]);
+                    polySynth.set({
+                        "envelope" : envelope
+                    });
+                    polySynth.set(par, specs[par](fieldValue, sliders[0], sliders[1]));
                     console.log(envelope);
+                        console.log(Voices);
+                    }
                 }
             }
         }
+
     });
+
 };

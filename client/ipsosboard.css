@@ -10,11 +10,13 @@ ul {
 
 button {
     white-space: pre;
+    float: left;
     white-space: pre-wrap;
     white-space: pre-line;
     word-wrap: break-word;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-left: 0px;
+    margin-bottom: 0px;
 }
 
 select-data {
@@ -63,7 +65,7 @@ body {
 #attack {
     position: sticky;
     margin: 20px;
-    margin-left: 125px;
+    margin-left: 25px;
     float: left;
     display: inline-block;
     width: 20px;
@@ -82,7 +84,7 @@ body {
 }
 
 #sustain {
-    position: relative;
+    position: sticky;
     margin: 20px;
     float: left;
     display: inline-block;
@@ -91,7 +93,8 @@ body {
     padding: 0;
 }
 
-#voice-dur {
+#release {
+    position: sticky;
     margin: 20px;
     float: left;
     display: inline-block;
@@ -101,6 +104,7 @@ body {
 }
 
 #detune {
+    position: sticky;
     margin: 20px;
     float: left;
     display: inline-block;
@@ -108,7 +112,6 @@ body {
     height: 150px;
     padding: 0;
 }
-
 
 #voice-slider1 {
     position: sticky;

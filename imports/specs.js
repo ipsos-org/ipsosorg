@@ -1,30 +1,49 @@
 const specs = {
-    attack: function(val, min, max){
-        return (val - min) / (max - min);
+    attack: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        //return console.log((Math.min(outmax, Math.max(outmin, val))));
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    decay: function(val, min, max){
-        return (val - min) / (max - min) * 10;
+    decay: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    sustain: function(val, min, max){
-        return (val - min) / (max - min);
+    sustain:function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
+    }	,
+    release: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    release: function(val, min, max){
-        return (val - min) / (max - min);
+    voice_one: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    voice_one: function(val, min, max){
-        return (val - min) * (max - min) * 1220.0;
+    voice_two: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    voice_two: function(val, min, max){
-        return (val - min) * (max - min) * 1220.0;
+    voice_three: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    voice_three: function(val, min, max){
-        return (val - min) * (max - min) * 1220.0;
+    voice_four: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    voice_four: function(val, min, max){
-        return (val - min) * (max - min) * 1220.0;
-    },
-    detune: function(val, min, max){
-        return (val - min) * (max - min) * 1000;
+    detune: function(val, outmin, outmax){
+    	  inmin = -Math.PI;
+      	inmax = Math.PI;
+        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     }
 };
 

@@ -6,134 +6,163 @@ Template.ipsosboard.rendered = function () {
         start: Session.get('slider'),
         orientation: "vertical",
         connect: true,
-        step: 0.01,
-        margin: 0.1,
+        step: 100,
+        margin: 300,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 120.0,
+            'max': 1220.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#voice-slider2").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
         connect: true,
-        step: 0.01,
-        margin: 0.1,
+        step: 100,
+        margin: 300,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 120.0,
+            'max': 1220.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#voice-slider3").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
         connect: true,
-        step: 0.01,
-        margin: 0.1,
+        step: 100,
+        margin: 300,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 120.0,
+            'max': 1220.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#voice-slider4").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
         connect: true,
-        step: 0.01,
-        margin: 0.1,
+        step: 100,
+        margin: 300,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 120.0,
+            'max': 1220.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
-    this.$("#voice-dur").noUiSlider({
+    this.$("#release").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
+        direction: 'rtl',
         connect: true,
         step: 0.01,
         margin: 0.1,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 0.1,
+            'max': 0.9
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+        console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#detune").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
+        direction: 'rtl',
         connect: true,
-        step: 0.01,
+        step: 1,
         margin: 0.1,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 1,
+            'max': 100
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+        console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#attack").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
+        direction: 'rtl',
         connect: true,
         step: 0.01,
-        margin: 0.1,
+        margin: 0.01,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 0.01,
+            'max': 0.99
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+        console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#decay").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
+        direction: "rtl",
         connect: true,
         step: 0.01,
-        margin: 0.1,
+        margin: 0.01,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 0.01,
+            'max': 0.8
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+        console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#sustain").noUiSlider({
         start: Session.get('slider'),
         orientation: "vertical",
+        direction: 'rtl',
         connect: true,
         step: 0.01,
-        margin: 0.1,
+        margin: 0.01,
         range: {
-            'min': [0.01],
-            'max': [1.0]
+            'min': 0.1,
+            'max': 1.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        console.log(this.id);
+        console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
+
 };
