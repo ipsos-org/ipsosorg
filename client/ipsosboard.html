@@ -4,11 +4,11 @@
     <meta charset="utf-8">
    </head>
 
-<body>
-    {{> ipsosboard}}
+   <body>
+       {{> ipsosboard}}
    </body>
-<template name="ipsosboard">
-
+   <template name="ipsosboard">
+       
     <select id="event-select">
         <option disabled="enabled" selected="selected">select event</option>
         {{#each events}}
@@ -16,7 +16,6 @@
         {{/each}}
     </select>
 
-   
 
     <table id="matrix-input" class="responsive-table-input-matrix">
 		    <thead>
@@ -41,7 +40,7 @@
 
     <button class="play">play</button>
     <button class="stop">stop</button>
-        
+            
     <!-- voice sliders -->
     <div id="attack"></div>
     <div id="decay"></div>

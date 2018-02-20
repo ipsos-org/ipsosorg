@@ -19,12 +19,24 @@ button {
     margin-bottom: 0px;
 }
 
+submit {
+    white-space: pre;
+    float: right;
+    white-space: pre-wrap;
+    white-space: pre-line;
+    word-wrap: break-word;
+    margin-top: 80px;
+    margin-left: 50px;
+    margin-bottom: 50px;
+}
+
 select-data {
   background: transparent;
     width: 410px;
     padding: 5px;
     font-size: 14px;
     line-height: 1;
+    margin-left: 10px;
     border: 0;
     border-radius: 0;
     height: 34px;
