@@ -9,8 +9,8 @@ Template.ipsosboard.rendered = function () {
         step: 100,
         margin: 300,
         range: {
-            'min': 120.0,
-            'max': 1220.0
+            'min': 20.0,
+            'max': 20000.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
@@ -26,8 +26,8 @@ Template.ipsosboard.rendered = function () {
         step: 100,
         margin: 300,
         range: {
-            'min': 120.0,
-            'max': 1220.0
+            'min': 20.0,
+            'max': 20000.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
@@ -43,8 +43,8 @@ Template.ipsosboard.rendered = function () {
         step: 100,
         margin: 300,
         range: {
-            'min': 120.0,
-            'max': 1220.0
+            'min': 20.0,
+            'max': 20000.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
@@ -60,8 +60,8 @@ Template.ipsosboard.rendered = function () {
         step: 100,
         margin: 300,
         range: {
-            'min': 120.0,
-            'max': 1220.0
+            'min': 20.0,
+            'max': 20000.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
