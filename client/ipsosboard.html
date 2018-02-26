@@ -8,48 +8,72 @@
        {{> ipsosboard}}
    </body>
    <template name="ipsosboard">
+
+       <tr>{{ eventInfo }}</tr>
+
+       <button class="play">play</button>
+       <button class="stop">stop</button>
+
+       <select id="event-select">
+           <option value="event_one" selected>Load data #1</option>
+           <option value="event_two">Load data #2</option>
+           <option value="event_three">Load data #3</option>
+       </select>
        
-    <select id="event-select">
-        <option disabled="enabled" selected="selected">select event</option>
-        {{#each events}}
-        <option>{{this}}</option>
-        {{/each}}
-    </select>
-
-
-    <table id="matrix-input" class="responsive-table-input-matrix">
-		    <thead>
+  <table id="matrix-input" class="responsive-table-input-matrix">
+        <thead>
             <tr>
                 <th></th>
                 {{#each field in listParams}}
-			          <th>{{field}}</th>
+                <th>{{field}}</th>
                 {{/each}}
             </tr>
-		    </thead> 
-        <tbody>
-            {{#each item in dataItems}}
-		        <tr>
-                <th>{{getKeys}}</th>
-                {{#each field in listParams}}
-                <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
-                {{/each}}
-            </tr>
-            {{/each}}
-        </tbody>
-	  </table>
+        </thead>
 
-    <button class="play">play</button>
-    <button class="stop">stop</button>
-            
-    <!-- voice sliders -->
+        <tbody>
+            {{ #each tupleMuon in allMuons }}
+            <tr>
+                {{#let
+                indexTuple=@index
+                muonLabel=(getMuonLabel tupleMuon)
+                muonValue=(getMuonValue tupleMuon)
+                }}
+
+                <td><b>{{ muonLabel }}</b></td>
+
+                {{ #each field in listParams }}
+                <td>
+                    {{ muonValue }}
+                    <input type="radio" name="{{ field }}" class="{{ field }}" data-item="{{ muonLabel }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" value="{{ muonValue }}" />
+                </td>
+                {{ /each }}
+
+                {{ /let }}
+            </tr>
+
+            {{ /each }}
+        </tbody>
+  </table>
+
+  <!-- envelope sliders -->
     <div id="attack"></div>
+    <p>Attack left value: {{attack.[0]}}, Attack right value: {{attack.[1]}}</p>
     <div id="decay"></div>
+    <p>Decay left value: {{decay.[0]}}, Decay right value: {{decay.[1]}}</p>
     <div id="sustain"></div>
+    <p>Sustain left value: {{sustain.[0]}}, Sustain right value: {{sustain.[1]}}</p>
     <div id="release"></div>
+    <p>Release left value: {{release.[0]}}, Release right value: {{release.[1]}}</p>
     <div id="detune"></div>
-    <div id="voice-slider1"></div>
-    <div id="voice-slider2"></div>
-    <div id="voice-slider3"></div>
-    <div id="voice-slider4"></div>
+    <p>Detune left value: {{detune.[0]}}, Detune right value: {{detune.[1]}}</p>
+    <!-- voice sliders -->
+    <div id="voiceOne"></div>
+    <p>Voice one left value: {{voiceOne.[0]}}, Voice one right value: {{voiceOne.[1]}}</p>
+    <div id="voiceTwo"></div>
+    <p>Voice two left value: {{voiceTwo.[0]}}, Voice two right value: {{voiceTwo.[1]}}</p>
+    <div id="voiceThree"></div>
+    <p>Voice three left value: {{voiceThree.[0]}}, Voice three right value: {{voiceThree.[1]}}</p>
+    <div id="voiceFour"></div>
+    <p>Voice four left value: {{voiceFour.[0]}}, Voice four right value: {{voiceFour.[1]}}</p>
 
 </template>

@@ -1,21 +1,15 @@
 import specs from '../imports/specs.js';
 import polySynth from '../imports/tone.js';
-import events from '../lib/events_v0/events.js';
-
-function selectEventVal(event){
-    var getValues = events[event].muons.map(items => Object.values(items));
-    Session.set('muons', getValues);
-    return getValues;
-};
-
-//selectEventVal('event_one');
-
+import EVENTS from '../lib/events_v0/events.js';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+import './ipsosboard.html';
 
 Session.setDefault('slider', [0.1, 0.6]);
-Session.setDefault('voice-slider1', [0.1, 0.6]);
-Session.setDefault('voice-slider2', [0.1, 0.6]);
-Session.setDefault('voice-slider3', [0.1, 0.6]);
-Session.setDefault('voice-slider4', [0.1, 0.6]);
+Session.setDefault('voiceOne', [20.0, 20000.0]);
+Session.setDefault('voiceTwo', [20.0, 20000.0]);
+Session.setDefault('voiceThree', [1500, 15000]);
+Session.setDefault('voiceFour', [1500, 15000]);
 Session.setDefault('voice-dur', [0.1, 0.6]);
 Session.setDefault('attack', [0.01, 0.1]);
 Session.setDefault('decay', [0.1, 0.6]);
@@ -24,54 +18,60 @@ Session.setDefault('detune', [0.1, 0.6]);
 
 if (Meteor.isClient) {
 
-    function getOnlyNeed(input){
-        var lookFor = ['frequency', 'frequency', 'frequency']; //only this params will be available.
-        var filter = input.filter(item => lookFor.includes(item));
-        console.log(filter);
-        return filter;
+    const selectEvent = function selectEvent( eventName ) {
+
+        const eventMuons = EVENTS[ eventName ] || [];
+        const muons = [];
+        
+        eventMuons.muons.forEach(function ( obj ) {
+            Object.keys( obj ).forEach(function ( key ) {
+                muons.push( [ key, obj[ key ] ] );
+            });
+        });
+
+        return muons;
     };
 
-    function pushCurEventValToTable(){
-        var curEvent = Session.get('muons');
-        curEvent = [].concat.apply([], curEvent);
-        return curEvent;
-    };
+    Template.ipsosboard.onCreated(function () {
+
+        this.listParams = [
+            'attack',    'decay',       'sustain',
+            'release',   'detune',      'voice_one',
+            'voice_two', 'voice_three', 'voice_four',
+        ];
+
+        this.muons  = [];
+        const template = this;
+
+        this.activeEvent = new ReactiveVar('event_one');
+    });
 
     Template.ipsosboard.helpers({
-        'events': function() {
-            return Object.keys(events);
-        },
-        'dataItems': function(){
-            return pushCurEventValToTable();
+        attack: () => Session.get("attack"),
+        decay: () => Session.get("decay"),
+        sustain: () => Session.get("sustain"),
+        release: () => Session.get("release"),
+        detune: () => Session.get("detune"),
+        voiceOne: () => Session.get("voiceOne"),
+        voiceTwo: () => Session.get("voiceTwo"),
+        voiceThree: () => Session.get("voiceThree"),
+        voiceFour: () => Session.get("voiceFour"),
+
+        listParams: () => Template.instance().listParams,
+
+        allMuons() {
+            const event = Template.instance().activeEvent.get();
+            return selectEvent( event );
         },
 
-        /*'synths': function() {
-            return Object.keys(someSynths);
-        },*/
-
-        'slider': function () {
-            return Session.get("slider");
-        },
-        'listParams': function () {
-            //return Object.keys(polySynth);
-            return ['attack', 'decay', 'sustain', 'release', 'detune', 'voice_one', 'voice_two', 'voice_three', 'voice_four'];
-        },
-        getField(item, field){
-            return item[field];
-        },
-        'getKeys': function(){
-            return Object.keys( events.event_one.muons[0]);
-        },
-        'eventInfo': function(){
-            var eventData = event.time_date;
-            return eventData;
-        }
+        getMuonLabel: ( tuple ) => tuple[ 0 ],
+        getMuonValue: ( tuple ) => tuple[ 1 ]
     });
 
     Template.ipsosboard.events({
-        "change #event-select": function(event, template) {
-            var selectedEvent = $( event.currentTarget ).val();
-            selectedEvent = selectEventVal(selectedEvent);
+        "change #event-select": function(event, tplInstance) {
+            var selectedElem = event.currentTarget.selectedOptions[ 0 ];
+            tplInstance.activeEvent.set( selectedElem.value );
         },
         'click .play': function(event) {
             var voices = Session.get('voices');
@@ -98,10 +98,10 @@ if (Meteor.isClient) {
                 voice4 = template.find('input[name*="voice_four"]:checked');
 
             voices = [
-                specs['voice_one'](voice1.value, Session.get('voice-slider1')[0], Session.get('voice-slider1')[1]),
-                specs['voice_two'](voice2.value, Session.get('voice-slider2')[0], Session.get('voice-slider2')[1]),
-                specs['voice_three'](voice3.value, Session.get('voice-slider3')[0], Session.get('voice-slider3')[1]),
-                specs['voice_four'](voice4.value, Session.get('voice-slider4')[0], Session.get('voice-slider4')[1])
+                specs['voice_one'](voice1.value, Session.get('voiceSliderOne')[0], Session.get('voiceSliderOne')[1]),
+                specs['voice_two'](voice2.value, Session.get('voiceSliderTwo')[0], Session.get('voiceSliderTwo')[1]),
+                specs['voice_three'](voice3.value, Session.get('voiceSliderThree')[0], Session.get('voiceSliderThree')[1]),
+                specs['voice_four'](voice4.value, Session.get('voiceSliderFour')[0], Session.get('voiceSliderFour')[1])
             ];
             var sliders = Session.get(par);
             envelope[par] = specs[par](Math.round(fieldValue), sliders[0], sliders[1]);

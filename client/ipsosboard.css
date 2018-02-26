@@ -14,53 +14,9 @@ button {
     white-space: pre-wrap;
     white-space: pre-line;
     word-wrap: break-word;
-    margin-top: 5px;
+    margin-top: 0px;
     margin-left: 0px;
     margin-bottom: 0px;
-}
-
-submit {
-    white-space: pre;
-    float: right;
-    white-space: pre-wrap;
-    white-space: pre-line;
-    word-wrap: break-word;
-    margin-top: 80px;
-    margin-left: 50px;
-    margin-bottom: 50px;
-}
-
-select-data {
-  background: transparent;
-    width: 410px;
-    padding: 5px;
-    font-size: 14px;
-    line-height: 1;
-    margin-left: 10px;
-    border: 0;
-    border-radius: 0;
-    height: 34px;
-    -webkit-appearance: none;
-}
-
-select-synth {
-    background: transparent;
-    width: 40px;
-    padding: 5px;
-    font-size: 14px;
-    line-height: 1;
-    border: 0;
-    border-radius: 0;
-    height: 34px;
-    -webkit-appearance: none;
-}
-
-slider-wrapper {
-    position: relative;
-    display: block;
-    width: 20px;
-    height: 150px;
-    padding: 0;
 }
 
 html {
@@ -69,99 +25,107 @@ html {
 body {
     height: 100%;
     overflow: hidden;
-    margin: 40px 15px;
+    margin: 0px 10px;
+    margin-left: 20px;
     font-family: Arial, sans-serif;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 #attack {
     position: sticky;
-    margin: 20px;
-    margin-left: 25px;
-    float: left;
+    margin: 10px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
 #decay {
     position: sticky;
-    margin: 20px;
-    float: left;
+    margin: 0px;
+    margin-bottom: 0px;
+float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
 #sustain {
     position: sticky;
-    margin: 20px;
-    float: left;
+    margin: 0px;
+    margin-bottom: 0px;
+    float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
 #release {
     position: sticky;
-    margin: 20px;
-    float: left;
+    margin: 0px;
+    margin-bottom: 0px;
+    float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
 #detune {
     position: sticky;
-    margin: 20px;
-    float: left;
+    margin: 0px;
+    float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
-#voice-slider1 {
+#voiceOne {
     position: sticky;
-    margin: 20px;
-    float: left;
+    margin: 0px;
+    margin-bottom: 0px;
+    float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
-#voice-slider2 {
-    float: left;
-    margin: 20px;
-    margin-left: 20px;
+#voiceTwo {
+    float: center;
+    margin: 0px;
+    margin-left: 0px;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
-#voice-slider3 {
-    margin: 20px;
-    margin-left: 40px;
-    float: left;
+#voiceThree {
+    margin: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
-#voice-slider4 {
-    margin: 20px;
-    margin-left: 30px;
-    float: left;
+#voiceFour {
+    margin: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    float: center;
     display: inline-block;
-    width: 20px;
-    height: 150px;
+    width: 580px;
+    height: 20px;
     padding: 0;
 }
 
@@ -171,7 +135,7 @@ table {
 }
 /* Zebra striping */
 tr:nth-of-type(odd) { 
-    background: white; 
+    background: grey; 
 }
 th { 
     background: #333; 
@@ -181,7 +145,7 @@ th {
 td, th { 
     padding: 3px; 
     border: 1px solid #ccc; 
-    text-align: left;
+    text-align: center;
     vertical-align: top;
 }
 
