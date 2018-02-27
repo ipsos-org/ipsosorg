@@ -1,59 +1,68 @@
 <head>
     <title>IPSOS</title>
     <h1>Interactive Physics Sonification System</h1>
+    <img src="images/BEER-logo.jpg" alt="beer logo" width="80" height="100">
     <meta charset="utf-8">
-   </head>
+       </head>
 
-   <body>
+       <body>
+          
        {{> ipsosboard}}
-   </body>
+       </body>
+
    <template name="ipsosboard">
 
        <tr>{{ eventInfo }}</tr>
 
        <button class="play">play</button>
        <button class="stop">stop</button>
-
        <select id="event-select">
-           <option value="event_one" selected>Load data #1</option>
-           <option value="event_two">Load data #2</option>
-           <option value="event_three">Load data #3</option>
+           {{ #each event in allEvents }}
+           <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
+           {{ /each }}
        </select>
-       
-  <table id="matrix-input" class="responsive-table-input-matrix">
-        <thead>
-            <tr>
-                <th></th>
-                {{#each field in listParams}}
-                <th>{{field}}</th>
-                {{/each}}
-            </tr>
-        </thead>
 
-        <tbody>
-            {{ #each tupleMuon in allMuons }}
-            <tr>
-                {{#let
-                indexTuple=@index
-                muonLabel=(getMuonLabel tupleMuon)
-                muonValue=(getMuonValue tupleMuon)
-                }}
 
-                <td><b>{{ muonLabel }}</b></td>
+       <table id="matrix-table">
+               <thead>
+                   <tr>
+                       <th> - </th>
+                       {{ #each field in listParams }}
+                       <th>{{ field }}</th>
+                       {{ /each }}
+                   </tr>
+               </thead>
 
-                {{ #each field in listParams }}
-                <td>
-                    {{ muonValue }}
-                    <input type="radio" name="{{ field }}" class="{{ field }}" data-item="{{ muonLabel }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" value="{{ muonValue }}" />
-                </td>
-                {{ /each }}
+               <tbody>
+                   {{ #each tupleMuon in getEventMuons }}
+                   <tr>
+                       {{ #let
+                       indexTuple=@index
+                       muonLabel=(getMuonLabel tupleMuon)
+                       muonValue=(getMuonValue tupleMuon)
+                       }}
 
-                {{ /let }}
-            </tr>
+                       <td><b>{{ muonLabel }}</b></td>
 
-            {{ /each }}
-        </tbody>
-  </table>
+                       {{ #each field in listParams }}
+                       <td>
+                           {{ muonValue }}
+                           <input type="radio" name="{{ field }}" class="{{ field }}" value="{{ muonValue }}"
+                                  data-item="{{ muonLabel }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" />
+                       </td>
+                       {{ /each }}
+
+                       {{ /let }}
+                   </tr>
+                   {{ /each }}
+               </tbody>
+           </table>
+
+           <div>Event number : {{ getEventNumber }}</div>
+           <div>Event date : {{ getEventData }}</div>
+
+          
+
 
   <!-- envelope sliders -->
     <div id="attack"></div>
@@ -67,13 +76,6 @@
     <div id="detune"></div>
     <p>Detune left value: {{detune.[0]}}, Detune right value: {{detune.[1]}}</p>
     <!-- voice sliders -->
-    <div id="voiceOne"></div>
-    <p>Voice one left value: {{voiceOne.[0]}}, Voice one right value: {{voiceOne.[1]}}</p>
-    <div id="voiceTwo"></div>
-    <p>Voice two left value: {{voiceTwo.[0]}}, Voice two right value: {{voiceTwo.[1]}}</p>
-    <div id="voiceThree"></div>
-    <p>Voice three left value: {{voiceThree.[0]}}, Voice three right value: {{voiceThree.[1]}}</p>
-    <div id="voiceFour"></div>
-    <p>Voice four left value: {{voiceFour.[0]}}, Voice four right value: {{voiceFour.[1]}}</p>
-
+    <div id="frequency"></div>
+    <p>Freq left value: {{frequency.[0]}}, Freq right value: {{frequency.[1]}}</p>
 </template>

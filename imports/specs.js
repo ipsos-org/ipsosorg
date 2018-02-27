@@ -45,26 +45,11 @@ const specs = {
       	inmax = Math.PI;
         return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    voice_one: function(val, outmin, outmax){
+    frequency: function(val, outmin, outmax){
     	  inmin = 120.0;
       	inmax = 1220.0;
         return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
-    voice_two: function(val, outmin, outmax){
-    	  inmin = 120.0;
-      	inmax = 1220.0;
-        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
-    },
-    voice_three: function(val, outmin, outmax){
-    	  inmin = 120.0;
-      	inmax = 1220.0;
-        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
-    },
-    voice_four: function(val, outmin, outmax){
-    	  inmin = 120.0;
-      	inmax = 1220.0;
-        return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
-    }
 };
 
 export default specs;

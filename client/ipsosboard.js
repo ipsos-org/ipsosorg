@@ -1,116 +1,147 @@
 import specs from '../imports/specs.js';
-import polySynth from '../imports/tone.js';
+import synthA from '../imports/synthA.js';
+import synthB from '../imports/synthB.js';
 import EVENTS from '../lib/events_v0/events.js';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-import './ipsosboard.html';
+//import './ipsosboard.html';
 
 Session.setDefault('slider', [0.1, 0.6]);
-Session.setDefault('voiceOne', [20.0, 20000.0]);
-Session.setDefault('voiceTwo', [20.0, 20000.0]);
-Session.setDefault('voiceThree', [1500, 15000]);
-Session.setDefault('voiceFour', [1500, 15000]);
+Session.setDefault('frequency', [0.1, 0.6]);
 Session.setDefault('voice-dur', [0.1, 0.6]);
 Session.setDefault('attack', [0.01, 0.1]);
 Session.setDefault('decay', [0.1, 0.6]);
 Session.setDefault('sustain', [0.1, 0.6]);
 Session.setDefault('detune', [0.1, 0.6]);
+Session.setDefault('release', [0.1, 0.6]);
 
 if (Meteor.isClient) {
+    
 
-    const selectEvent = function selectEvent( eventName ) {
+    const transformData = function transformData( events ) {
 
-        const eventMuons = EVENTS[ eventName ] || [];
-        const muons = [];
-        
-        eventMuons.muons.forEach(function ( obj ) {
-            Object.keys( obj ).forEach(function ( key ) {
-                muons.push( [ key, obj[ key ] ] );
+        const newDataObject = {};
+
+        for (let eventName in events ) {
+
+            const currentEvent = events[ eventName ];
+
+            // transform muons by creating tuples
+            const transformedMuons = [];
+
+            currentEvent.muons.forEach(function ( obj ) {
+                Object.keys( obj ).forEach(function ( key ) {
+                    transformedMuons.push( [ key, obj[ key ] ] );
+                });
             });
-        });
 
-        return muons;
+            // copy event object into a new object,
+            // and override 'muons' key with our transformed muons data
+            newDataObject[ eventName ] = Object.assign( {}, currentEvent, {
+                muons: transformedMuons
+            });
+        }
+
+        return newDataObject;
     };
 
-    Template.ipsosboard.onCreated(function () {
+Template.ipsosboard.onCreated(function () {
 
-        this.listParams = [
-            'attack',    'decay',       'sustain',
-            'release',   'detune',      'voice_one',
-            'voice_two', 'voice_three', 'voice_four',
-        ];
+  this.listParams = [
+    'attack',    'decay',       'sustain',
+    'release',   'detune',      'frequency'
+  ];
 
-        this.muons  = [];
-        const template = this;
+  // transform your data by creating tuples for each label/value
+  // [ [ 'labelA', labelA_value ], [ 'labelB', labelB_value ], ... ]
+  this.events = transformData( EVENTS );
 
-        this.activeEvent = new ReactiveVar('event_one');
-    });
+  // default event name not hard-coded
+  const defaultEventName = Object.keys( this.events )[ 0 ];
+  this.activeEventName   = new ReactiveVar( defaultEventName );
+  this.activeEvent       = new ReactiveVar();
+
+  this.autorun(() => {
+    // this will rerun each time its dependencies are changed (the ReactiveVar)
+    const eventName   = this.activeEventName.get();
+    const linkedEvent = this.events[ eventName ];
+    this.activeEvent.set( linkedEvent );
+  });
+});
 
     Template.ipsosboard.helpers({
-        attack: () => Session.get("attack"),
-        decay: () => Session.get("decay"),
-        sustain: () => Session.get("sustain"),
-        release: () => Session.get("release"),
-        detune: () => Session.get("detune"),
-        voiceOne: () => Session.get("voiceOne"),
-        voiceTwo: () => Session.get("voiceTwo"),
-        voiceThree: () => Session.get("voiceThree"),
-        voiceFour: () => Session.get("voiceFour"),
 
         listParams: () => Template.instance().listParams,
 
-        allMuons() {
-            const event = Template.instance().activeEvent.get();
-            return selectEvent( event );
-        },
+        getEventMuons : () => Template.instance().activeEvent.get().muons,
+        getEventNumber: () => Template.instance().activeEvent.get().eventNumber,
+        getEventData  : () => Template.instance().activeEvent.get().date_time,
 
         getMuonLabel: ( tuple ) => tuple[ 0 ],
-        getMuonValue: ( tuple ) => tuple[ 1 ]
+        getMuonValue: ( tuple ) => tuple[ 1 ],
+
+        /**
+         * {{ #each }} can't loop over an Object
+         * http://blazejs.org/api/spacebars.html#Each
+         *
+         * @returns {Array}
+         */
+        allEvents() {
+            const eventsObj = Template.instance().events;
+            const eventsArr = [];
+
+            for (let eventName in eventsObj) {
+                eventsArr.push({
+                    name  : eventName,
+                    number: eventsObj[ eventName ].number
+                });
+            }
+
+            return eventsArr;
+        },
+
     });
 
+    function triggerSynth(freq, release){
+        return Session.set('freq', freq);
+    };
+
     Template.ipsosboard.events({
-        "change #event-select": function(event, tplInstance) {
-            var selectedElem = event.currentTarget.selectedOptions[ 0 ];
-            tplInstance.activeEvent.set( selectedElem.value );
+        'change #event-select'( event, tplInstance ) {
+            const selectedElem = event.currentTarget.selectedOptions[ 0 ];
+            tplInstance.activeEventName.set( selectedElem.value );
         },
         'click .play': function(event) {
-            var voices = Session.get('voices');
-            polySynth.triggerAttackRelease(voices, 0.5);
-            console.log(`Voices `, voices);
+            //something to start the synth here...
+            synthA.triggerAttackRelease(Session.get('freq'), 0.75);
+            triggerSynth();
         },
 
         'click .stop': function(event) {
-            console.log('stop pressed');
-            var voices = Session.get('voices');
-            polySynth.triggerRelease(voices);
+            synthA.triggerRelease();
         },
 
-        'click #matrix-input': function(event, template){
+        'click #matrix-table': function(event, template){
             var selected = template.findAll("input[type=checkbox]:checked");
             var par = $(event.target).attr('class');
             var fieldValue = event.target.value;
             var envelope = {};
-            var voices = [];
+            var freqModifier = {};
             
-            var voice1 = template.find('input[name*="voice_one"]:checked'),
-                voice2 = template.find('input[name*="voice_two"]:checked'),
-                voice3 = template.find('input[name*="voice_three"]:checked'),
-                voice4 = template.find('input[name*="voice_four"]:checked');
-
-            voices = [
-                specs['voice_one'](voice1.value, Session.get('voiceSliderOne')[0], Session.get('voiceSliderOne')[1]),
-                specs['voice_two'](voice2.value, Session.get('voiceSliderTwo')[0], Session.get('voiceSliderTwo')[1]),
-                specs['voice_three'](voice3.value, Session.get('voiceSliderThree')[0], Session.get('voiceSliderThree')[1]),
-                specs['voice_four'](voice4.value, Session.get('voiceSliderFour')[0], Session.get('voiceSliderFour')[1])
-            ];
-            var sliders = Session.get(par);
-            envelope[par] = specs[par](Math.round(fieldValue), sliders[0], sliders[1]);
-            polySynth.set(par,  specs[par](Math.round(fieldValue), sliders[0], sliders[1]));
-            Session.set('voices', voices);
-            polySynth.set({
+            freqModifier[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
+            envelope[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
+            var freq = Object.values(freqModifier)[0];
+            triggerSynth(freq);
+            
+            synthA.set({
                 "envelope" : envelope
             });
-            console.log(`Envelope `, envelope);
+
+            synthB.set({
+                "envelope" : envelope
+            });
+
+            console.log(`Setter `, freqModifier);
         }
     });
 

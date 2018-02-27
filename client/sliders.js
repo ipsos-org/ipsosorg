@@ -2,7 +2,7 @@ var noUiSlider = require('nouislider');
 
 Template.ipsosboard.rendered = function () {
 
-    this.$("#voiceOne").noUiSlider({
+    this.$("#frequency").noUiSlider({
         start: Session.get('slider'),
         orientation: "horizontal",
         connect: true,
@@ -18,8 +18,8 @@ Template.ipsosboard.rendered = function () {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
     });
-
-    this.$("#voiceTwo").noUiSlider({
+/*
+    this.$("#voice_two").noUiSlider({
         start: Session.get('slider'),
         orientation: "horizontal",
         connect: true,
@@ -36,7 +36,7 @@ Template.ipsosboard.rendered = function () {
         console.log(this.id + val);
     });
 
-    this.$("#voiceThree").noUiSlider({
+    this.$("#voice_three").noUiSlider({
         start: Session.get('slider'),
         orientation: "horizontal",
         connect: true,
@@ -53,7 +53,7 @@ Template.ipsosboard.rendered = function () {
         console.log(this.id + val);
     });
 
-    this.$("#voiceFour").noUiSlider({
+    this.$("#voice_four").noUiSlider({
         start: Session.get('slider'),
         orientation: "horizontal",
         connect: true,
@@ -69,6 +69,7 @@ Template.ipsosboard.rendered = function () {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
     });
+    */
 
     this.$("#release").noUiSlider({
         start: Session.get('slider'),
@@ -119,6 +120,9 @@ Template.ipsosboard.rendered = function () {
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#decay").noUiSlider({
@@ -134,6 +138,9 @@ Template.ipsosboard.rendered = function () {
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        console.log(this.id + val);
     });
 
     this.$("#sustain").noUiSlider({
@@ -148,6 +155,9 @@ Template.ipsosboard.rendered = function () {
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
+        console.log(this.id + val);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
     });
 

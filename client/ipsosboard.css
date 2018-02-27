@@ -19,6 +19,17 @@ button {
     margin-bottom: 0px;
 }
 
+select {
+    white-space: pre;
+    float: left;
+    white-space: pre-wrap;
+    white-space: pre-line;
+    word-wrap: break-word;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+}
+
 html {
     height: 100%;
 }
@@ -28,7 +39,8 @@ body {
     margin: 0px 10px;
     margin-left: 20px;
     font-family: Arial, sans-serif;
-    font-size: 11px;
+    font-size: 12px;
+    overflow: scroll;
 }
 
 #attack {
@@ -130,7 +142,8 @@ float: center;
 }
 
 table { 
-    width: 50%; 
+    width: 50%;
+    height: 300px;
     border-collapse: collapse; 
 }
 /* Zebra striping */
@@ -147,11 +160,4 @@ td, th {
     border: 1px solid #ccc; 
     text-align: center;
     vertical-align: top;
-}
-
-
-#responsive-table-input-matrix {
-		display: block;
-		position: relative;
-		width: 50%;
 }
