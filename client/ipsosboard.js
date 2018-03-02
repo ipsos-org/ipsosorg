@@ -2,6 +2,7 @@ import specs from '../imports/specs.js';
 import synthA from '../imports/synthA.js';
 import synthB from '../imports/synthB.js';
 import EVENTS from '../lib/events_v0/events.js';
+import eventsNew from '../lib/events_new/events.js';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 //import './ipsosboard.html';
@@ -22,9 +23,9 @@ if (Meteor.isClient) {
 
         const newDataObject = {};
 
-        for (let eventName in events ) {
+        for (i = 0; i < events.length; i++) {
 
-            const currentEvent = events[ eventName ];
+            const currentEvent = events[ i ];
 
             // transform muons by creating tuples
             const transformedMuons = [];
@@ -37,7 +38,7 @@ if (Meteor.isClient) {
 
             // copy event object into a new object,
             // and override 'muons' key with our transformed muons data
-            newDataObject[ eventName ] = Object.assign( {}, currentEvent, {
+            newDataObject[ i ] = Object.assign( {}, currentEvent, {
                 muons: transformedMuons
             });
         }
@@ -54,7 +55,7 @@ Template.ipsosboard.onCreated(function () {
 
   // transform your data by creating tuples for each label/value
   // [ [ 'labelA', labelA_value ], [ 'labelB', labelB_value ], ... ]
-  this.events = transformData( EVENTS );
+  this.events = transformData( eventsNew );
 
   // default event name not hard-coded
   const defaultEventName = Object.keys( this.events )[ 0 ];
