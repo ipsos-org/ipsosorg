@@ -1,139 +1,134 @@
-import { noUiSlider } from 'meteor/rcy:nouislider';
 import specs from '../imports/specs.js';
+import synthA from '../imports/synthA.js';
+import synthB from '../imports/synthB.js';
+import EVENTS from '../lib/events_v0/events.js';
+import eventsNew from '../lib/events_new/events.js';
+import { Template } from 'meteor/templating';
+import { ReactiveVar } from 'meteor/reactive-var';
+//import './ipsosboard.html';
 
-let json = require('../lib/ev119516329_run199318.json');
-
-event = json['muons'];
-Data = new Mongo.Collection('data', { connection: null });
-const array = event.map( item => JSON.stringify(item) );
-const selected = [];
-const synthArray = new Array('saw', 'pulse', 'sine', 'square');
+Session.setDefault('slider', [0.1, 0.6]);
+Session.setDefault('frequency', [0.1, 0.6]);
+Session.setDefault('voice-dur', [0.1, 0.6]);
+Session.setDefault('attack', [0.01, 0.1]);
+Session.setDefault('decay', [0.1, 0.6]);
+Session.setDefault('sustain', [0.1, 0.6]);
+Session.setDefault('detune', [0.1, 0.6]);
+Session.setDefault('release', [0.1, 0.6]);
 
 if (Meteor.isClient) {
 
-    Session.setDefault("slider", [1, 5]);
-    Session.setDefault('synthParameters', [' ', 'amp','freq','mod']);
-    Session.setDefault('selected', Data.find().fetch());
+Template.ipsosboard.onCreated(function () {
 
-    function normalize(val, max=1, min=0.1) {
-        return (val - min) / (max - min);
-    };
+  this.listParams = [
+    'attack',    'decay',       'sustain',
+    'release',   'detune',      'frequency'
+  ];
 
-    function normalize_scale_offset(input, scale=1, offset=0) {
-        var normalized = input.map((val) => normalize(val, Math.max(...input), Math.min(...input)));
-        return normalized.map( (val) => val / scale + Math.sqrt(offset) ).map((val) => val * 1000);
-    };
+  this.events = eventsNew;
 
-    function arrayVal(arrayIn) {
-        if(arrayIn.constructor === String) {
-            var array = JSON.parse(arrayIn);
-            array = Object.values(array);
-            return array;
-        }
-    };
+  // default event name not hard-coded
+  const defaultEventName = Object.keys( this.events )[ 0 ];
+  this.activeEventName   = new ReactiveVar( defaultEventName );
+  this.activeEvent       = new ReactiveVar();
 
-    Meteor.startup(function (){
-        if(Data.find().count() === 0) {
-            console.log("importing data to db");
-            var data = json['muons'];
-            data = data.forEach(items => Data.insert(items));
-            console.log(data);
-        };
-    });
-
-    Template.ipsosboard.rendered = function () {
-        this.$("#range-slider").noUiSlider({
-            start: Session.get("slider"),
-            connect: true,
-            range: {
-                'min': 0.1,
-                'max': 10.0
-            }
-        }).on('slide', function (ev, val) {
-            Session.set('slider', [Math.round(val[0]), Math.round(val[1])]);
-            var setValues = normalize_scale_offset(Session.get('selected'), val[0], val[1]);
-            seq.values = setValues;
-        });
-    };
-
-    function getOnlyNeed(input){
-        var lookFor = ['gain', 'frequency', 'attack', 'decay', 'sustain', 'release']; //only this params will be available.
-        var filter = input.filter(item => lookFor.includes(item));
-        return filter;
-    };
-
-    function synthParams() {
-        var synthParams = eval(Session.get('synthID'));
-        synthParams = Object.keys(synthParams);
-        synthParams = getOnlyNeed(synthParams);
-        Session.set('synthParameters', synthParams);
-        return synthParams;
-    };
-
-    function getKeys() {
-        var keys = event.map(items => Object.keys(items))[0];
-        return keys;
-    };
+  this.autorun(() => {
+    // this will rerun each time its dependencies are changed (the ReactiveVar)
+    const eventName   = this.activeEventName.get();
+    const linkedEvent = this.events[ eventName ];
+    this.activeEvent.set( linkedEvent );
+  });
+});
 
     Template.ipsosboard.helpers({
-        'categories': function() {
-            return array;
+
+        listParams: () => Template.instance().listParams,
+
+        getEventNumber: () => Template.instance().activeEvent.get().eventNumber,
+        getEventData  : () => Template.instance().activeEvent.get().date_time,
+
+        // here we can easily add new data types
+        getSonificationData: function() {
+          return [
+            {type : "Jet", data : Template.instance().activeEvent.get().jets},
+            {type : "Muon", data : Template.instance().activeEvent.get().muons}
+          ]
         },
-        'dataItems': function(){
-            return Session.get('selected'); //reading from db.
+
+        getAllFields: function(dataObject) {
+          let fields = [];
+
+          _.each(Object.keys(dataObject), function(theKey) {
+            fields.push({label: theKey, value: dataObject[theKey] });
+          });
+
+          fields = _.sortBy(fields, 'label');
+          return fields;
         },
-        'synths': function() {
-            return synthArray; //synths of the app.
+
+        /**
+         * {{ #each }} can't loop over an Object
+         * http://blazejs.org/api/spacebars.html#Each
+         *
+         * @returns {Array}
+         */
+        allEvents() {
+            const eventsObj = Template.instance().events;
+            const eventsArr = [];
+
+            for (let eventName in eventsObj) {
+                eventsArr.push({
+                    name  : eventName,
+                    number: eventsObj[ eventName ].number
+                });
+            }
+
+            return eventsArr;
         },
-        'slider': function () {
-            return Session.get("slider");
-        },
-        'listParams': function () {
-            return Session.get('synthParameters');
-        },
-        getField(item, field){
-            return item[field];
-        },
-        'dataKeys': function(key){
-            return getKeys();
-        }
+
     });
 
+    function triggerSynth(freq, release){
+        return Session.set('freq', freq);
+    };
+
     Template.ipsosboard.events({
-        "change #category-select": function(event, template) {
-            var selectedArray = $( event.currentTarget ).val();
-            selectedArray = arrayVal(selectedArray);
-            Session.set('selected', selectedArray);
-            seq.values = normalize_scale_offset(selectedArray, Session.get('slider')[0], Session.get('slider')[1]);
+        'change #event-select'( event, tplInstance ) {
+            const selectedElem = event.currentTarget.selectedOptions[ 0 ];
+            tplInstance.activeEventName.set( selectedElem.value );
         },
-        'change #synth-select': function(event) {
-            var selected = $(event.currentTarget).val();
-            Session.set('synthID', selected);
-            seq.target = eval(selected);
-            synthParams();
+        'click .play': function(event) {
+            //something to start the synth here...
+            synthA.triggerAttackRelease(Session.get('freq'), 0.75);
+            triggerSynth();
         },
-        'click button': function(event) {
-            if(event.target.id == 'play'){
-                seq.start();
-            } else {
-                seq.stop();
-            }
+
+        'click .stop': function(event) {
+            synthA.triggerRelease();
         },
-        'input input[type="range"]': function(event){
-            Session.set(event.target.id, event.target.value);
-            seq.timings = [44100, 44100].map(val => val / Session.get('speed'));
-        },
-        'click #matrix-input': function(event, template){
+
+        'click #matrix-table': function(event, template){
             var selected = template.findAll("input[type=checkbox]:checked");
             var par = $(event.target).attr('class');
             var fieldValue = event.target.value;
-            var modifier = { };
-            if(par !== ""){
-                if(_.contains (synthParams(), par)){
-                    modifier = eval(Session.get('synthID'))[par] = specs[par]( Number(fieldValue) );
-                    console.log(par + ':' + modifier);
-                }
-            }
+            var envelope = {};
+            var freqModifier = {};
+
+            freqModifier[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
+            envelope[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
+            var freq = Object.values(freqModifier)[0];
+            triggerSynth(freq);
+
+            synthA.set({
+                "envelope" : envelope
+            });
+
+            synthB.set({
+                "envelope" : envelope
+            });
+
+            console.log(`Setter `, freqModifier);
         }
     });
+
 };

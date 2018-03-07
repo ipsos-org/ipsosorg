@@ -1,75 +1,79 @@
 <head>
-    <title>Ipsosboard</title>
+    <title>IPSOS</title>
+    <h1>Interactive Physics Sonification System</h1>
+    <img src="images/BEER-logo.jpg" alt="beer logo" width="80" height="100">
     <meta charset="utf-8">
-   </head>
+       </head>
 
-   <body>
+       <body>
+
        {{> ipsosboard}}
-   </body>
+       </body>
+
    <template name="ipsosboard">
 
-       <select id="category-select">
-           <option disabled="enabled" selected="selected">select data</option>
-           {{#each categories}}
-           <option value="{{this}}">{{this}}</option>
-           {{/each}}
-       </select>
-       <select id="synth-select">
-           <option disabled="enabled" selected="selected">select synth</option>
-           {{#each synths}}
-           <option value="{{this}}">{{this}}</option>
-           {{/each}}
+       <tr>{{ eventInfo }}</tr>
+
+       <button class="play">play</button>
+       <button class="stop">stop</button>
+       <select id="event-select">
+           {{ #each event in allEvents }}
+           <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
+           {{ /each }}
        </select>
 
-       <table id="matrix-input" class="responsive-table-input-matrix">
-		<thead>
-        <tr>
-            <th></th>
-            {{#each field in listParams}}
-			      <th>{{field}}</th>
-            {{/each}}
-        </tr>
-		</thead> 
+       <table id="matrix-table">
+               <thead>
+                   <tr>
+                       <th> - </th>
+                       {{ #each field in listParams }}
+                       <th>{{ field }}</th>
+                       {{ /each }}
+                   </tr>
+               </thead>
+               <tbody>
+                 {{#each dataSet in getSonificationData}}
+                 {{#each element in dataSet.data}}
+                 <tr><th colspan="1">{{dataSet.type}}</th></tr>
+                 {{#each pair in (getAllFields element)}}
+                 <tr>
+                   {{ #let
+                     indexTuple=@index
+                   }}
+                   <td><b>{{ pair.label }}</b></td>
+                   {{ #each field in listParams }}
+                   <td>
+                     {{ pair.value }}
+                     <input type="radio" name="{{ field }}" class="{{ field }}" value="{{ pair.value }}"
+                     data-item="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" />
+                   </td>
+                   {{ /each }}
+                   {{ /let }}
+                 </tr>
+                 {{/each}}
+                 {{/each}}
+                 {{/each}}
+               </tbody>
+           </table>
 
-    <tbody>
-        {{#each item in dataItems}}
-		    <tr>
-            <th>
-                {{#each key in dataKeys}}
-                {{key}}
-                {{/each}}
-            </th>
-            {{#each field in listParams}}
-			      <td>{{item[field]}} <input class="{{field}}" type="radio" name="{{field}}" data-item="{{item._id}}" data-field="{{field}}" value={{item[field]}}></td>
-            {{/each}}
-        </tr>
-        {{/each}}
-    </tbody>
-	     </table>
-<!--  <p align="left">
-        <ul>
-            {{#each dataItems}}
-            <li> pt: {{pt}}
-                <input name="checkbox" value={{pt}} type="checkbox">
-            </li>
-            <li> eta: {{eta}}
-                <input name="checkbox" value={{eta}} type="checkbox">
-            </li>
-            <li> phi: {{phi}}
-                <input name="checkbox" value={{phi}} type="checkbox">
-            </li>
-            <li> charge: {{charge}}
-                <input name="checkbox" id="charge" value={{charge}} type="checkbox">
-            </li>
-            {{/each}}
-        </ul>
-       </p>
-       -->
-    <button class="button" id="play">Play</Button>
-    <button class="button" id="stop" value=0>Stop</Button>
-    <div class="slider-wrapper">
-        <input type="range" min="1" max="10" id="speed" value="1" step="0.01" orient="vertical">
-    </div>
-    <div id="range-slider"></div>
-        <p>Left value: {{slider.[0]}}, right value: {{slider.[1]}}</p>
-  </template>
+           <div>Event number : {{ getEventNumber }}</div>
+           <div>Event date : {{ getEventData }}</div>
+
+
+
+
+  <!-- envelope sliders -->
+    <div id="attack"></div>
+    <p>Attack left value: {{attack.[0]}}, Attack right value: {{attack.[1]}}</p>
+    <div id="decay"></div>
+    <p>Decay left value: {{decay.[0]}}, Decay right value: {{decay.[1]}}</p>
+    <div id="sustain"></div>
+    <p>Sustain left value: {{sustain.[0]}}, Sustain right value: {{sustain.[1]}}</p>
+    <div id="release"></div>
+    <p>Release left value: {{release.[0]}}, Release right value: {{release.[1]}}</p>
+    <div id="detune"></div>
+    <p>Detune left value: {{detune.[0]}}, Detune right value: {{detune.[1]}}</p>
+    <!-- voice sliders -->
+    <div id="frequency"></div>
+    <p>Freq left value: {{frequency.[0]}}, Freq right value: {{frequency.[1]}}</p>
+</template>

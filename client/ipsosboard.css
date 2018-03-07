@@ -10,41 +10,24 @@ ul {
 
 button {
     white-space: pre;
+    float: left;
     white-space: pre-wrap;
     white-space: pre-line;
     word-wrap: break-word;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
 }
 
-select-data {
-  background: transparent;
-    width: 410px;
-    padding: 5px;
-    font-size: 14px;
-    line-height: 1;
-    border: 0;
-    border-radius: 0;
-    height: 34px;
-    -webkit-appearance: none;
-}
-
-select-synth {
-    background: transparent;
-    width: 40px;
-    padding: 5px;
-    font-size: 14px;
-    line-height: 1;
-    border: 0;
-    border-radius: 0;
-    height: 34px;
-    -webkit-appearance: none;
-}
-
-slider-wrapper {
-    position: relative
-    display: block;
-    width: 20px;
-    height: 150px;
-    padding: 0;
+select {
+    white-space: pre;
+    float: left;
+    white-space: pre-wrap;
+    white-space: pre-line;
+    word-wrap: break-word;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
 }
 
 html {
@@ -53,23 +36,119 @@ html {
 body {
     height: 100%;
     overflow: hidden;
-    margin: 40px 15px;
+    margin: 0px 10px;
+    margin-left: 20px;
     font-family: Arial, sans-serif;
     font-size: 12px;
+    overflow: scroll;
 }
-#range-slider {
-    position: relative;
+
+#attack {
+    position: sticky;
+    margin: 10px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    float: center;
+    display: inline-block;
+    width: 580px;
     height: 20px;
-    width: 50%;
+    padding: 0;
+}
+
+#decay {
+    position: sticky;
+    margin: 0px;
+    margin-bottom: 0px;
+float: center;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
+}
+
+#sustain {
+    position: sticky;
+    margin: 0px;
+    margin-bottom: 0px;
+    float: center;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
+}
+
+#release {
+    position: sticky;
+    margin: 0px;
+    margin-bottom: 0px;
+    float: center;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
+}
+
+#detune {
+    position: sticky;
+    margin: 0px;
+    float: center;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
+}
+
+#voiceOne {
+    position: sticky;
+    margin: 0px;
+    margin-bottom: 0px;
+    float: center;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
+}
+
+#voiceTwo {
+    float: center;
+    margin: 0px;
+    margin-left: 0px;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
+}
+
+#voiceThree {
+    margin: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    float: center;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
+}
+
+#voiceFour {
+    margin: 0px;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    float: center;
+    display: inline-block;
+    width: 580px;
+    height: 20px;
+    padding: 0;
 }
 
 table { 
-    width: 25%; 
+    width: 50%;
+    height: 300px;
     border-collapse: collapse; 
 }
 /* Zebra striping */
 tr:nth-of-type(odd) { 
-    background: white; 
+    background: grey; 
 }
 th { 
     background: #333; 
@@ -79,13 +158,6 @@ th {
 td, th { 
     padding: 3px; 
     border: 1px solid #ccc; 
-    text-align: left;
+    text-align: center;
     vertical-align: top;
-}
-
-
-#responsive-table-input-matrix {
-		display: block;
-		position: relative;
-		width: 50%;
 }
