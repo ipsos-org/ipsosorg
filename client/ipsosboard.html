@@ -22,7 +22,6 @@
            {{ /each }}
        </select>
 
-
        <table id="matrix-table">
                <thead>
                    <tr>
@@ -32,32 +31,28 @@
                        {{ /each }}
                    </tr>
                </thead>
-
                <tbody>
-                   {{ #each muon in getEventMuons }}
-                   <tr><th colspan="2">Muon</th></tr>
-                   {{ #each tupleMuon in muon }}
-                   <tr>
-                       {{ #let
-                       indexTuple=@index
-                       muonLabel=(getMuonLabel tupleMuon)
-                       muonValue=(getMuonValue tupleMuon)
-                       }}
-
-                       <td><b>{{ muonLabel }}</b></td>
-
-                       {{ #each field in listParams }}
-                       <td>
-                           {{ muonValue }}
-                           <input type="radio" name="{{ field }}" class="{{ field }}" value="{{ muonValue }}"
-                                  data-item="{{ muonLabel }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" />
-                       </td>
-                       {{ /each }}
-
-                       {{ /let }}
-                   </tr>
+                 {{#each dataSet in getSonificationData}}
+                 {{#each element in dataSet.data}}
+                 <tr><th colspan="1">{{dataSet.type}}</th></tr>
+                 {{#each pair in (getAllFields element)}}
+                 <tr>
+                   {{ #let
+                     indexTuple=@index
+                   }}
+                   <td><b>{{ pair.label }}</b></td>
+                   {{ #each field in listParams }}
+                   <td>
+                     {{ pair.value }}
+                     <input type="radio" name="{{ field }}" class="{{ field }}" value="{{ pair.value }}"
+                     data-item="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" />
+                   </td>
                    {{ /each }}
-                   {{ /each }}
+                   {{ /let }}
+                 </tr>
+                 {{/each}}
+                 {{/each}}
+                 {{/each}}
                </tbody>
            </table>
 

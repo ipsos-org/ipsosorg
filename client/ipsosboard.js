@@ -18,36 +18,6 @@ Session.setDefault('release', [0.1, 0.6]);
 
 if (Meteor.isClient) {
 
-
-    const transformData = function transformData( events ) {
-
-        const newDataObject = {};
-
-        for (i = 0; i < events.length; i++) {
-
-            const currentEvent = events[ i ];
-
-            // transform muons by creating tuples
-            const transformedMuons = [];
-
-            currentEvent.muons.forEach(function ( obj ) {
-              const thisMuon = [];
-                Object.keys( obj ).forEach(function ( key ) {
-                    thisMuon.push( [ key, obj[ key ] ] );
-                });
-                transformedMuons.push(thisMuon);
-            });
-
-            // copy event object into a new object,
-            // and override 'muons' key with our transformed muons data
-            newDataObject[ i ] = Object.assign( {}, currentEvent, {
-                muons: transformedMuons
-            });
-        }
-
-        return newDataObject;
-    };
-
 Template.ipsosboard.onCreated(function () {
 
   this.listParams = [
@@ -55,9 +25,7 @@ Template.ipsosboard.onCreated(function () {
     'release',   'detune',      'frequency'
   ];
 
-  // transform your data by creating tuples for each label/value
-  // [ [ 'labelA', labelA_value ], [ 'labelB', labelB_value ], ... ]
-  this.events = transformData( eventsNew );
+  this.events = eventsNew;
 
   // default event name not hard-coded
   const defaultEventName = Object.keys( this.events )[ 0 ];
@@ -76,12 +44,27 @@ Template.ipsosboard.onCreated(function () {
 
         listParams: () => Template.instance().listParams,
 
-        getEventMuons : () => Template.instance().activeEvent.get().muons,
         getEventNumber: () => Template.instance().activeEvent.get().eventNumber,
         getEventData  : () => Template.instance().activeEvent.get().date_time,
 
-        getMuonLabel: ( tuple ) => tuple[ 0 ],
-        getMuonValue: ( tuple ) => tuple[ 1 ],
+        // here we can easily add new data types
+        getSonificationData: function() {
+          return [
+            {type : "Jet", data : Template.instance().activeEvent.get().jets},
+            {type : "Muon", data : Template.instance().activeEvent.get().muons}
+          ]
+        },
+
+        getAllFields: function(dataObject) {
+          let fields = [];
+
+          _.each(Object.keys(dataObject), function(theKey) {
+            fields.push({label: theKey, value: dataObject[theKey] });
+          });
+
+          fields = _.sortBy(fields, 'label');
+          return fields;
+        },
 
         /**
          * {{ #each }} can't loop over an Object
