@@ -6,7 +6,7 @@
        </head>
 
        <body>
-          
+
        {{> ipsosboard}}
        </body>
 
@@ -34,7 +34,9 @@
                </thead>
 
                <tbody>
-                   {{ #each tupleMuon in getEventMuons }}
+                   {{ #each muon in getEventMuons }}
+                   <tr><th colspan="2">Muon</th></tr>
+                   {{ #each tupleMuon in muon }}
                    <tr>
                        {{ #let
                        indexTuple=@index
@@ -55,13 +57,14 @@
                        {{ /let }}
                    </tr>
                    {{ /each }}
+                   {{ /each }}
                </tbody>
            </table>
 
            <div>Event number : {{ getEventNumber }}</div>
            <div>Event date : {{ getEventData }}</div>
 
-          
+
 
 
   <!-- envelope sliders -->

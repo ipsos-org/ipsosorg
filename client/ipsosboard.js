@@ -17,7 +17,7 @@ Session.setDefault('detune', [0.1, 0.6]);
 Session.setDefault('release', [0.1, 0.6]);
 
 if (Meteor.isClient) {
-    
+
 
     const transformData = function transformData( events ) {
 
@@ -31,9 +31,11 @@ if (Meteor.isClient) {
             const transformedMuons = [];
 
             currentEvent.muons.forEach(function ( obj ) {
+              const thisMuon = [];
                 Object.keys( obj ).forEach(function ( key ) {
-                    transformedMuons.push( [ key, obj[ key ] ] );
+                    thisMuon.push( [ key, obj[ key ] ] );
                 });
+                transformedMuons.push(thisMuon);
             });
 
             // copy event object into a new object,
@@ -128,12 +130,12 @@ Template.ipsosboard.onCreated(function () {
             var fieldValue = event.target.value;
             var envelope = {};
             var freqModifier = {};
-            
+
             freqModifier[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
             envelope[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
             var freq = Object.values(freqModifier)[0];
             triggerSynth(freq);
-            
+
             synthA.set({
                 "envelope" : envelope
             });
