@@ -43,11 +43,9 @@
                    {{ #let
                      indexPair=@index
                    }}
-                   <td><b>{{ pair.label }}</b></td>
+                   <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
                    {{ #each field in listParams }}
-
                    <td>
-                     {{ pair.value }}
                      <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
                      data-item="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexPair }}" data-field="{{ field }}" />
                    </td>
