@@ -12,17 +12,15 @@
 
    <template name="ipsosboard">
 
-       <tr>{{ eventInfo }}</tr>
-
-       <button class="play">play</button>
+       <div><button class="play">play</button>
        <button class="stop">stop</button>
        <select id="event-select">
            {{ #each event in allEvents }}
            <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
            {{ /each }}
-       </select>
+       </select></div>
 
-       <table id="matrix-table">
+       <div><table id="matrix-table">
                <thead>
                    <tr>
                        <th> - </th>
@@ -58,7 +56,7 @@
                  {{/each}}
                  {{/each}}
                </tbody>
-           </table>
+           </table></div>
 
            <div>Event number : {{ getEventNumber }}</div>
            <div>Event date : {{ getEventData }}</div>
