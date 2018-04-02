@@ -55,27 +55,26 @@
                  {{ /let }}
                  {{/each}}
                  {{/each}}
+                 <tr>
+                   <td><b>Mapping<br />Ranges</b></td>
+                   <td><div id="attack"></div></td>
+                   <td><div id="decay"></div></td>
+                   <td><div id="sustain"></div></td>
+                   <td><div id="release"></div></td>
+                   <td><div id="detune"></div></td>
+                   <td><div id="frequency"></div></td>
+                 </tr>
                </tbody>
+               <thead>
+                   <tr>
+                       <th> - </th>
+                       {{ #each field in listParams }}
+                       <th>{{ field }}</th>
+                       {{ /each }}
+                   </tr>
+               </thead>
            </table></div>
 
            <div>Event number : {{ getEventNumber }}</div>
            <div>Event date : {{ getEventData }}</div>
-
-
-
-
-  <!-- envelope sliders -->
-    <div id="attack"></div>
-    <p>Attack left value: {{attack.[0]}}, Attack right value: {{attack.[1]}}</p>
-    <div id="decay"></div>
-    <p>Decay left value: {{decay.[0]}}, Decay right value: {{decay.[1]}}</p>
-    <div id="sustain"></div>
-    <p>Sustain left value: {{sustain.[0]}}, Sustain right value: {{sustain.[1]}}</p>
-    <div id="release"></div>
-    <p>Release left value: {{release.[0]}}, Release right value: {{release.[1]}}</p>
-    <div id="detune"></div>
-    <p>Detune left value: {{detune.[0]}}, Detune right value: {{detune.[1]}}</p>
-    <!-- voice sliders -->
-    <div id="frequency"></div>
-    <p>Freq left value: {{frequency.[0]}}, Freq right value: {{frequency.[1]}}</p>
 </template>
