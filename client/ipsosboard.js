@@ -86,6 +86,8 @@ Template.ipsosboard.onCreated(function () {
             return eventsArr;
         },
 
+        incremented(index) { return (index + 1)},
+
     });
 
     function triggerSynth(freq, release){
