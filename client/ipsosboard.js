@@ -5,6 +5,8 @@ import EVENTS from '../lib/events_v0/events.js';
 import eventsNew from '../lib/events_new/events.js';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+import { EJSON } from 'meteor/ejson';
+
 //import './ipsosboard.html';
 
 Session.setDefault('slider', [0.1, 0.6]);
@@ -38,6 +40,10 @@ Template.ipsosboard.onCreated(function () {
     const linkedEvent = this.events[ eventName ];
     this.activeEvent.set( linkedEvent );
   });
+
+  
+  this.state = {}; // Make this a ReactiveDict?
+  
 });
 
     Template.ipsosboard.helpers({
@@ -93,10 +99,12 @@ Template.ipsosboard.onCreated(function () {
     };
 
     Template.ipsosboard.events({
+  
         'change #event-select'( event, tplInstance ) {
             const selectedElem = event.currentTarget.selectedOptions[ 0 ];
             tplInstance.activeEventName.set( selectedElem.value );
         },
+
         'click .play': function(event) {
             //something to start the synth here...
             synthA.triggerAttackRelease(Session.get('freq'), 0.75);
@@ -107,9 +115,44 @@ Template.ipsosboard.onCreated(function () {
             synthA.triggerRelease();
         },
 
+        'click .save': function(event, instance) {
+
+	    instance.state.curValue = instance.activeEventName.curValue;
+	    instance.state.checked = [];
+	    instance.state.params = {};
+	    
+	    var checked = instance.findAll('input[type=radio]:checked');
+
+	    for ( var c in checked ) {
+
+		instance.state.checked.push($(checked[c]).attr('id'));
+
+	    }
+
+	    for ( var pi in instance.listParams ) {
+
+		var param = instance.listParams[pi];
+		instance.state.params[param] = Session.get(param);
+
+	    }
+
+	    var blob = new Blob([EJSON.stringify(instance.state)], {type: 'text/plain'});
+	    var objectURL = URL.createObjectURL(blob);
+
+	    var link = document.createElement('a');
+	    link.style.display = 'none';
+	    document.body.appendChild(link);
+	    
+	    link.href = objectURL;
+	    link.download = 'state_'+ new Date().valueOf() +'.json';
+	    link.target = '_blank';
+	    link.click();
+
+	},
+
         'click #matrix-table': function(event, template){
-            var selected = template.findAll("input[type=checkbox]:checked");
-            var par = $(event.target).attr('class');
+            
+	    var par = $(event.target).attr('class');
             var fieldValue = event.target.value;
             var envelope = {};
             var freqModifier = {};
@@ -128,7 +171,9 @@ Template.ipsosboard.onCreated(function () {
             });
 
             console.log(`Setter `, freqModifier);
+
         }
+
     });
 
 };

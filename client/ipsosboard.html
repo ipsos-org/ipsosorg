@@ -16,6 +16,8 @@
 
        <button class="play">play</button>
        <button class="stop">stop</button>
+       <button class="save">save</button>
+      
        <select id="event-select">
            {{ #each event in allEvents }}
            <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
@@ -34,24 +36,35 @@
                <tbody>
                  {{#each dataSet in getSonificationData}}
                  {{#each element in dataSet.data}}
-                 <tr><th colspan="1">{{dataSet.type}}</th></tr>
+                 
+		 
+		 {{ #let
+                    indexTuple=@index
+                 }}
+
+		 <tr><th colspan="1">{{dataSet.type}}</th></tr>
                  {{#each pair in (getAllFields element)}}
                  <tr>
-                   {{ #let
-                     indexTuple=@index
-                   }}
+                  
                    <td><b>{{ pair.label }}</b></td>
                    {{ #each field in listParams }}
-                   <td>
+                  
+
+		   <td>
                      {{ pair.value }}
                      <input type="radio" name="{{ field }}" class="{{ field }}" value="{{ pair.value }}"
-                     data-item="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" />
+                     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" />
                    </td>
+		  
+
                    {{ /each }}
-                   {{ /let }}
                  </tr>
                  {{/each}}
+
+		 
+		 {{/let}}
                  {{/each}}
+
                  {{/each}}
                </tbody>
            </table>
