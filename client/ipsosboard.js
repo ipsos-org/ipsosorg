@@ -1,10 +1,10 @@
 import specs from '../imports/specs.js';
-import synthA from '../imports/synthA.js';
-import synthB from '../imports/synthB.js';
 import EVENTS from '../lib/events_v0/events.js';
 import eventsNew from '../lib/events_new/events.js';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
+const Tone = require("Tone");
+
 //import './ipsosboard.html';
 
 Session.setDefault('slider', [0.1, 0.6]);
@@ -86,7 +86,7 @@ Template.ipsosboard.onCreated(function () {
             return eventsArr;
         },
 
-        incremented(index) { return (index + 1)},
+        incremented(index) { return (index + 1); },
 
     });
 
@@ -101,12 +101,12 @@ Template.ipsosboard.onCreated(function () {
         },
         'click .play': function(event) {
             //something to start the synth here...
-            synthA.triggerAttackRelease(Session.get('freq'), 0.75);
+            Synth.triggerAttackRelease(Session.get('freq'), 0.75);
             triggerSynth();
         },
 
         'click .stop': function(event) {
-            synthA.triggerRelease();
+            Synth.triggerRelease();
         },
 
         'click #matrix-table': function(event, template){
@@ -121,12 +121,17 @@ Template.ipsosboard.onCreated(function () {
             var freq = Object.values(freqModifier)[0];
             triggerSynth(freq);
 
-            synthA.set({
-                "envelope" : envelope
-            });
 
-            synthB.set({
-                "envelope" : envelope
+            var Synth = new Tone.Synth({
+                oscillator : {
+  	                type : 'fmsquare',
+                    modulationType : 'sawtooth',
+                    modulationIndex : 3,
+                    harmonicity: 3.4
+                },
+
+                envelope : envelope
+
             });
 
             console.log(`Setter `, freqModifier);
