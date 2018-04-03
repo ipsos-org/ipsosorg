@@ -4,7 +4,7 @@ Template.ipsosboard.rendered = function () {
 
     this.$("#frequency").noUiSlider({
         start: Session.get('slider'),
-        orientation: "horizontal",
+        orientation: "vertical",
         connect: true,
         step: 100,
         margin: 3000,
@@ -17,7 +17,8 @@ Template.ipsosboard.rendered = function () {
     }).on('change', function (ev, val) {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
-    });
+    }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
+.Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 /*
     this.$("#voice_two").noUiSlider({
         start: Session.get('slider'),
@@ -73,7 +74,7 @@ Template.ipsosboard.rendered = function () {
 
     this.$("#release").noUiSlider({
         start: Session.get('slider'),
-        orientation: "horizontal",
+        orientation: "vertical",
         connect: true,
         step: 0.01,
         margin: 0.1,
@@ -87,11 +88,12 @@ Template.ipsosboard.rendered = function () {
     }).on('change', function (ev, val) {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
-    });
+    }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
+.Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#detune").noUiSlider({
         start: Session.get('slider'),
-        orientation: "horizontal",
+        orientation: "vertical",
         connect: true,
         step: 1,
         margin: 0.1,
@@ -105,11 +107,12 @@ Template.ipsosboard.rendered = function () {
     }).on('change', function (ev, val) {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
-    });
+    }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
+.Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#attack").noUiSlider({
         start: Session.get('slider'),
-        orientation: "horizontal",
+        orientation: "vertical",
         connect: true,
         step: 0.01,
         margin: 0.01,
@@ -123,11 +126,12 @@ Template.ipsosboard.rendered = function () {
     }).on('change', function (ev, val) {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
-    });
+    }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
+.Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#decay").noUiSlider({
         start: Session.get('slider'),
-        orientation: "horizontal",
+        orientation: "vertical",
         connect: true,
         step: 0.01,
         margin: 0.01,
@@ -141,11 +145,12 @@ Template.ipsosboard.rendered = function () {
     }).on('change', function (ev, val) {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
-    });
+    }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
+.Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#sustain").noUiSlider({
         start: Session.get('slider'),
-        orientation: "horizontal",
+        orientation: "vertical",
         connect: true,
         step: 0.01,
         margin: 0.01,
@@ -159,6 +164,18 @@ Template.ipsosboard.rendered = function () {
     }).on('change', function (ev, val) {
         Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
         console.log(this.id + val);
-    });
+    }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
+.Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
+
+    function sliderHandler(value, handle, slider){
+        var values = slider.val();
+        var tooltip = $('.tooltip').not($(this));
+            tooltip.show();
+            $(this).text(value)
+            .css({
+                'left': '-9px'
+            });
+
+    }
 
 };

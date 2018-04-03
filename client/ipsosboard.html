@@ -6,24 +6,21 @@
        </head>
 
        <body>
-          
+
        {{> ipsosboard}}
        </body>
 
    <template name="ipsosboard">
 
-       <tr>{{ eventInfo }}</tr>
-
-       <button class="play">play</button>
+       <div><button class="play">play</button>
        <button class="stop">stop</button>
        <select id="event-select">
            {{ #each event in allEvents }}
            <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
            {{ /each }}
-       </select>
+       </select></div>
 
-
-       <table id="matrix-table">
+       <div><table id="matrix-table">
                <thead>
                    <tr>
                        <th> - </th>
@@ -32,50 +29,52 @@
                        {{ /each }}
                    </tr>
                </thead>
-
                <tbody>
-                   {{ #each tupleMuon in getEventMuons }}
-                   <tr>
-                       {{ #let
-                       indexTuple=@index
-                       muonLabel=(getMuonLabel tupleMuon)
-                       muonValue=(getMuonValue tupleMuon)
-                       }}
+                 {{#each dataSet in getSonificationData}} <!-- datasets are collections of muons, jets, etc.-->
+                 {{#each element in dataSet.data}} <!-- element is *individual* muon or jet, etc.-->
+                 {{ #let
+                   indexElement=@index
+                 }}
+                 <tr><th colspan="1">{{dataSet.type}}-{{incremented indexElement}}</th></tr><!-- add one to index for humans -->
+                 {{#each pair in (getAllFields element)}} <!-- type dependant key-value pairs, e.g. "phi":1.29274 -->
+                 <tr>
+                   {{ #let
+                     indexPair=@index
+                   }}
+                   <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
+                   {{ #each field in listParams }}
+                   <td>
+                     <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
+                     data-item="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexPair }}" data-field="{{ field }}" />
+                   </td>
 
-                       <td><b>{{ muonLabel }}</b></td>
-
-                       {{ #each field in listParams }}
-                       <td>
-                           {{ muonValue }}
-                           <input type="radio" name="{{ field }}" class="{{ field }}" value="{{ muonValue }}"
-                                  data-item="{{ muonLabel }}-{{ field }}-{{ indexTuple }}" data-field="{{ field }}" />
-                       </td>
-                       {{ /each }}
-
-                       {{ /let }}
-                   </tr>
                    {{ /each }}
+                   {{ /let }}
+                 </tr>
+                 {{/each}}
+                 {{ /let }}
+                 {{/each}}
+                 {{/each}}
+                 <tr>
+                   <td><b>Mapping<br />Ranges</b></td>
+                   <td><div id="attack"></div></td>
+                   <td><div id="decay"></div></td>
+                   <td><div id="sustain"></div></td>
+                   <td><div id="release"></div></td>
+                   <td><div id="detune"></div></td>
+                   <td><div id="frequency"></div></td>
+                 </tr>
                </tbody>
-           </table>
+               <thead>
+                   <tr>
+                       <th> - </th>
+                       {{ #each field in listParams }}
+                       <th>{{ field }}</th>
+                       {{ /each }}
+                   </tr>
+               </thead>
+           </table></div>
 
            <div>Event number : {{ getEventNumber }}</div>
            <div>Event date : {{ getEventData }}</div>
-
-          
-
-
-  <!-- envelope sliders -->
-    <div id="attack"></div>
-    <p>Attack left value: {{attack.[0]}}, Attack right value: {{attack.[1]}}</p>
-    <div id="decay"></div>
-    <p>Decay left value: {{decay.[0]}}, Decay right value: {{decay.[1]}}</p>
-    <div id="sustain"></div>
-    <p>Sustain left value: {{sustain.[0]}}, Sustain right value: {{sustain.[1]}}</p>
-    <div id="release"></div>
-    <p>Release left value: {{release.[0]}}, Release right value: {{release.[1]}}</p>
-    <div id="detune"></div>
-    <p>Detune left value: {{detune.[0]}}, Detune right value: {{detune.[1]}}</p>
-    <!-- voice sliders -->
-    <div id="frequency"></div>
-    <p>Freq left value: {{frequency.[0]}}, Freq right value: {{frequency.[1]}}</p>
 </template>
