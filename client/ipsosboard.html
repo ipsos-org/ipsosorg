@@ -14,6 +14,8 @@
 
        <div><button class="play">play</button>
        <button class="stop">stop</button>
+       <button class="save">save</button>
+      
        <select id="event-select">
            {{ #each event in allEvents }}
            <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
@@ -38,21 +40,16 @@
                  <tr><th colspan="1">{{dataSet.type}}-{{incremented indexElement}}</th></tr><!-- add one to index for humans -->
                  {{#each pair in (getAllFields element)}} <!-- type dependant key-value pairs, e.g. "phi":1.29274 -->
                  <tr>
-                   {{ #let
-                     indexPair=@index
-                   }}
                    <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
                    {{ #each field in listParams }}
                    <td>
                      <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
-                     data-item="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexPair }}" data-field="{{ field }}" />
+                     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-field="{{ field }}" />
                    </td>
-
                    {{ /each }}
-                   {{ /let }}
                  </tr>
                  {{/each}}
-                 {{ /let }}
+                 {{/let }}
                  {{/each}}
                  {{/each}}
                  <tr>
