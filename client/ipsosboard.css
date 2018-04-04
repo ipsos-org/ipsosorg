@@ -173,12 +173,12 @@ td, th {
 .tooltip {
 	display: block;
 	position: absolute;
-	border: 1px solid #D9D9D9;
-	font: 400 12px/12px Arial;
-	border-radius: 3px;
-	background: #fff;
+	border: 0px;
+	font: normal bold 11px/11px Arial;
+	border-radius: 0px;
+	background: transparent;
 	top: 0px;
-	padding: 5px;
+	padding: 10px 0px 0px 40px;
 	left: 0px;
 	text-align: center;
 	width: 50px;
