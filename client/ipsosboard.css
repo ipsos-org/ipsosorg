@@ -20,10 +20,6 @@ button {
 }
 
 select {
-    white-space: pre;
-    float: left;
-    white-space: pre-wrap;
-    white-space: pre-line;
     word-wrap: break-word;
     margin-top: 0px;
     margin-left: 0px;
@@ -45,56 +41,68 @@ body {
 
 #attack {
     position: sticky;
-    margin: 10px;
+    margin: 20px;
     margin-left: 0px;
     margin-bottom: 0px;
     float: center;
     display: inline-block;
-    width: 580px;
-    height: 20px;
+    height: 200px;
+    width: 20px;
     padding: 0;
 }
 
 #decay {
     position: sticky;
-    margin: 0px;
-    margin-bottom: 0px;
+    margin: 20px;
+    margin-bottom: 20px;
 float: center;
     display: inline-block;
-    width: 580px;
-    height: 20px;
+    height: 200px;
+    width: 20px;
     padding: 0;
 }
 
 #sustain {
     position: sticky;
-    margin: 0px;
-    margin-bottom: 0px;
+    margin: 20px;
+    margin-bottom: 20px;
     float: center;
     display: inline-block;
-    width: 580px;
-    height: 20px;
+    height: 200px;
+    width: 20px;
     padding: 0;
 }
 
 #release {
     position: sticky;
-    margin: 0px;
-    margin-bottom: 0px;
+    margin: 20px;
+    margin-bottom: 20px;
     float: center;
     display: inline-block;
-    width: 580px;
-    height: 20px;
+    height: 200px;
+    width: 20px;
     padding: 0;
 }
 
 #detune {
     position: sticky;
-    margin: 0px;
+    margin: 20px;
+    margin-bottom: 20px;
     float: center;
     display: inline-block;
-    width: 580px;
-    height: 20px;
+    height: 200px;
+    width: 20px;
+    padding: 0;
+}
+
+#frequency {
+    position: sticky;
+    margin: 20px;
+    margin-bottom: 20px;
+    float: center;
+    display: inline-block;
+    height: 200px;
+    width: 20px;
     padding: 0;
 }
 
@@ -104,7 +112,7 @@ float: center;
     margin-bottom: 0px;
     float: center;
     display: inline-block;
-    width: 580px;
+    width: 200px;
     height: 20px;
     padding: 0;
 }
@@ -114,7 +122,7 @@ float: center;
     margin: 0px;
     margin-left: 0px;
     display: inline-block;
-    width: 580px;
+    width: 200px;
     height: 20px;
     padding: 0;
 }
@@ -125,7 +133,7 @@ float: center;
     margin-bottom: 0px;
     float: center;
     display: inline-block;
-    width: 580px;
+    width: 200px;
     height: 20px;
     padding: 0;
 }
@@ -136,28 +144,43 @@ float: center;
     margin-bottom: 0px;
     float: center;
     display: inline-block;
-    width: 580px;
+    width: 200px;
     height: 20px;
     padding: 0;
 }
 
-table { 
+table {
     width: 50%;
     height: 300px;
-    border-collapse: collapse; 
+    border-collapse: collapse;
 }
 /* Zebra striping */
-tr:nth-of-type(odd) { 
-    background: grey; 
+tr:nth-of-type(odd) {
+    background: grey;
 }
-th { 
-    background: #333; 
-    color: white; 
-    font-weight: bold; 
+th {
+    background: #333;
+    color: white;
+    font-weight: bold;
 }
-td, th { 
-    padding: 3px; 
-    border: 1px solid #ccc; 
+td, th {
+    padding: 3px;
+    border: 1px solid #ccc;
     text-align: center;
     vertical-align: top;
+}
+
+.tooltip {
+	display: block;
+	position: absolute;
+	border: 1px solid #D9D9D9;
+	font: 400 12px/12px Arial;
+	border-radius: 3px;
+	background: #fff;
+	top: 0px;
+	padding: 5px;
+	left: 0px;
+	text-align: center;
+	width: 50px;
+  height: 35px;
 }
