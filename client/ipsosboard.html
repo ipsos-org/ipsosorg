@@ -43,8 +43,8 @@
                    <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
                    {{ #each field in listParams }}
                    <td>
-                     <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
-                     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-field="{{ field }}" />
+                     <input type="radio" name="{{ field }}-{{dataSet.type}}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
+                     id="{{ pair.label }}-{{ field }}-{{dataSet.type}}-{{ indexElement }}" data-field="{{ field }}" data-element="{{dataSet.type}}-{{ indexElement }}" />
                    </td>
                    {{ /each }}
                  </tr>

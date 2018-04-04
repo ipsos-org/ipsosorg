@@ -7,6 +7,8 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { EJSON } from 'meteor/ejson';
 
+var Tone = require("Tone");
+
 //import './ipsosboard.html';
 
 Session.setDefault('slider', [0.1, 0.6]);
@@ -41,9 +43,12 @@ Template.ipsosboard.onCreated(function () {
     this.activeEvent.set( linkedEvent );
   });
 
-  
+
   this.state = {}; // Make this a ReactiveDict?
-  
+
+  this.synthParameters = {};
+  this.synthArray = [];
+
 });
 
     Template.ipsosboard.helpers({
@@ -101,20 +106,56 @@ Template.ipsosboard.onCreated(function () {
     };
 
     Template.ipsosboard.events({
-  
+
         'change #event-select'( event, tplInstance ) {
             const selectedElem = event.currentTarget.selectedOptions[ 0 ];
             tplInstance.activeEventName.set( selectedElem.value );
         },
 
-        'click .play': function(event) {
+        'click .play': function(event, instance) {
             //something to start the synth here...
-            synthA.triggerAttackRelease(Session.get('freq'), 0.75);
-            triggerSynth();
+            // synthA.triggerAttackRelease(Session.get('freq'), 0.75);
+            // triggerSynth();
+
+            // clean up from last time
+            for (var synth in instance.synthArray) {
+              synth.dispose();
+            }
+
+            instance.synthArray = [];
+
+            for (var element in instance.synthParameters) {
+              var params = instance.synthParameters[element];
+              console.log(`params4synth `, params);
+              var synth = new Tone.Synth({
+              	  oscillator : {
+                	    type : 'fmsquare',
+                      modulationType : 'sawtooth',
+                      modulationIndex : 3,
+                      harmonicity: 3.4
+                  },
+                  envelope : {
+                    attack  : params["attack"] ,
+                    decay  : params["decay"] ,
+                    sustain  : params["sustain"] ,
+                    release  : params["release"]
+                  },
+                  frequency: params["frequency"]
+              }).toMaster();
+              instance.synthArray.push(synth);
+            }
+
+            for (var s in instance.synthArray) {
+              var synth = instance.synthArray[s];
+              synth.triggerAttackRelease({duration: "4n", velocity: 1 / instance.synthArray.length});
+            }
         },
 
-        'click .stop': function(event) {
-            synthA.triggerRelease();
+        'click .stop': function(event, instance) {
+          for (var s in instance.synthArray) {
+            var synth = instance.synthArray[s];
+            synth.triggerRelease();
+          }
         },
 
         'click .save': function(event, instance) {
@@ -122,7 +163,7 @@ Template.ipsosboard.onCreated(function () {
 	    instance.state.curValue = instance.activeEventName.curValue;
 	    instance.state.checked = [];
 	    instance.state.params = {};
-	    
+
 	    var checked = instance.findAll('input[type=radio]:checked');
 
 	    for ( var c in checked ) {
@@ -144,7 +185,7 @@ Template.ipsosboard.onCreated(function () {
 	    var link = document.createElement('a');
 	    link.style.display = 'none';
 	    document.body.appendChild(link);
-	    
+
 	    link.href = objectURL;
 	    link.download = 'state_'+ new Date().valueOf() +'.json';
 	    link.target = '_blank';
@@ -152,28 +193,25 @@ Template.ipsosboard.onCreated(function () {
 
 	},
 
-        'click #matrix-table': function(event, template){
-            
-	    var par = $(event.target).attr('class');
-            var fieldValue = event.target.value;
-            var envelope = {};
-            var freqModifier = {};
+        'click #matrix-table': function(event, instance){
 
-            freqModifier[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
-            envelope[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
-            var freq = Object.values(freqModifier)[0];
-            triggerSynth(freq);
+	          var checked = instance.findAll('input[type=radio]:checked');
 
-            synthA.set({
-                "envelope" : envelope
-            });
+            var synthParameters = {};
 
-            synthB.set({
-                "envelope" : envelope
-            });
+            for ( var c in checked ) {
+              var element = $(checked[c]).attr('data-element');
+              if(typeof synthParameters[element] == 'undefined') {
+                synthParameters[element] = {};
+              }
+              var par = $(checked[c]).attr('class');
+              var fieldValue = $(checked[c]).attr('value');
+              synthParameters[element][par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
 
-            console.log(`Setter `, freqModifier);
+            }
 
+            console.log(`synthpar `, synthParameters);
+            instance.synthParameters = synthParameters;
         }
 
     });
