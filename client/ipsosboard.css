@@ -1,3 +1,4 @@
+/*
 ul {
     list-style-type: circle;
     background: none;
@@ -6,17 +7,6 @@ ul {
     padding: 0;
     top: 220;
     height: 220;
-}
-
-button {
-    white-space: pre;
-    float: left;
-    white-space: pre-wrap;
-    white-space: pre-line;
-    word-wrap: break-word;
-    margin-top: 0px;
-    margin-left: 0px;
-    margin-bottom: 0px;
 }
 
 select {
@@ -29,6 +19,7 @@ select {
 html {
     height: 100%;
 }
+
 body {
     height: 100%;
     overflow: hidden;
@@ -38,6 +29,7 @@ body {
     font-size: 12px;
     overflow: scroll;
 }
+*/
 
 #attack {
     position: sticky;
@@ -55,7 +47,7 @@ body {
     position: sticky;
     margin: 20px;
     margin-bottom: 20px;
-float: center;
+    float: center;
     display: inline-block;
     height: 200px;
     width: 20px;
@@ -149,12 +141,29 @@ float: center;
     padding: 0;
 }
 
+/*
+ Note: for some reason row margins don't appear
+ automatically from bootstrap. Make new class here to 
+ add
+*/
+.rowmt {
+  margin-top:10px;
+}
+
+.noUi-connect {
+ background: #c8b45a;
+}
+
+/*
 table {
     width: 50%;
     height: 300px;
     border-collapse: collapse;
 }
+*/
 /* Zebra striping */
+
+/*
 tr:nth-of-type(odd) {
     background: grey;
 }
@@ -169,6 +178,7 @@ td, th {
     text-align: center;
     vertical-align: top;
 }
+*/
 
 .tooltip {
 	display: block;
@@ -182,5 +192,5 @@ td, th {
 	left: 0px;
 	text-align: center;
 	width: 50px;
-  height: 35px;
+ 	height: 35px;
 }

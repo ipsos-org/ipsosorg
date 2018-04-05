@@ -7,7 +7,8 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { EJSON } from 'meteor/ejson';
 
-//import './ipsosboard.html';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 
 Session.setDefault('slider', [0.1, 0.6]);
 Session.setDefault('frequency', [0.1, 0.6]);
