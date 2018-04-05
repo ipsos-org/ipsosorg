@@ -98,7 +98,7 @@ Template.ipsosboard.onCreated(function () {
         },
 
         incremented(index) { return (index + 1)},
-
+        
     });
 
     function triggerSynth(freq, release){
@@ -118,37 +118,36 @@ Template.ipsosboard.onCreated(function () {
             // triggerSynth();
 
             // clean up from last time
-            for (var synth in instance.synthArray) {
-              synth.dispose();
-            }
+            //for (var s in instance.synthArray) { instance[s].dispose(); }
 
             instance.synthArray = [];
 
             for (var element in instance.synthParameters) {
-              var params = instance.synthParameters[element];
-              console.log(`params4synth `, params);
-              var synth = new Tone.Synth({
-              	  oscillator : {
-                	    type : 'fmsquare',
-                      modulationType : 'sawtooth',
-                      modulationIndex : 3,
-                      harmonicity: 3.4
-                  },
-                  envelope : {
-                    attack  : params["attack"] ,
-                    decay  : params["decay"] ,
-                    sustain  : params["sustain"] ,
-                    release  : params["release"]
-                  },
-                  frequency: params["frequency"]
-              }).toMaster();
-              instance.synthArray.push(synth);
+                var params = instance.synthParameters[element];
+                console.log(`params4synth `, params);
+                var synth = new Tone.Synth({
+                    "oscillator" : {
+                        "type" : "pwm",
+                        "modulationFrequency" : Number(params["frequency"])
+                    },
+                    "envelope" : {
+                        "attack" : Number(params["attack"]),
+                        "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
+                        "sustain" : Number(params["sustain"]),
+                        "release" : Number(params["release"])
+                    },
+                    "detune" : Number(params["detune"]),
+                    "frequency" : Number(params["frequency"]),
+                }).toMaster();
+
+                instance.synthArray.push(synth);
             }
 
             for (var s in instance.synthArray) {
               var synth = instance.synthArray[s];
-              synth.triggerAttackRelease({duration: "4n", velocity: 1 / instance.synthArray.length});
+                synth.triggerAttackRelease("C4", Number(params["release"]) + 0.01);
             }
+
         },
 
         'click .stop': function(event, instance) {
