@@ -118,7 +118,7 @@ Template.ipsosboard.onCreated(function () {
             // triggerSynth();
 
             // clean up from last time
-            //for (var s in instance.synthArray) { instance[s].dispose(); }
+            for (var s in instance.synthArray) { instance.synthArray[s].dispose(); }
 
             instance.synthArray = [];
 
