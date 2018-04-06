@@ -1,77 +1,109 @@
 <head>
-    <title>IPSOS</title>
-    <h1>Interactive Physics Sonification System</h1>
-    <img src="images/BEER-logo.jpg" alt="beer logo" width="80" height="100">
-    <meta charset="utf-8">
-       </head>
+  <title>IPSOS</title>
+  <meta charset="utf-8">
+</head>
 
-       <body>
+<body>
+  <div class="container-fluid">
+    <div class="row rowmt">
+      <div class="col-lg-6">
+	<h2>Interactive Physics Sonification System</h2>
+	<img src="images/BEER-logo.jpg" alt="beer logo" width="80" height="100">
+      </div>
+    </div>
+    {{> ipsosboard}}
+  </div>
+</body>
 
-       {{> ipsosboard}}
-       </body>
+<template name="ipsosboard">
 
-   <template name="ipsosboard">
+  <div class="row rowmt">
+    <div class="col-lg-3">
+      <select class="form-control" id="event-select">
+        {{ #each event in allEvents }}
+        <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
+        {{ /each }}
+      </select>
+    </div>
+    <div class="col-md-3">Event number : {{ getEventNumber }}</div>
+    <div class="col-md-3">Event date : {{ getEventData }}</div>
+  </div>
 
-       <div><button class="play">play</button>
-       <button class="stop">stop</button>
-       <button class="save">save</button>
+  <div class="row rowmt">
+    <div class="col-lg-12">
+      <button type="button" class="play btn btn-warning">play</button>
+      <button class="stop btn btn-warning">stop</button>
+      <button class="save btn btn-warning">save</button>
+    </div> 
+  </div>
+
+  <div class="row rowmt">
+    <div class="col-lg-6">
+      <table class="table table-striped" id="matrix-table">
+	<thead class="thead-light">
+          <tr>
+            <th> </th>
+            {{ #each field in listParams }}
+            <th>{{ field }}</th>
+            {{ /each }}
+          </tr>
+	</thead>
+	<tbody>
+          {{#each dataSet in getSonificationData}} <!-- datasets are collections of muons, jets, etc.-->
+          {{#each element in dataSet.data}} <!-- element is *individual* muon or jet, etc.-->
+          {{ #let
+          indexElement=@index
+          }}
+          <tr><th colspan="1" class="table-warning">{{dataSet.type}}-{{incremented indexElement}}</th></tr><!-- add one to index for humans -->
+          {{#each pair in (getAllFields element)}} <!-- type dependant key-value pairs, e.g. "phi":1.29274 -->
+          <tr>
+            <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
+            {{ #each field in listParams }}
+            <td>
+              <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
+		     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-field="{{ field }}" />
+            </td>
+            {{ /each }}
+          </tr>
+          {{/each}}
+          {{/let }}
+          {{/each}}
+          {{/each}}
+        
+	</tbody>
       
-       <select id="event-select">
-           {{ #each event in allEvents }}
-           <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
-           {{ /each }}
-       </select></div>
+      </table>
+    </div>
 
-       <div><table id="matrix-table">
-               <thead>
-                   <tr>
-                       <th> - </th>
-                       {{ #each field in listParams }}
-                       <th>{{ field }}</th>
-                       {{ /each }}
-                   </tr>
-               </thead>
-               <tbody>
-                 {{#each dataSet in getSonificationData}} <!-- datasets are collections of muons, jets, etc.-->
-                 {{#each element in dataSet.data}} <!-- element is *individual* muon or jet, etc.-->
-                 {{ #let
-                   indexElement=@index
-                 }}
-                 <tr><th colspan="1">{{dataSet.type}}-{{incremented indexElement}}</th></tr><!-- add one to index for humans -->
-                 {{#each pair in (getAllFields element)}} <!-- type dependant key-value pairs, e.g. "phi":1.29274 -->
-                 <tr>
-                   <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
-                   {{ #each field in listParams }}
-                   <td>
-                     <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
-                     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-field="{{ field }}" />
-                   </td>
-                   {{ /each }}
-                 </tr>
-                 {{/each}}
-                 {{/let }}
-                 {{/each}}
-                 {{/each}}
-                 <tr>
-                   <td><b>Mapping<br />Ranges</b></td>
-                   <td><div id="attack"></div></td>
-                   <td><div id="decay"></div></td>
-                   <td><div id="sustain"></div></td>
-                   <td><div id="release"></div></td>
-                   <td><div id="detune"></div></td>
-                   <td><div id="frequency"></div></td>
-                 </tr>
-               </tbody>
-               <thead>
-                   <tr>
-                       <th> - </th>
-                       {{ #each field in listParams }}
-                       <th>{{ field }}</th>
-                       {{ /each }}
-                   </tr>
-               </thead>
-           </table></div>
+    <div class="col-lg-3">
+      <table class="table table-striped">
+	<tbody>
+	  <tr>
+	    <th colspan="1" class="table-warning">
+	      Mapping<br />Ranges
+	    </th>
+	  </tr>
+	  <tr>
+            <th> </th>
+            <td><div id="attack"></div></td>
+            <td><div id="decay"></div></td>
+            <td><div id="sustain"></div></td>
+            <td><div id="release"></div></td>
+            <td><div id="detune"></div></td>
+            <td><div id="frequency"></div></td>
+          </tr>  
+	</tbody>
+	<thead class="thead-light">
+          <tr>
+            <th> </th>
+            {{ #each field in listParams }}
+            <th>{{ field }}</th>
+            {{ /each }}
+          </tr>
+	</thead>
+      </table>
+    </div>
 
-           <div>Event number : {{ getEventNumber }}</div>
-           <div>Event date : {{ getEventData }}</div>
+  </div>
+  
 </template>
