@@ -7,7 +7,7 @@ Template.ipsosboard.rendered = function () {
         orientation: "vertical",
         connect: true,
         step: 0.01,
-        margin: 3000,
+        margin: 0.1,
         range: {
             'min': 0.1,
             'max': 1.0
@@ -25,10 +25,10 @@ Template.ipsosboard.rendered = function () {
         orientation: "vertical",
         connect: true,
         step: 0.1,
-        margin: 3000,
+        margin: 0.1,
         range: {
-            'min': 0,
-            'max': 127
+            'min': 0.0,
+            'max': 127.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
@@ -100,7 +100,7 @@ Template.ipsosboard.rendered = function () {
         orientation: "vertical",
         connect: true,
         step: 0.01,
-        margin: 0.01,
+        margin: 0.1,
         range: {
             'min': 0.01,
             'max': 0.8
