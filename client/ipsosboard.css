@@ -98,52 +98,20 @@ body {
     padding: 0;
 }
 
-#voiceOne {
+#duration {
     position: sticky;
-    margin: 0px;
-    margin-bottom: 0px;
+    margin: 20px;
+    margin-bottom: 20px;
     float: center;
     display: inline-block;
-    width: 200px;
-    height: 20px;
-    padding: 0;
-}
-
-#voiceTwo {
-    float: center;
-    margin: 0px;
-    margin-left: 0px;
-    display: inline-block;
-    width: 200px;
-    height: 20px;
-    padding: 0;
-}
-
-#voiceThree {
-    margin: 0px;
-    margin-left: 0px;
-    margin-bottom: 0px;
-    float: center;
-    display: inline-block;
-    width: 200px;
-    height: 20px;
-    padding: 0;
-}
-
-#voiceFour {
-    margin: 0px;
-    margin-left: 0px;
-    margin-bottom: 0px;
-    float: center;
-    display: inline-block;
-    width: 200px;
-    height: 20px;
+    height: 200px;
+    width: 20px;
     padding: 0;
 }
 
 /*
  Note: for some reason row margins don't appear
- automatically from bootstrap. Make new class here to 
+ automatically from bootstrap. Make new class here to
  add
 */
 .rowmt {
