@@ -5,7 +5,7 @@
     "start": "meteor run"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.38",
+    "@babel/runtime": "^7.0.0-beta.44",
     "babel-runtime": "^6.26.0",
     "core-js": "^2.5.3",
     "flocking": "0.1.4",
@@ -13,13 +13,15 @@
     "gulp-cli": "^1.4.0",
     "ion-rangeslider": "^2.2.0",
     "meteor-node-stubs": "~0.2.4",
-    "nouislider": "^11.0.3",
+    "nouislider": "^11.1.0",
     "scale-value": "^1.0.0",
     "timbre": "^14.11.25",
-    "tone": "^0.11.11",
+    "tone": "^0.11.12",
     "vue": "^1.0.24",
     "vue-json-tree-view": "^2.1.1",
     "vue-meteor-tracker": "^1.0.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/tone": "git+https://github.com/Tonejs/TypeScript.git"
+  }
 }

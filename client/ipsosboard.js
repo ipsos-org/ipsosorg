@@ -1,7 +1,4 @@
 import specs from '../imports/specs.js';
-import synthA from '../imports/synthA.js';
-import synthB from '../imports/synthB.js';
-import EVENTS from '../lib/events_v0/events.js';
 import eventsNew from '../lib/events_new/events.js';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -9,16 +6,14 @@ import { EJSON } from 'meteor/ejson';
 
 var Tone = require("Tone");
 
-//import './ipsosboard.html';
-
 Session.setDefault('slider', [0.1, 0.6]);
 Session.setDefault('frequency', [0.1, 0.6]);
-Session.setDefault('voice-dur', [0.1, 0.6]);
 Session.setDefault('attack', [0.01, 0.1]);
 Session.setDefault('decay', [0.1, 0.6]);
 Session.setDefault('sustain', [0.1, 0.6]);
 Session.setDefault('detune', [0.1, 0.6]);
 Session.setDefault('release', [0.1, 0.6]);
+Session.setDefault('duration', [0.1, 0.5]);
 
 if (Meteor.isClient) {
 
@@ -101,10 +96,6 @@ Template.ipsosboard.onCreated(function () {
         
     });
 
-    function triggerSynth(freq, release){
-        return Session.set('freq', freq);
-    };
-
     Template.ipsosboard.events({
 
         'change #event-select'( event, tplInstance ) {
@@ -114,9 +105,7 @@ Template.ipsosboard.onCreated(function () {
 
         'click .play': function(event, instance) {
             //something to start the synth here...
-            // synthA.triggerAttackRelease(Session.get('freq'), 0.75);
-            // triggerSynth();
-
+            
             // clean up from last time
             for (var s in instance.synthArray) { instance.synthArray[s].dispose(); }
 
@@ -124,28 +113,29 @@ Template.ipsosboard.onCreated(function () {
 
             for (var element in instance.synthParameters) {
                 var params = instance.synthParameters[element];
+
                 console.log(`params4synth `, params);
                 var synth = new Tone.Synth({
                     "oscillator" : {
-                        "type" : "pwm",
-                        "modulationFrequency" : Number(params["frequency"])
+                        "type" : "sine",
+                        "detune" : Math.abs(params["detune"]),
+                        "frequency" : Math.abs(params["frequency"])
                     },
                     "envelope" : {
-                        "attack" : Number(params["attack"]),
-                        "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
-                        "sustain" : Number(params["sustain"]),
-                        "release" : Number(params["release"])
+                        "attack" : Math.abs(params["attack"]),
+                        "decay" : Math.abs(params["decay"]),
+                        "sustain" : Math.abs(params["sustain"]),
+                        "release" : Math.abs(params["release"])
                     },
-                    "detune" : Number(params["detune"]),
-                    "frequency" : Number(params["frequency"]),
                 }).toMaster();
 
                 instance.synthArray.push(synth);
             }
 
             for (var s in instance.synthArray) {
-              var synth = instance.synthArray[s];
-                synth.triggerAttackRelease("C4", Number(params["release"]) + 0.01);
+                var synth = instance.synthArray[s];
+                var note = Math.abs(params['frequency']), dur = Session.get('duration');
+                synth.triggerAttackRelease(note, dur);
             }
 
         },

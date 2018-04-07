@@ -46,8 +46,8 @@ const specs = {
         return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
     frequency: function(val, outmin, outmax){
-    	  inmin = 120.0;
-      	inmax = 1220.0;
+    	  inmin = 20.0;
+      	inmax = 20000.0;
         return (((val - inmin) / (inmax - inmin)) * (outmax - outmin)) + outmin;
     },
 };
