@@ -11,7 +11,7 @@ var Tone = require("Tone");
 
 
 //Session.setDefault('slider', [0.1, 0.6]);
-Session.setDefault('frequency', [20.0, 5000.0]);
+Session.setDefault('midinote', [20.0, 60.0]);
 Session.setDefault('attack', [0.01, 0.1]);
 Session.setDefault('decay', [0.1, 0.6]);
 Session.setDefault('sustain', [0.1, 0.6]);
@@ -26,7 +26,7 @@ Template.ipsosboard.onCreated(function () {
 
   this.listParams = [
     'attack',    'decay',       'sustain',
-    'release',   'detune',      'frequency',  'duration'
+    'release',   'detune',      'midinote',  'duration'
   ];
 
   this.events = eventsNew;
@@ -115,8 +115,6 @@ Template.ipsosboard.onCreated(function () {
 
             var rbs = instance.findAll('input[type=radio]:checked');
             var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
-
-
             var synthParameters = {};
 
             for ( var c in checked ) {
@@ -146,7 +144,7 @@ Template.ipsosboard.onCreated(function () {
                     "oscillator" : {
                       "type" : "sine",
                       "detune" : Number(params["detune"]),
-                      "frequency" : Number(params["frequency"])
+                      "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
                     },
                     "envelope" : {
                         "attack" : Number(params["attack"]),
@@ -162,7 +160,7 @@ Template.ipsosboard.onCreated(function () {
                     this.chordmode = false;
                 }
 
-                instance.synthArray.push([synth, Number(params["duration"]), Number(params["frequency"])]);
+                instance.synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
             }
             var when = Tone.now();
             for (var s in instance.synthArray) {
