@@ -134,7 +134,7 @@ Template.ipsosboard.onCreated(function () {
 
             for (var s in instance.synthArray) {
                 var synth = instance.synthArray[s];
-                var note = Math.abs(params['frequency']), dur = Session.get('duration');
+                var note = Math.abs(params['frequency']), dur = Session.get('duration')[0];
                 synth.triggerAttackRelease(note, dur);
             }
 
@@ -201,8 +201,12 @@ Template.ipsosboard.onCreated(function () {
 
             console.log(`synthpar `, synthParameters);
             instance.synthParameters = synthParameters;
-        }
+        },
 
-    });
+        "click [type='submit']": ( (event, instance) => {
+            console.log(event);
+        })
+
+        });
 
 };
