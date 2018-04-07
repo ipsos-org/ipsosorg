@@ -2,11 +2,29 @@ var noUiSlider = require('nouislider');
 
 Template.ipsosboard.rendered = function () {
 
-    this.$("#frequency").noUiSlider({
-        start: Session.get('slider'),
+    this.$("#duration").noUiSlider({
+        start: Session.get('duration'),
         orientation: "vertical",
         connect: true,
-        step: 100,
+        step: 0.01,
+        margin: 3000,
+        range: {
+            'min': 0.1,
+            'max': 1.0
+        }
+    }).on('slide', function (ev, val) {
+        Session.set(this.id, [val[0], val[1]]);
+    }).on('change', function (ev, val) {
+        Session.set(this.id, [val[0], val[1]]);
+        console.log(this.id + val);
+    }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
+        .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
+
+    this.$("#frequency").noUiSlider({
+        start: Session.get('frequency'),
+        orientation: "vertical",
+        connect: true,
+        step: 0.1,
         margin: 3000,
         range: {
             'min': 20.0,
@@ -15,65 +33,13 @@ Template.ipsosboard.rendered = function () {
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
     }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
 .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
-/*
-    this.$("#voice_two").noUiSlider({
-        start: Session.get('slider'),
-        orientation: "horizontal",
-        connect: true,
-        step: 100,
-        margin: 300,
-        range: {
-            'min': 20.0,
-            'max': 20000.0
-        }
-    }).on('slide', function (ev, val) {
-        Session.set(this.id, [val[0], val[1]]);
-    }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
-        console.log(this.id + val);
-    });
-
-    this.$("#voice_three").noUiSlider({
-        start: Session.get('slider'),
-        orientation: "horizontal",
-        connect: true,
-        step: 100,
-        margin: 300,
-        range: {
-            'min': 20.0,
-            'max': 20000.0
-        }
-    }).on('slide', function (ev, val) {
-        Session.set(this.id, [val[0], val[1]]);
-    }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
-        console.log(this.id + val);
-    });
-
-    this.$("#voice_four").noUiSlider({
-        start: Session.get('slider'),
-        orientation: "horizontal",
-        connect: true,
-        step: 100,
-        margin: 300,
-        range: {
-            'min': 20.0,
-            'max': 20000.0
-        }
-    }).on('slide', function (ev, val) {
-        Session.set(this.id, [val[0], val[1]]);
-    }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
-        console.log(this.id + val);
-    });
-    */
 
     this.$("#release").noUiSlider({
-        start: Session.get('slider'),
+        start: Session.get('release'),
         orientation: "vertical",
         connect: true,
         step: 0.01,
@@ -86,13 +52,13 @@ Template.ipsosboard.rendered = function () {
         Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
 .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#detune").noUiSlider({
-        start: Session.get('slider'),
+        start: Session.get('detune'),
         orientation: "vertical",
         connect: true,
         step: 1,
@@ -105,32 +71,32 @@ Template.ipsosboard.rendered = function () {
         Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
 .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#attack").noUiSlider({
-        start: Session.get('slider'),
+        start: Session.get('attack'),
         orientation: "vertical",
         connect: true,
         step: 0.01,
         margin: 0.01,
         range: {
             'min': 0.01,
-            'max': 0.99
+            'max': 0.1
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
 .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#decay").noUiSlider({
-        start: Session.get('slider'),
+        start: Session.get('decay'),
         orientation: "vertical",
         connect: true,
         step: 0.01,
@@ -143,13 +109,13 @@ Template.ipsosboard.rendered = function () {
         Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
 .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     this.$("#sustain").noUiSlider({
-        start: Session.get('slider'),
+        start: Session.get('sustain'),
         orientation: "vertical",
         connect: true,
         step: 0.01,
@@ -162,7 +128,7 @@ Template.ipsosboard.rendered = function () {
         Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).on('change', function (ev, val) {
-        Session.set(this.id, [Math.round(val[0]), Math.round(val[1])]);
+        Session.set(this.id, [val[0], val[1]]);
         console.log(this.id + val);
     }).Link('lower').to('-inline-<div class="tooltip"></div>', sliderHandler)
 .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);

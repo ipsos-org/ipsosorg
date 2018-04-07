@@ -1,7 +1,4 @@
 import specs from '../imports/specs.js';
-import synthA from '../imports/synthA.js';
-import synthB from '../imports/synthB.js';
-import EVENTS from '../lib/events_v0/events.js';
 import eventsNew from '../lib/events_new/events.js';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -10,14 +7,18 @@ import { EJSON } from 'meteor/ejson';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
-Session.setDefault('slider', [0.1, 0.6]);
-Session.setDefault('frequency', [0.1, 0.6]);
-Session.setDefault('voice-dur', [0.1, 0.6]);
+var Tone = require("Tone");
+
+
+//Session.setDefault('slider', [0.1, 0.6]);
+Session.setDefault('frequency', [20.0, 5000.0]);
 Session.setDefault('attack', [0.01, 0.1]);
 Session.setDefault('decay', [0.1, 0.6]);
 Session.setDefault('sustain', [0.1, 0.6]);
-Session.setDefault('detune', [0.1, 0.6]);
+Session.setDefault('detune', [1.0, 50.0]);
 Session.setDefault('release', [0.1, 0.6]);
+Session.setDefault('duration', [0.1, 1.0]);
+
 
 if (Meteor.isClient) {
 
@@ -25,7 +26,7 @@ Template.ipsosboard.onCreated(function () {
 
   this.listParams = [
     'attack',    'decay',       'sustain',
-    'release',   'detune',      'frequency'
+    'release',   'detune',      'frequency',  'duration'
   ];
 
   this.events = eventsNew;
@@ -42,9 +43,13 @@ Template.ipsosboard.onCreated(function () {
     this.activeEvent.set( linkedEvent );
   });
 
-  
+
   this.state = {}; // Make this a ReactiveDict?
-  
+
+  this.synthParameters = {};
+  this.synthArray = [];
+
+
 });
 
     Template.ipsosboard.helpers({
@@ -97,25 +102,74 @@ Template.ipsosboard.onCreated(function () {
 
     });
 
-    function triggerSynth(freq, release){
-        return Session.set('freq', freq);
-    };
-
     Template.ipsosboard.events({
-  
+
         'change #event-select'( event, tplInstance ) {
             const selectedElem = event.currentTarget.selectedOptions[ 0 ];
             tplInstance.activeEventName.set( selectedElem.value );
         },
 
-        'click .play': function(event) {
-            //something to start the synth here...
-            synthA.triggerAttackRelease(Session.get('freq'), 0.75);
-            triggerSynth();
+        'click .play': function(event, instance) {
+            // sort synthParameters
+
+            var checked = instance.findAll('input[type=radio]:checked');
+
+            var synthParameters = {};
+
+            for ( var c in checked ) {
+              var element = $(checked[c]).attr('data-element');
+              if(typeof synthParameters[element] == 'undefined') {
+                synthParameters[element] = {};
+              }
+              var par = $(checked[c]).attr('class');
+              var physpar = $(checked[c]).attr('data-physicsparam');
+              var fieldValue = $(checked[c]).attr('value');
+              synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
+
+            }
+
+            console.log(`synthpar `, synthParameters);
+            instance.synthParameters = synthParameters;
+
+            // clean up from last time
+            for (var s in instance.synthArray) { instance.synthArray[s][0].dispose(); }
+
+            instance.synthArray = [];
+
+            for (var element in instance.synthParameters) {
+                var params = instance.synthParameters[element];
+                console.log(`params4synth `, params);
+                var synth = new Tone.Synth({
+                    "oscillator" : {
+                      "type" : "sine",
+                      "detune" : Number(params["detune"]),
+                      "frequency" : Number(params["frequency"])
+                    },
+                    "envelope" : {
+                        "attack" : Number(params["attack"]),
+                        "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
+                        "sustain" : Number(params["sustain"]),
+                        "release" : Number(params["release"])
+                    }
+                }).toMaster();
+
+                instance.synthArray.push([synth, Number(params["duration"]), Number(params["frequency"])]);
+            }
+
+            for (var s in instance.synthArray) {
+              var synth = instance.synthArray[s][0];
+              var dur = instance.synthArray[s][1];
+              var note = instance.synthArray[s][2];
+              synth.triggerAttackRelease(note, dur);
+            }
+
         },
 
-        'click .stop': function(event) {
-            synthA.triggerRelease();
+        'click .stop': function(event, instance) {
+          for (var s in instance.synthArray) {
+            var synth = instance.synthArray[s][0];
+            synth.triggerRelease();
+          }
         },
 
         'click .save': function(event, instance) {
@@ -123,7 +177,7 @@ Template.ipsosboard.onCreated(function () {
 	    instance.state.curValue = instance.activeEventName.curValue;
 	    instance.state.checked = [];
 	    instance.state.params = {};
-	    
+
 	    var checked = instance.findAll('input[type=radio]:checked');
 
 	    for ( var c in checked ) {
@@ -145,7 +199,7 @@ Template.ipsosboard.onCreated(function () {
 	    var link = document.createElement('a');
 	    link.style.display = 'none';
 	    document.body.appendChild(link);
-	    
+
 	    link.href = objectURL;
 	    link.download = 'state_'+ new Date().valueOf() +'.json';
 	    link.target = '_blank';
@@ -153,29 +207,6 @@ Template.ipsosboard.onCreated(function () {
 
 	},
 
-        'click #matrix-table': function(event, template){
-            
-	    var par = $(event.target).attr('class');
-            var fieldValue = event.target.value;
-            var envelope = {};
-            var freqModifier = {};
-
-            freqModifier[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
-            envelope[par] = specs[par](fieldValue, Session.get(par)[0], Session.get(par)[1]);
-            var freq = Object.values(freqModifier)[0];
-            triggerSynth(freq);
-
-            synthA.set({
-                "envelope" : envelope
-            });
-
-            synthB.set({
-                "envelope" : envelope
-            });
-
-            console.log(`Setter `, freqModifier);
-
-        }
 
     });
 
