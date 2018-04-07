@@ -49,6 +49,9 @@ Template.ipsosboard.onCreated(function () {
   this.synthParameters = {};
   this.synthArray = [];
   this.chordmode = true;
+  this.storedSonifications = [];
+  this.storeIndex = 0;
+  this.storeSynths = [[], [], [], [], [], [], [], [], []];
 
 
 });
@@ -174,6 +177,31 @@ Template.ipsosboard.onCreated(function () {
 
         },
 
+        'click .store': function(event, instance) {
+          // this duplicates a lot of code in play, so should be factored out later
+          var rbs = instance.findAll('input[type=radio]:checked');
+          var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
+          var synthParameters = {};
+
+          for ( var c in checked ) {
+            var element = $(checked[c]).attr('data-element');
+            if(typeof synthParameters[element] == 'undefined') {
+              synthParameters[element] = {};
+            }
+            var par = $(checked[c]).attr('class');
+            var physpar = $(checked[c]).attr('data-physicsparam');
+            var fieldValue = $(checked[c]).attr('value');
+            synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
+          }
+
+          var storedParams = {};
+
+          storedParams["synthParams"] = synthParameters;
+          storedParams["chordmode"] = this.chordmode;
+          instance.storedSonifications[instance.storeIndex] = storedParams;
+          instance.storeIndex = (instance.storeIndex + 1)%9;
+        },
+
         'click .stop': function(event, instance) {
           for (var s in instance.synthArray) {
             var synth = instance.synthArray[s][0];
@@ -217,9 +245,60 @@ Template.ipsosboard.onCreated(function () {
 	},
 
 
-        "click [type='submit']": ( (event, instance) => {
-            console.log(event);
-        })
+  "click [type='submit']": ( (event, instance) => {
+    var ind = Number($(event.target).attr("data-playind"));
+
+    console.log(event);
+    var storedParams = instance.storedSonifications[ind];
+    if(typeof storedParams != 'undefined') {
+      var synthParameters = storedParams["synthParams"];
+      var chordMode = storedParams["chordmode"];
+
+      var synthArray = instance.storeSynths[ind];
+
+      // clean up from last time
+      for (var s in synthArray) { synthArray[s][0].dispose(); }
+
+      synthArray = [];
+
+      for (var element in synthParameters) {
+        var params = synthParameters[element];
+        console.log(`params4synth `, params);
+        var synth = new Tone.Synth({
+          "oscillator" : {
+            "type" : "sine",
+            "detune" : Number(params["detune"]),
+            "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
+          },
+          "envelope" : {
+            "attack" : Number(params["attack"]),
+            "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
+            "sustain" : Number(params["sustain"]),
+            "release" : Number(params["release"])
+          }
+        }).toMaster();
+
+        if ($("#chord").prop("checked")) {
+          this.chordmode = true;
+        } else {
+          this.chordmode = false;
+        }
+
+        synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
+      }
+      instance.storeSynths[ind] = synthArray;
+      var when = Tone.now();
+      for (var s in synthArray) {
+        var synth = synthArray[s][0];
+        var dur = synthArray[s][1];
+        var note = synthArray[s][2];
+        console.log(`when `, when);
+        synth.triggerAttackRelease(note, dur, when);
+        if(!chordmode) { when = when + dur; }
+      }
+    }
+  })
+
 
         });
 
