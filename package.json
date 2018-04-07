@@ -19,7 +19,7 @@
     "popper.js": "^1.14.3",
     "scale-value": "^1.0.0",
     "timbre": "^14.11.25",
-    "tone": "^0.11.11",
+    "tone": "^0.12.80",
     "vue": "^1.0.24",
     "vue-json-tree-view": "^2.1.1",
     "vue-meteor-tracker": "^1.0.3"
