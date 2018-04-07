@@ -60,7 +60,7 @@
             <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
             {{ #each field in listParams }}
             <td>
-              <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}"
+              <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}" checked=""
 		     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-physicsparam="{{ pair.label }}" data-field="{{ field }}" data-element="{{dataSet.type}}-{{ indexElement }}" />
             </td>
             {{ /each }}
