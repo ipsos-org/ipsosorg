@@ -48,6 +48,7 @@ Template.ipsosboard.onCreated(function () {
 
   this.synthParameters = {};
   this.synthArray = [];
+  this.chordmode = true;
 
 
 });
@@ -112,7 +113,9 @@ Template.ipsosboard.onCreated(function () {
         'click .play': function(event, instance) {
             // sort synthParameters
 
-            var checked = instance.findAll('input[type=radio]:checked');
+            var rbs = instance.findAll('input[type=radio]:checked');
+            var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
+
 
             var synthParameters = {};
 
@@ -153,14 +156,22 @@ Template.ipsosboard.onCreated(function () {
                     }
                 }).toMaster();
 
+                if ($("#chord").prop("checked")) {
+                    this.chordmode = true;
+                } else {
+                    this.chordmode = false;
+                }
+
                 instance.synthArray.push([synth, Number(params["duration"]), Number(params["frequency"])]);
             }
-
+            var when = Tone.now();
             for (var s in instance.synthArray) {
               var synth = instance.synthArray[s][0];
               var dur = instance.synthArray[s][1];
               var note = instance.synthArray[s][2];
-              synth.triggerAttackRelease(note, dur);
+              console.log(`when `, when);
+              synth.triggerAttackRelease(note, dur, when);
+              if(!this.chordmode) { when = when + dur; }
             }
 
         },

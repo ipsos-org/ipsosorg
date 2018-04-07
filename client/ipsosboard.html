@@ -34,6 +34,10 @@
       <button type="button" class="play btn btn-warning">play</button>
       <button class="stop btn btn-warning">stop</button>
       <button class="save btn btn-warning">save</button>
+      <input type="radio" name="chordOrSeq" id="chord" checked="" data-type="chordbutton"/>
+      <label for="chord">chord</label>
+      <input type="radio" name="chordOrSeq" id="sequence" data-type="chordbutton"/>
+      <label for="sequence">sequence</label>
     </div>
   </div>
 
@@ -61,7 +65,7 @@
             {{ #each field in listParams }}
             <td>
               <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}" checked=""
-		     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-physicsparam="{{ pair.label }}" data-field="{{ field }}" data-element="{{dataSet.type}}-{{ indexElement }}" />
+		     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-type="matrixbutton" data-physicsparam="{{ pair.label }}" data-field="{{ field }}" data-element="{{dataSet.type}}-{{ indexElement }}" />
             </td>
             {{ /each }}
           </tr>
