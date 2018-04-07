@@ -198,6 +198,10 @@ Template.ipsosboard.onCreated(function () {
 
           storedParams["synthParams"] = synthParameters;
           storedParams["chordmode"] = this.chordmode;
+
+          var storeButton = instance.find('[data-playind=' + instance.storeIndex + ']');
+
+          $(storeButton).attr('class', "btn btn-success");
           instance.storedSonifications[instance.storeIndex] = storedParams;
           instance.storeIndex = (instance.storeIndex + 1)%9;
         },
@@ -245,7 +249,7 @@ Template.ipsosboard.onCreated(function () {
 	},
 
 
-  "click [type='submit']": ( (event, instance) => {
+  "click [data-type='playbutton']": ( (event, instance) => {
     var ind = Number($(event.target).attr("data-playind"));
 
     console.log(event);
