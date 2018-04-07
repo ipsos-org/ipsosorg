@@ -217,6 +217,10 @@ Template.ipsosboard.onCreated(function () {
 	},
 
 
-    });
+        "click [type='submit']": ( (event, instance) => {
+            console.log(event);
+        })
+
+        });
 
 };
