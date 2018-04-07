@@ -33,7 +33,7 @@
     <div class="col-lg-12">
       <button type="button" class="play btn btn-warning">play</button>
       <button class="stop btn btn-warning">stop</button>
-      <button class="save btn btn-warning">save</button>
+      <button class="store btn btn-warning">store</button>
       <input type="radio" name="chordOrSeq" id="chord" checked="" data-type="chordbutton"/>
       <label for="chord">chord</label>
       <input type="radio" name="chordOrSeq" id="sequence" data-type="chordbutton"/>
@@ -109,6 +109,30 @@
       </table>
     </div>
 
+
+    <div class="col-lg-12">
+      <table class="table-warning" id="playback-table">
+        <tbody>
+          <tr>
+            <td><button type="button" class="btn btn-secondary" id="cell1" data-type="playbutton" data-playind = "0">1</button></td>
+            <td><button type="button" class="btn btn-secondary" id="cell2" data-type="playbutton" data-playind = "1">2</button></td>
+            <td><button type="button" class="btn btn-secondary" id="cell3" data-type="playbutton" data-playind = "2">3</button></td>
+          </tr>
+          <tr>
+            <td><button type="button" class="btn btn-secondary" id="cell4" data-type="playbutton" data-playind = "3">4</button></td>
+            <td><button type="button" class="btn btn-secondary" id="cell5" data-type="playbutton" data-playind = "4">5</button></td>
+            <td><button type="button" class="btn btn-secondary" id="cell6" data-type="playbutton" data-playind = "5">6</button></td>
+          </tr>
+          <tr>
+            <td><button type="button" class="btn btn-secondary" id="cell7" data-type="playbutton" data-playind = "6">7</button></td>
+            <td><button type="button" class="btn btn-secondary" id="cell8" data-type="playbutton" data-playind = "7">8</button></td>
+            <td><button type="button" class="btn btn-secondary" id="cell9" data-type="playbutton" data-playind = "8">9</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
+           <div>Event number : {{ getEventNumber }}</div>
+           <div>Event date : {{ getEventData }}</div>
 </template>
