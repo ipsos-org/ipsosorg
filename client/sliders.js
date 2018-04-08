@@ -11,7 +11,7 @@ Template.ipsosboard.rendered = function () {
         range: {
             'min': 0.1,
             'max': 1.0
-        }
+	    }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
     }).on('change', function (ev, val) {
@@ -134,8 +134,10 @@ Template.ipsosboard.rendered = function () {
 .Link('upper').to('-inline-<div class="tooltip"></div>', sliderHandler);
 
     function sliderHandler(value, handle, slider){
+
         var values = slider.val();
         var tooltip = $('.tooltip').not($(this));
+	
             tooltip.show();
             $(this).text(value)
             .css({
