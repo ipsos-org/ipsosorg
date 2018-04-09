@@ -6,8 +6,10 @@
 <body>
   <div class="container-fluid">
     <div class="row rowmt">
-      <div class="col-lg-6">
+      <div class="col-lg-3">
 	<h2>Interactive Physics Sonification System</h2>
+      </div>
+      <div class="col-md-3">
 	<img src="images/BEER-logo.jpg" alt="beer logo" width="80" height="100">
       </div>
     </div>
@@ -18,37 +20,44 @@
 <template name="ipsosboard">
 
   <div class="row rowmt">
-    <div class="col-lg-3">
+    <div class="col-md-3">
       <select class="form-control" id="event-select">
         {{ #each event in allEvents }}
         <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
         {{ /each }}
       </select>
     </div>
-    <div class="col-md-3">Event number : {{ getEventNumber }}</div>
-    <div class="col-md-3">Event date : {{ getEventData }}</div>
-  </div>
-
-  <div class="row rowmt">
-    <div class="col-lg-12">
-      <button type="button" class="play btn btn-warning">play</button>
-      <button class="stop btn btn-warning">stop</button>
-      <button class="store btn btn-warning">store</button>
-      <input type="radio" name="chordOrSeq" id="chord" checked="" data-type="chordbutton"/>
-      <label for="chord">chord</label>
-      <input type="radio" name="chordOrSeq" id="sequence" data-type="chordbutton"/>
-      <label for="sequence">sequence</label>
+    <div class="col-md-3">
+      <p>Event number : {{ getEventNumber }}</p>
+      <p>Event date : {{ getEventData }}</p>
     </div>
-  </div>
+  </div> <!-- End of row 1 -->
 
   <div class="row rowmt">
-    <div class="col-lg-6">
-      <table class="table table-striped" id="matrix-table">
+    <div class="col-md-2">
+      <button type="button" class="play btn btn-warning btn-lg">play</button>
+      <button class="stop btn btn-warning btn-lg">stop</button>
+      <button class="store btn btn-warning btn-lg">store</button>
+    </div>
+    <div class="col-md-3">
+      <div class="radio">
+	<label for="chord"><input type="radio" name="chordOrSeq" id="chord" checked="" data-type="chordbutton"> chord</label>
+      </div>
+      <div class="radio">
+	<label for="sequence"><input type="radio" name="chordOrSeq" id="sequence" data-type="chordbutton"> sequence</label>
+      </div>
+    </div>
+  </div> <!-- End of row 2 -->
+
+  <div class="row rowmt">
+    
+    <div class="col-md-5">
+      <table class="table table-bordered table-striped" id="matrix-table">
 	<thead class="thead-light">
           <tr>
             <th> </th>
             {{ #each field in listParams }}
-            <th>{{ field }}</th>
+            <th class="text-center">{{ field }}</th>
             {{ /each }}
           </tr>
 	</thead>
@@ -63,7 +72,7 @@
           <tr>
             <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
             {{ #each field in listParams }}
-            <td>
+            <td class="text-center">
               <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}" checked=""
 		     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-type="matrixbutton" data-physicsparam="{{ pair.label }}" data-field="{{ field }}" data-element="{{dataSet.type}}-{{ indexElement }}" />
             </td>
@@ -77,62 +86,66 @@
 	</tbody>
 
       </table>
-    </div>
+     
+    </div> <!-- End of column 1 -->
 
-    <div class="col-lg-3">
-      <table class="table table-striped" id="ranges-table">
-	<tbody>
-	  <tr>
-	    <th colspan="1" class="table-warning">
-	      Mapping<br />Ranges
-	    </th>
-	  </tr>
-	  <tr>
-            <th> </th>
-            <td><div id="attack"></div></td>
-            <td><div id="decay"></div></td>
-            <td><div id="sustain"></div></td>
-            <td><div id="release"></div></td>
-            <td><div id="detune"></div></td>
-            <td><div id="midinote"></div></td>
-            <td><div id="duration"></div></td>
-          </tr>
-	</tbody>
-	<thead class="thead-light">
-          <tr>
-            <th> </th>
-            {{ #each field in listParams }}
-            <th>{{ field }}</th>
-            {{ /each }}
-          </tr>
-	</thead>
-      </table>
-    </div>
+    <div class="col-md-5">
+
+      <div class="row">
+	<table class="table table-bordered table-striped" id="ranges-table">
+	  <tbody>
+	    <tr>
+	      <th colspan="1" class="table-warning">
+		Mapping<br />Ranges
+	      </th>
+	    </tr>
+	    <tr>
+              <th> </th>
+              <td><div id="attack"></div></td>
+              <td><div id="decay"></div></td>
+              <td><div id="sustain"></div></td>
+              <td><div id="release"></div></td>
+              <td><div id="detune"></div></td>
+              <td><div id="midinote"></div></td>
+              <td><div id="duration"></div></td>
+            </tr>
+	  </tbody>
+	  <thead class="thead-light">
+            <tr>
+              <th> </th>
+              {{ #each field in listParams }}
+              <th>{{ field }}</th>
+              {{ /each }}
+            </tr>
+	  </thead>
+	</table>
+      </div>
+      
+      <div class="row">
+	<table class="table table-bordered" id="playback-table">
+          <tbody>
+            <tr>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell1" data-type="playbutton" data-playind="0">1</button></td>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell2" data-type="playbutton" data-playind="1">2</button></td>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell3" data-type="playbutton" data-playind="2">3</button></td>
+            </tr>
+            <tr>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell4" data-type="playbutton" data-playind="3">4</button></td>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell5" data-type="playbutton" data-playind="4">5</button></td>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell6" data-type="playbutton" data-playind="5">6</button></td>
+            </tr>
+            <tr>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell7" data-type="playbutton" data-playind="6">7</button></td>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell8" data-type="playbutton" data-playind="7">8</button></td>
+	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell9" data-type="playbutton" data-playind="8">9</button></td>
+            </tr>
+          </tbody>
+	</table>
+      </div>
+    
+    </div> <!-- End of column 2 -->    
+    
+  </div> <!-- End of row 3 -->
 
 
-    <div class="col-lg-12">
-      <table class="table-warning" id="playback-table">
-        <tbody>
-          <tr>
-            <td><button type="button" class="btn btn-secondary" id="cell1" data-type="playbutton" data-playind = "0">1</button></td>
-            <td><button type="button" class="btn btn-secondary" id="cell2" data-type="playbutton" data-playind = "1">2</button></td>
-            <td><button type="button" class="btn btn-secondary" id="cell3" data-type="playbutton" data-playind = "2">3</button></td>
-          </tr>
-          <tr>
-            <td><button type="button" class="btn btn-secondary" id="cell4" data-type="playbutton" data-playind = "3">4</button></td>
-            <td><button type="button" class="btn btn-secondary" id="cell5" data-type="playbutton" data-playind = "4">5</button></td>
-            <td><button type="button" class="btn btn-secondary" id="cell6" data-type="playbutton" data-playind = "5">6</button></td>
-          </tr>
-          <tr>
-            <td><button type="button" class="btn btn-secondary" id="cell7" data-type="playbutton" data-playind = "6">7</button></td>
-            <td><button type="button" class="btn btn-secondary" id="cell8" data-type="playbutton" data-playind = "7">8</button></td>
-            <td><button type="button" class="btn btn-secondary" id="cell9" data-type="playbutton" data-playind = "8">9</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-           <div>Event number : {{ getEventNumber }}</div>
-           <div>Event date : {{ getEventData }}</div>
 </template>
