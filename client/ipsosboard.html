@@ -92,15 +92,18 @@
     <div class="col-md-5">
 
       <div class="row">
-	<table class="table table-bordered table-striped" id="ranges-table">
+	<table class="table table-bordered" id="ranges-table">
 	  <tbody>
-	    <tr>
-	      <th colspan="1" class="table-warning">
-		Mapping<br />Ranges
-	      </th>
+	    <tr class="text-center">
+	      <td><span id="attack-low"></span></td>
+	      <td><span id="decay-low"></span></td>
+	      <td><span id="sustain-low"></span></td>
+	      <td><span id="release-low"></span></td>
+	      <td><span id="detune-low"></span></td>
+	      <td><span id="midinote-low"></span></td>
+	      <td><span id="duration-low"></span></td>
 	    </tr>
-	    <tr>
-              <th> </th>
+	    <tr class="text-center">
               <td><div id="attack"></div></td>
               <td><div id="decay"></div></td>
               <td><div id="sustain"></div></td>
@@ -109,10 +112,18 @@
               <td><div id="midinote"></div></td>
               <td><div id="duration"></div></td>
             </tr>
+	    <tr class="text-center">
+	      <td><span id="attack-high"></span></td>
+	      <td><span id="decay-high"></span></td>
+	      <td><span id="sustain-high"></span></td>
+	      <td><span id="release-high"></span></td>
+	      <td><span id="detune-high"></span></td>
+	      <td><span id="midinote-high"></span></td>
+	      <td><span id="duration-high"></span></td>
+	    </tr>
 	  </tbody>
 	  <thead class="thead-light">
-            <tr>
-              <th> </th>
+            <tr class="text-center">
               {{ #each field in listParams }}
               <th>{{ field }}</th>
               {{ /each }}
