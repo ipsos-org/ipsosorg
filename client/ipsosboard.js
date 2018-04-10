@@ -67,7 +67,8 @@ Template.ipsosboard.onCreated(function () {
         getSonificationData: function() {
           return [
             {type : "Jet", data : Template.instance().activeEvent.get().jets},
-            {type : "Muon", data : Template.instance().activeEvent.get().muons}
+            {type : "Muon", data : Template.instance().activeEvent.get().muons},
+	    {type: "Electron", data: Template.instance().activeEvent.get().electrons}
           ]
         },
 
