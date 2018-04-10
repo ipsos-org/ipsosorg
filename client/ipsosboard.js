@@ -68,7 +68,8 @@ Template.ipsosboard.onCreated(function () {
           return [
             {type : "Jet", data : Template.instance().activeEvent.get().jets},
             {type : "Muon", data : Template.instance().activeEvent.get().muons},
-	    {type: "Electron", data: Template.instance().activeEvent.get().electrons}
+	    {type: "Electron", data: Template.instance().activeEvent.get().electrons},
+	    {type: "Photon", data: Template.instance().activeEvent.get().photons}
           ]
         },
 
