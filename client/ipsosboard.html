@@ -5,11 +5,11 @@
 
 <body>
   <div class="container-fluid">
-    <div class="row rowmt">
-      <div class="col-lg-3">
+    <div class="row">
+      <div class="col-sm-3">
 	<h2>Interactive Physics Sonification System</h2>
       </div>
-      <div class="col-md-3">
+      <div class="col-sm-3">
 	<img src="images/BEER-logo.jpg" alt="beer logo" width="80" height="100">
       </div>
     </div>
@@ -19,27 +19,27 @@
 
 <template name="ipsosboard">
 
-  <div class="row rowmt">
-    <div class="col-md-3">
+  <div class="row">
+    <div class="col-sm-3">
       <select class="form-control" id="event-select">
         {{ #each event in allEvents }}
         <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
         {{ /each }}
       </select>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <p>Event number : {{ getEventNumber }}</p>
       <p>Event date : {{ getEventData }}</p>
     </div>
   </div> <!-- End of row 1 -->
 
-  <div class="row rowmt">
-    <div class="col-md-2">
+  <div class="row">
+    <div class="col-sm-2">
       <button type="button" class="play btn btn-warning btn-lg">play</button>
       <button class="stop btn btn-warning btn-lg">stop</button>
       <button class="store btn btn-warning btn-lg">store</button>
     </div>
-    <div class="col-md-3">
+    <div class="col-sm-3">
       <div class="radio">
 	<label for="chord"><input type="radio" name="chordOrSeq" id="chord" checked="" data-type="chordbutton"> chord</label>
       </div>
@@ -49,9 +49,9 @@
     </div>
   </div> <!-- End of row 2 -->
 
-  <div class="row rowmt">
+  <div class="row">
     
-    <div class="col-md-5">
+    <div class="col-sm-6">
       <table class="table table-bordered table-striped" id="matrix-table">
 	<thead class="thead-light">
           <tr class="text-center">
@@ -89,9 +89,12 @@
      
     </div> <!-- End of column 1 -->
 
-    <div class="col-md-5">
+    <div class="col-sm-6">
 
       <div class="row">
+	
+	<div class="col-sm-12">
+
 	<table class="table table-bordered" id="ranges-table">
 	  <tbody>
 	    <tr class="text-center">
@@ -130,9 +133,16 @@
             </tr>
 	  </thead>
 	</table>
+
+
+	</div>
+
       </div>
       
       <div class="row">
+
+	<div class="col-sm-12">
+
 	<table class="table table-bordered" id="playback-table">
           <tbody>
             <tr>
@@ -152,6 +162,9 @@
             </tr>
           </tbody>
 	</table>
+
+	</div>
+
       </div>
     
     </div> <!-- End of column 2 -->    
