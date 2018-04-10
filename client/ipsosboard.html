@@ -54,10 +54,10 @@
     <div class="col-md-5">
       <table class="table table-bordered table-striped" id="matrix-table">
 	<thead class="thead-light">
-          <tr>
+          <tr class="text-center">
             <th> </th>
             {{ #each field in listParams }}
-            <th class="text-center">{{ field }}</th>
+            <th>{{ field }}</th>
             {{ /each }}
           </tr>
 	</thead>
@@ -67,12 +67,12 @@
           {{ #let
           indexElement=@index
           }}
-          <tr><th colspan="1" class="table-warning">{{dataSet.type}}-{{incremented indexElement}}</th></tr><!-- add one to index for humans -->
+          <tr class="text-center"><th colspan="1" class="table-warning">{{dataSet.type}}-{{incremented indexElement}}</th></tr><!-- add one to index for humans -->
           {{#each pair in (getAllFields element)}} <!-- type dependant key-value pairs, e.g. "phi":1.29274 -->
-          <tr>
+          <tr class="text-center">
             <td><b>{{ pair.label }}</b><br />{{ pair.value }}</td>
             {{ #each field in listParams }}
-            <td class="text-center">
+            <td>
               <input type="radio" name="{{ field }}-{{ indexElement }}" class="{{ field }}" value="{{ pair.value }}" checked=""
 		     id="{{dataSet.type}}-{{ pair.label }}-{{ field }}-{{ indexElement }}" data-type="matrixbutton" data-physicsparam="{{ pair.label }}" data-field="{{ field }}" data-element="{{dataSet.type}}-{{ indexElement }}" />
             </td>
