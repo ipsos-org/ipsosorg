@@ -203,6 +203,8 @@ Template.ipsosboard.onCreated(function () {
           var storeButton = instance.find('[data-playind=' + instance.storeIndex + ']');
 
           $(storeButton).attr('class', "btn btn-success");
+          setTimeout(function() {$(storeButton).attr('class', "btn btn-secondary btn-lg");}, 250);
+          setTimeout(function() {$(storeButton).attr('class', "btn btn-success btn-lg");}, 500);
           instance.storedSonifications[instance.storeIndex] = storedParams;
           instance.storeIndex = (instance.storeIndex + 1)%9;
         },
