@@ -9,7 +9,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 var Tone = require("Tone");
 
-
 //Session.setDefault('slider', [0.1, 0.6]);
 Session.setDefault('midinote', [20.0, 60.0]);
 Session.setDefault('attack', [0.01, 0.1]);
@@ -18,7 +17,6 @@ Session.setDefault('sustain', [0.1, 0.6]);
 Session.setDefault('detune', [1.0, 50.0]);
 Session.setDefault('release', [0.1, 0.6]);
 Session.setDefault('duration', [0.1, 1.0]);
-
 
 if (Meteor.isClient) {
 

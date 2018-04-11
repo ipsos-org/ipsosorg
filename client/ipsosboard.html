@@ -23,18 +23,17 @@
     <div class="col-sm-3">
       <select class="form-control" id="event-select">
         {{ #each event in allEvents }}
-        <option value="{{ event.name }}">Load data for event #{{ event.name }}</option>
+        <option value="{{ event.name }}">Collision event #{{ event.name }}</option>
         {{ /each }}
       </select>
     </div>
-    <div class="col-sm-3">
-      <p>Event number : {{ getEventNumber }}</p>
+    <div class="col-sm-6">
       <p>Event date : {{ getEventData }}</p>
     </div>
   </div> <!-- End of row 1 -->
 
   <div class="row">
-    <div class="col-sm-2">
+    <div class="col-sm-3">
       <button type="button" class="play btn btn-warning btn-lg">play</button>
       <button class="stop btn btn-warning btn-lg">stop</button>
       <button class="store btn btn-warning btn-lg">store</button>
@@ -47,10 +46,10 @@
 	<label for="sequence"><input type="radio" name="chordOrSeq" id="sequence" data-type="chordbutton"> sequence</label>
       </div>
     </div>
-      <div class="col-md-3">
+      <div class="col-sm-3">
         <select class="form-control" id="synthtype-select">
           {{ #each type in synthTypes }}
-          <option value="{{ type }}">Select Synth type {{ type }}</option>
+          <option value="{{ type }}">Synth type: {{ type }}</option>
           {{ /each }}
         </select>
     </div>
@@ -59,7 +58,7 @@
   <div class="row">
     
     <div class="col-sm-6">
-      <table class="table table-bordered table-striped" id="matrix-table">
+      <table class="table table-sm table-bordered table-striped" id="matrix-table">
 	<thead class="thead-light">
           <tr class="text-center">
             <th> </th>
@@ -94,15 +93,11 @@
 
       </table>
      
-    </div> <!-- End of column 1 -->
+    </div>  <!-- End of column 1 -->
 
     <div class="col-sm-6">
 
-      <div class="row">
-	
-	<div class="col-sm-12">
-
-	<table class="table table-bordered" id="ranges-table">
+	<table class="table table-bordered table-striped table-sm" id="ranges-table">
 	  <tbody>
 	    <tr class="text-center">
 	      <td><span id="attack-low"></span></td>
@@ -141,16 +136,8 @@
 	  </thead>
 	</table>
 
-
-	</div>
-
-      </div>
-      
-      <div class="row">
-
-	<div class="col-sm-12">
-
-	<table class="table table-bordered" id="playback-table">
+	
+	<table class="table table-sm table-bordered" id="playback-table">
           <tbody>
             <tr>
 	      <td class="text-center"><button type="button" class="btn btn-warning btn-lg" id="cell1" data-type="playbutton" data-playind="0">1</button></td>
@@ -170,12 +157,14 @@
           </tbody>
 	</table>
 
-	</div>
+    
+    </div>
+
+<!--
+
 
       </div>
-    
-    </div> <!-- End of column 2 -->    
-    
+    -->
   </div> <!-- End of row 3 -->
 
 
