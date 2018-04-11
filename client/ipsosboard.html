@@ -47,6 +47,13 @@
 	<label for="sequence"><input type="radio" name="chordOrSeq" id="sequence" data-type="chordbutton"> sequence</label>
       </div>
     </div>
+      <div class="col-md-3">
+        <select class="form-control" id="synthtype-select">
+          {{ #each type in synthTypes }}
+          <option value="{{ type }}">Select Synth type {{ type }}</option>
+          {{ /each }}
+        </select>
+    </div>
   </div> <!-- End of row 2 -->
 
   <div class="row">
