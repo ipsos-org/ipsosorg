@@ -29,6 +29,8 @@ Template.ipsosboard.onCreated(function () {
     'release',   'detune',      'midinote',  'duration'
   ];
 
+  this.synthTypes = ['sine', 'square', 'triangle', 'sawtooth'];
+
   this.events = eventsNew;
 
   // default event name not hard-coded
@@ -52,6 +54,7 @@ Template.ipsosboard.onCreated(function () {
   this.storedSonifications = [];
   this.storeIndex = 0;
   this.storeSynths = [[], [], [], [], [], [], [], [], []];
+  this.synthType = 'sine';
 
 
 });
@@ -59,6 +62,8 @@ Template.ipsosboard.onCreated(function () {
     Template.ipsosboard.helpers({
 
         listParams: () => Template.instance().listParams,
+
+        synthTypes: () => Template.instance().synthTypes,
 
         getEventNumber: () => Template.instance().activeEvent.get().eventNumber,
         getEventData  : () => Template.instance().activeEvent.get().date_time,
@@ -114,6 +119,11 @@ Template.ipsosboard.onCreated(function () {
             tplInstance.activeEventName.set( selectedElem.value );
         },
 
+        'change #synthtype-select'( event, tplInstance ) {
+            const selectedElem = event.currentTarget.selectedOptions[ 0 ];
+            tplInstance.synthType = selectedElem.value;
+        },
+
         'click .play': function(event, instance) {
             // sort synthParameters
 
@@ -130,8 +140,9 @@ Template.ipsosboard.onCreated(function () {
               var physpar = $(checked[c]).attr('data-physicsparam');
               var fieldValue = $(checked[c]).attr('value');
               synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
-
             }
+
+
 
             console.log(`synthpar `, synthParameters);
             instance.synthParameters = synthParameters;
@@ -144,9 +155,10 @@ Template.ipsosboard.onCreated(function () {
             for (var element in instance.synthParameters) {
                 var params = instance.synthParameters[element];
                 console.log(`params4synth `, params);
+                console.log(`params4synth `, synthParameters["synthtype"]);
                 var synth = new Tone.Synth({
                     "oscillator" : {
-                      "type" : "sine",
+                      "type" : instance.synthType,
                       "detune" : Number(params["detune"]),
                       "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
                     },
@@ -199,6 +211,7 @@ Template.ipsosboard.onCreated(function () {
 
           storedParams["synthParams"] = synthParameters;
           storedParams["chordmode"] = this.chordmode;
+          storedParams["synthtype"] = instance.synthType;
 
           var storeButton = instance.find('[data-playind=' + instance.storeIndex + ']');
 
@@ -260,8 +273,11 @@ Template.ipsosboard.onCreated(function () {
     if(typeof storedParams != 'undefined') {
       var synthParameters = storedParams["synthParams"];
       var chordMode = storedParams["chordmode"];
+      var synthType = storedParams["synthtype"];
 
       var synthArray = instance.storeSynths[ind];
+
+      console.log(`synthType `, synthType);
 
       // clean up from last time
       for (var s in synthArray) { synthArray[s][0].dispose(); }
@@ -273,7 +289,7 @@ Template.ipsosboard.onCreated(function () {
         console.log(`params4synth `, params);
         var synth = new Tone.Synth({
           "oscillator" : {
-            "type" : "sine",
+            "type" : synthType,
             "detune" : Number(params["detune"]),
             "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
           },
