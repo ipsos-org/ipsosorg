@@ -167,15 +167,15 @@ Template.ipsosboard.onCreated(function () {
                         "release" : Number(params["release"])
                     }
                 }).toMaster();
-
-                if ($("#chord").prop("checked")) {
-                    instance.chordmode = true;
-                } else {
-                    instance.chordmode = false;
-                }
-
                 instance.synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
             }
+            // update chordmode if needed
+            if ($("#chord").prop("checked")) {
+                instance.chordmode = true;
+            } else {
+                instance.chordmode = false;
+            }
+
             var when = Tone.now();
             for (var s in instance.synthArray) {
               var synth = instance.synthArray[s][0];
@@ -183,7 +183,7 @@ Template.ipsosboard.onCreated(function () {
               var note = instance.synthArray[s][2];
               console.log(`when `, when);
               synth.triggerAttackRelease(note, dur, when);
-              if(!this.chordmode) { when = when + dur; }
+              if(!instance.chordmode) { when = when + dur; }
             }
 
         },
