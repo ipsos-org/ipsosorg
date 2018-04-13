@@ -169,9 +169,9 @@ Template.ipsosboard.onCreated(function () {
                 }).toMaster();
 
                 if ($("#chord").prop("checked")) {
-                    this.chordmode = true;
+                    instance.chordmode = true;
                 } else {
-                    this.chordmode = false;
+                    instance.chordmode = false;
                 }
 
                 instance.synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
@@ -205,11 +205,19 @@ Template.ipsosboard.onCreated(function () {
             synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
           }
 
+          if ($("#chord").prop("checked")) {
+              instance.chordmode = true;
+          } else {
+              instance.chordmode = false;
+          }
+
           var storedParams = {};
 
           storedParams["synthParams"] = synthParameters;
-          storedParams["chordmode"] = this.chordmode;
+          storedParams["chordmode"] = instance.chordmode;
           storedParams["synthtype"] = instance.synthType;
+
+          console.log(`storedparams`, storedParams);
 
           var storeButton = instance.find('[data-playind=' + instance.storeIndex + ']');
 
@@ -299,12 +307,6 @@ Template.ipsosboard.onCreated(function () {
           }
         }).toMaster();
 
-        if ($("#chord").prop("checked")) {
-          this.chordmode = true;
-        } else {
-          this.chordmode = false;
-        }
-
         synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
       }
       instance.storeSynths[ind] = synthArray;
@@ -315,7 +317,7 @@ Template.ipsosboard.onCreated(function () {
         var note = synthArray[s][2];
         console.log(`when `, when);
         synth.triggerAttackRelease(note, dur, when);
-        if(!chordmode) { when = when + dur; }
+        if(!chordMode) { when = when + dur; }
       }
     }
   })
