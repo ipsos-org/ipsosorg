@@ -123,24 +123,7 @@ Template.ipsosboard.onCreated(function () {
         },
 
         'click .play': function(event, instance) {
-            // sort synthParameters
-
-            var rbs = instance.findAll('input[type=radio]:checked');
-            var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
-            var synthParameters = {};
-
-            for ( var c in checked ) {
-              var element = $(checked[c]).attr('data-element');
-              if(typeof synthParameters[element] == 'undefined') {
-                synthParameters[element] = {};
-              }
-              var par = $(checked[c]).attr('class');
-              var physpar = $(checked[c]).attr('data-physicsparam');
-              var fieldValue = $(checked[c]).attr('value');
-              synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
-            }
-
-
+            var synthParameters = getSynthParamsFromGui(instance);
 
             console.log(`synthpar `, synthParameters);
             instance.synthParameters = synthParameters;
@@ -189,21 +172,8 @@ Template.ipsosboard.onCreated(function () {
         },
 
         'click .store': function(event, instance) {
-          // this duplicates a lot of code in play, so should be factored out later
-          var rbs = instance.findAll('input[type=radio]:checked');
-          var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
-          var synthParameters = {};
 
-          for ( var c in checked ) {
-            var element = $(checked[c]).attr('data-element');
-            if(typeof synthParameters[element] == 'undefined') {
-              synthParameters[element] = {};
-            }
-            var par = $(checked[c]).attr('class');
-            var physpar = $(checked[c]).attr('data-physicsparam');
-            var fieldValue = $(checked[c]).attr('value');
-            synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
-          }
+          var synthParameters = getSynthParamsFromGui(instance);
 
           if ($("#chord").prop("checked")) {
               instance.chordmode = true;
@@ -322,7 +292,26 @@ Template.ipsosboard.onCreated(function () {
     }
   })
 
-
         });
+
+        // helper funcs
+
+        function getSynthParamsFromGui(instance){
+          var rbs = instance.findAll('input[type=radio]:checked');
+          var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
+          var synthParameters = {};
+
+          for ( var c in checked ) {
+            var element = $(checked[c]).attr('data-element');
+            if(typeof synthParameters[element] == 'undefined') {
+              synthParameters[element] = {};
+            }
+            var par = $(checked[c]).attr('class');
+            var physpar = $(checked[c]).attr('data-physicsparam');
+            var fieldValue = $(checked[c]).attr('value');
+            synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
+          }
+          return synthParameters;
+        }
 
 };
