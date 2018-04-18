@@ -46,12 +46,9 @@ Template.ipsosboard.onCreated(function () {
 
   this.state = {}; // Make this a ReactiveDict?
 
-  this.synthParameters = {};
-  this.synthArray = [];
   this.chordmode = true;
   this.storedSonifications = [];
   this.storeIndex = 0;
-  this.storeSynths = [[], [], [], [], [], [], [], [], []];
   this.synthType = 'sine';
 
 
@@ -124,87 +121,24 @@ Template.ipsosboard.onCreated(function () {
         },
 
         'click .play': function(event, instance) {
-            // sort synthParameters
-
-            var rbs = instance.findAll('input[type=radio]:checked');
-            var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
-            var synthParameters = {};
-
-            for ( var c in checked ) {
-              var element = $(checked[c]).attr('data-element');
-              if(typeof synthParameters[element] == 'undefined') {
-                synthParameters[element] = {};
-              }
-              var par = $(checked[c]).attr('class');
-              var physpar = $(checked[c]).attr('data-physicsparam');
-              var fieldValue = $(checked[c]).attr('value');
-              synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
-            }
-
-
+            var synthParameters = getSynthParamsFromGui(instance);
+            var chordMode;
 
             console.log(`synthpar `, synthParameters);
-            instance.synthParameters = synthParameters;
 
-            // clean up from last time
-            for (var s in instance.synthArray) { instance.synthArray[s][0].dispose(); }
-
-            instance.synthArray = [];
-
-            for (var element in instance.synthParameters) {
-                var params = instance.synthParameters[element];
-                console.log(`params4synth `, params);
-                console.log(`params4synth `, synthParameters["synthtype"]);
-                var synth = new Tone.Synth({
-                    "oscillator" : {
-                      "type" : instance.synthType,
-                      "detune" : Number(params["detune"]),
-                      "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
-                    },
-                    "envelope" : {
-                        "attack" : Number(params["attack"]),
-                        "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
-                        "sustain" : Number(params["sustain"]),
-                        "release" : Number(params["release"])
-                    }
-                }).toMaster();
-                instance.synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
-            }
-            // update chordmode if needed
             if ($("#chord").prop("checked")) {
-                instance.chordmode = true;
+                chordMode = true;
             } else {
-                instance.chordmode = false;
+                chordMode = false;
             }
 
-            var when = Tone.now();
-            for (var s in instance.synthArray) {
-              var synth = instance.synthArray[s][0];
-              var dur = instance.synthArray[s][1];
-              var note = instance.synthArray[s][2];
-              console.log(`when `, when);
-              synth.triggerAttackRelease(note, dur, when);
-              if(!instance.chordmode) { when = when + dur; }
-            }
+            playSynths(synthParameters, instance.synthType, chordMode);
 
         },
 
         'click .store': function(event, instance) {
-          // this duplicates a lot of code in play, so should be factored out later
-          var rbs = instance.findAll('input[type=radio]:checked');
-          var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
-          var synthParameters = {};
 
-          for ( var c in checked ) {
-            var element = $(checked[c]).attr('data-element');
-            if(typeof synthParameters[element] == 'undefined') {
-              synthParameters[element] = {};
-            }
-            var par = $(checked[c]).attr('class');
-            var physpar = $(checked[c]).attr('data-physicsparam');
-            var fieldValue = $(checked[c]).attr('value');
-            synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
-          }
+          var synthParameters = getSynthParamsFromGui(instance);
 
           if ($("#chord").prop("checked")) {
               instance.chordmode = true;
@@ -282,48 +216,75 @@ Template.ipsosboard.onCreated(function () {
       var chordMode = storedParams["chordmode"];
       var synthType = storedParams["synthtype"];
 
-      var synthArray = instance.storeSynths[ind];
-
       console.log(`synthType `, synthType);
 
-      // clean up from last time
-      for (var s in synthArray) { synthArray[s][0].dispose(); }
-
-      synthArray = [];
-
-      for (var element in synthParameters) {
-        var params = synthParameters[element];
-        console.log(`params4synth `, params);
-        var synth = new Tone.Synth({
-          "oscillator" : {
-            "type" : synthType,
-            "detune" : Number(params["detune"]),
-            "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
-          },
-          "envelope" : {
-            "attack" : Number(params["attack"]),
-            "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
-            "sustain" : Number(params["sustain"]),
-            "release" : Number(params["release"])
-          }
-        }).toMaster();
-
-        synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
-      }
-      instance.storeSynths[ind] = synthArray;
-      var when = Tone.now();
-      for (var s in synthArray) {
-        var synth = synthArray[s][0];
-        var dur = synthArray[s][1];
-        var note = synthArray[s][2];
-        console.log(`when `, when);
-        synth.triggerAttackRelease(note, dur, when);
-        if(!chordMode) { when = when + dur; }
-      }
+      playSynths(synthParameters, synthType, chordMode);
     }
   })
 
-
         });
+
+        // helper funcs
+
+        function getSynthParamsFromGui(instance){
+          var rbs = instance.findAll('input[type=radio]:checked');
+          var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
+          var synthParameters = {};
+
+          for ( var c in checked ) {
+            var element = $(checked[c]).attr('data-element');
+            if(typeof synthParameters[element] == 'undefined') {
+              synthParameters[element] = {};
+            }
+            var par = $(checked[c]).attr('class');
+            var physpar = $(checked[c]).attr('data-physicsparam');
+            var fieldValue = $(checked[c]).attr('value');
+            synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
+          }
+          return synthParameters;
+        }
+
+        function playSynths(synthParameters, synthType, chordMode) {
+          var synthArray = [];
+
+          for (var element in synthParameters) {
+            var params = synthParameters[element];
+            console.log(`params4synth `, params);
+            var synth = new Tone.Synth({
+              "oscillator" : {
+                "type" : synthType,
+                "detune" : Number(params["detune"]),
+                "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
+              },
+              "envelope" : {
+                "attack" : Number(params["attack"]),
+                "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
+                "sustain" : Number(params["sustain"]),
+                "release" : Number(params["release"])
+              }
+            }).toMaster();
+
+            synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
+          }
+          var when = Tone.now();
+          var maxDur = 0.0;
+          var start = when;
+          for (var s in synthArray) {
+            var synth = synthArray[s][0];
+            var dur = synthArray[s][1];
+            var note = synthArray[s][2];
+            console.log(`when `, when);
+            synth.triggerAttackRelease(note, dur, when);
+            if(!chordMode) { when = when + dur; }
+            if(dur > maxDur) {maxDur = dur};
+          }
+
+          // cleanup when done
+          if((when - start) > maxDur) { maxDur = when - start; }
+          setTimeout(function() {
+            console.log("disposing");
+            for (var s in synthArray) { synthArray[s][0].dispose(); }
+          }, maxDur * 1500);// a little extra just in case
+        }
 
 };
