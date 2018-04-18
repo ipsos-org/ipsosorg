@@ -47,11 +47,9 @@ Template.ipsosboard.onCreated(function () {
   this.state = {}; // Make this a ReactiveDict?
 
   this.synthParameters = {};
-  this.synthArray = [];
   this.chordmode = true;
   this.storedSonifications = [];
   this.storeIndex = 0;
-  this.storeSynths = [[], [], [], [], [], [], [], [], []];
   this.synthType = 'sine';
 
 
@@ -128,10 +126,7 @@ Template.ipsosboard.onCreated(function () {
             console.log(`synthpar `, synthParameters);
             instance.synthParameters = synthParameters;
 
-            // clean up from last time
-            for (var s in instance.synthArray) { instance.synthArray[s][0].dispose(); }
-
-            instance.synthArray = [];
+            var synthArray = [];
 
             for (var element in instance.synthParameters) {
                 var params = instance.synthParameters[element];
@@ -150,7 +145,7 @@ Template.ipsosboard.onCreated(function () {
                         "release" : Number(params["release"])
                     }
                 }).toMaster();
-                instance.synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
+                synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
             }
             // update chordmode if needed
             if ($("#chord").prop("checked")) {
@@ -160,14 +155,25 @@ Template.ipsosboard.onCreated(function () {
             }
 
             var when = Tone.now();
-            for (var s in instance.synthArray) {
-              var synth = instance.synthArray[s][0];
-              var dur = instance.synthArray[s][1];
-              var note = instance.synthArray[s][2];
+            var maxDur = 0.0;
+            var start = when;
+            for (var s in synthArray) {
+              var synth = synthArray[s][0];
+              var dur = synthArray[s][1];
+              var note = synthArray[s][2];
               console.log(`when `, when);
               synth.triggerAttackRelease(note, dur, when);
               if(!instance.chordmode) { when = when + dur; }
+              if(dur > maxDur) {maxDur = dur};
             }
+
+            // cleanup when done
+            if((when - start) > maxDur) { maxDur = when - start; }
+            console.log('maxDur ', maxDur);
+            setTimeout(function() {
+              console.log("disposing");
+              for (var s in synthArray) { synthArray[s][0].dispose(); }
+            }, maxDur * 1500);// a little extra just in case
 
         },
 
@@ -251,14 +257,9 @@ Template.ipsosboard.onCreated(function () {
       var chordMode = storedParams["chordmode"];
       var synthType = storedParams["synthtype"];
 
-      var synthArray = instance.storeSynths[ind];
-
       console.log(`synthType `, synthType);
 
-      // clean up from last time
-      for (var s in synthArray) { synthArray[s][0].dispose(); }
-
-      synthArray = [];
+      var synthArray = [];
 
       for (var element in synthParameters) {
         var params = synthParameters[element];
@@ -279,8 +280,9 @@ Template.ipsosboard.onCreated(function () {
 
         synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
       }
-      instance.storeSynths[ind] = synthArray;
       var when = Tone.now();
+      var maxDur = 0.0;
+      var start = when;
       for (var s in synthArray) {
         var synth = synthArray[s][0];
         var dur = synthArray[s][1];
@@ -288,7 +290,17 @@ Template.ipsosboard.onCreated(function () {
         console.log(`when `, when);
         synth.triggerAttackRelease(note, dur, when);
         if(!chordMode) { when = when + dur; }
+        if(dur > maxDur) {maxDur = dur};
       }
+
+      // cleanup when done
+      if((when - start) > maxDur) { maxDur = when - start; }
+      setTimeout(function() {
+        console.log("disposing");
+        for (var s in synthArray) { synthArray[s][0].dispose(); }
+      }, maxDur * 1500);// a little extra just in case
+
+
     }
   })
 
