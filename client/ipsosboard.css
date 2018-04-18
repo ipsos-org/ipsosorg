@@ -115,7 +115,11 @@ body {
  add
 */
 .rowmt {
-  margin-top:10px;
+  margin-top:12px;
+}
+
+.rowmb {
+  margin-bottom:12px;
 }
 
 .noUi-connect {

@@ -5,7 +5,7 @@
 
 <body>
   <div class="container-fluid">
-    <div class="row">
+    <div class="row rowmb">
       <div class="col-sm-3">
 	<h2>Interactive Physics Sonification System</h2>
       </div>
@@ -19,7 +19,7 @@
 
 <template name="ipsosboard">
 
-  <div class="row">
+  <div class="row rowmb">
     <div class="col-sm-3">
       <select class="form-control" id="event-select">
         {{ #each event in allEvents }}
@@ -34,9 +34,21 @@
 
   <div class="row">
     <div class="col-sm-3">
-      <button type="button" class="play btn btn-warning btn-lg">play</button>
-      <button class="stop btn btn-warning btn-lg">stop</button>
-      <button class="store btn btn-warning btn-lg">store</button>
+      <div class="btn-group" role="group">
+	<button class="play btn btn-warning btn-lg" title="Play"><i class="fa fa-play"></i></button>
+	<button class="stop btn btn-warning btn-lg" title="Stop"><i class="fa fa-stop"></i></button>
+	<button class="store btn btn-warning btn-lg" title="Store"><i class="fa fa-plus"></i></button>
+      </div>
+
+      <button class="record btn btn-warning btn-lg" title="Record"><i class="fa fa-circle"></i></button>
+      
+      <div class="btn-group" role="group">
+	<button class="upload btn btn-warning btn-lg" title="Export settings"><i class="fa fa-upload"></i></button>
+	<button class="download btn btn-warning btn-lg" title="Import settings"><i class="fa fa-download"></i></button>
+      </div>
+
+      <button class="about btn btn-warning btn-lg" title="About"><i class="fa fa-info"></i></button>
+     
     </div>
     <div class="col-sm-3">
       <div class="radio">
