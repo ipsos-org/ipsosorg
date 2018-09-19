@@ -1,7 +1,7 @@
 var noUiSlider = require('nouislider');
 
 Template.ipsosboard.rendered = function () {
-    
+
     var duration = Session.get('duration');
     $('#duration-low').text(duration[0]);
     $('#duration-high').text(duration[1]);
@@ -14,11 +14,11 @@ Template.ipsosboard.rendered = function () {
         margin: 0.1,
         range: {
             'min': 0.1,
-            'max': 1.0
+            'max': 10.0
 	    }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-		
+
 	$('#duration-low').text(val[0]);
 	$('#duration-high').text(val[1]);
 
@@ -42,7 +42,7 @@ Template.ipsosboard.rendered = function () {
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-	
+
 	$('#midinote-low').text(val[0]);
 	$('#midinote-high').text(val[1]);
 
@@ -62,11 +62,11 @@ Template.ipsosboard.rendered = function () {
         margin: 0.1,
         range: {
             'min': 0.1,
-            'max': 0.9
+            'max': 4.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-	
+
 	$('#release-low').text(val[0]);
 	$('#release-high').text(val[1]);
 
@@ -85,7 +85,7 @@ Template.ipsosboard.rendered = function () {
         step: 1,
         margin: 0.1,
         range: {
-            'min': 1,
+            'min': 0,
             'max': 100
         }
     }).on('slide', function (ev, val) {
@@ -110,11 +110,11 @@ Template.ipsosboard.rendered = function () {
         margin: 0.01,
         range: {
             'min': 0.01,
-            'max': 0.1
+            'max': 10.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-       
+
 	$('#attack-low').text(val[0]);
 	$('#attack-high').text(val[1]);
 
@@ -134,11 +134,11 @@ Template.ipsosboard.rendered = function () {
         margin: 0.1,
         range: {
             'min': 0.01,
-            'max': 0.8
+            'max': 3.0
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-       
+
 	$('#decay-low').text(val[0]);
 	$('#decay-high').text(val[1]);
 
@@ -162,7 +162,7 @@ Template.ipsosboard.rendered = function () {
         }
     }).on('slide', function (ev, val) {
         Session.set(this.id, [val[0], val[1]]);
-        
+
 	$('#sustain-low').text(val[0]);
 	$('#sustain-high').text(val[1]);
 

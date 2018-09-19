@@ -132,7 +132,7 @@ Template.ipsosboard.onCreated(function () {
                 chordMode = false;
             }
 
-            playSynths(synthParameters, instance.synthType, chordMode);
+            instance.synthArray = playSynths(synthParameters, instance.synthType, chordMode);
 
         },
 
@@ -218,7 +218,7 @@ Template.ipsosboard.onCreated(function () {
 
       console.log(`synthType `, synthType);
 
-      playSynths(synthParameters, synthType, chordMode);
+      instance.synthArray = playSynths(synthParameters, synthType, chordMode);
     }
   })
 
@@ -285,6 +285,8 @@ Template.ipsosboard.onCreated(function () {
             console.log("disposing");
             for (var s in synthArray) { synthArray[s][0].dispose(); }
           }, maxDur * 1500);// a little extra just in case
+
+          return synthArray;
         }
 
 };
