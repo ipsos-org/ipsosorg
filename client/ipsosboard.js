@@ -1,292 +1,297 @@
-import specs from '../imports/specs.js';
-import eventsNew from '../lib/events_new/events.js';
-import { Template } from 'meteor/templating';
-import { ReactiveVar } from 'meteor/reactive-var';
-import { EJSON } from 'meteor/ejson';
+  import specs from '../imports/specs.js';
+  import eventsNew from '../lib/events_new/events.js';
+  import { Template } from 'meteor/templating';
+  import { ReactiveVar } from 'meteor/reactive-var';
+  import { EJSON } from 'meteor/ejson';
+  import 'bootstrap';
+  import 'bootstrap/dist/css/bootstrap.css';
+  import Tone, { Synth, Reverb } from 'tone';
 
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.css';
+    const reverbSettings = {
+        decay : 1.2,
+        preDelay : 0.03,
+        wet: 0.6
+        };
 
-var Tone = require("Tone");
+  //Session.setDefault('slider', [0.1, 0.6]);
+  Session.setDefault('midinote', [20.0, 60.0]);
+  Session.setDefault('attack', [0.01, 0.1]);
+  Session.setDefault('decay', [0.1, 0.6]);
+  Session.setDefault('sustain', [0.1, 0.6]);
+  Session.setDefault('detune', [1.0, 50.0]);
+  Session.setDefault('release', [0.1, 0.6]);
+  Session.setDefault('duration', [0.1, 1.0]);
 
-//Session.setDefault('slider', [0.1, 0.6]);
-Session.setDefault('midinote', [20.0, 60.0]);
-Session.setDefault('attack', [0.01, 0.1]);
-Session.setDefault('decay', [0.1, 0.6]);
-Session.setDefault('sustain', [0.1, 0.6]);
-Session.setDefault('detune', [1.0, 50.0]);
-Session.setDefault('release', [0.1, 0.6]);
-Session.setDefault('duration', [0.1, 1.0]);
+  if (Meteor.isClient) {
 
-if (Meteor.isClient) {
+  Template.ipsosboard.onCreated(function () {
 
-Template.ipsosboard.onCreated(function () {
+    this.listParams = [
+      'attack',    'decay',       'sustain',
+      'release',   'detune',      'midinote',  'duration'
+    ];
 
-  this.listParams = [
-    'attack',    'decay',       'sustain',
-    'release',   'detune',      'midinote',  'duration'
-  ];
+    this.synthTypes = ['sine', 'square', 'triangle', 'sawtooth'];
 
-  this.synthTypes = ['sine', 'square', 'triangle', 'sawtooth'];
+    this.events = eventsNew;
 
-  this.events = eventsNew;
+    // default event name not hard-coded
+    const defaultEventName = Object.keys( this.events )[ 0 ];
+    this.activeEventName   = new ReactiveVar( defaultEventName );
+    this.activeEvent       = new ReactiveVar();
 
-  // default event name not hard-coded
-  const defaultEventName = Object.keys( this.events )[ 0 ];
-  this.activeEventName   = new ReactiveVar( defaultEventName );
-  this.activeEvent       = new ReactiveVar();
-
-  this.autorun(() => {
-    // this will rerun each time its dependencies are changed (the ReactiveVar)
-    const eventName   = this.activeEventName.get();
-    const linkedEvent = this.events[ eventName ];
-    this.activeEvent.set( linkedEvent );
-  });
-
-
-  this.state = {}; // Make this a ReactiveDict?
-
-  this.chordmode = true;
-  this.storedSonifications = [];
-  this.storeIndex = 0;
-  this.synthType = 'sine';
-
-
-});
-
-    Template.ipsosboard.helpers({
-
-        listParams: () => Template.instance().listParams,
-
-        synthTypes: () => Template.instance().synthTypes,
-
-        getEventNumber: () => Template.instance().activeEvent.get().eventNumber,
-        getEventData  : () => Template.instance().activeEvent.get().date_time,
-
-        // here we can easily add new data types
-        getSonificationData: function() {
-          return [
-            {type : "Jet", data : Template.instance().activeEvent.get().jets},
-            {type : "Muon", data : Template.instance().activeEvent.get().muons},
-	    {type: "Electron", data: Template.instance().activeEvent.get().electrons},
-	    {type: "Photon", data: Template.instance().activeEvent.get().photons}
-          ]
-        },
-
-        getAllFields: function(dataObject) {
-          let fields = [];
-
-          _.each(Object.keys(dataObject), function(theKey) {
-            fields.push({label: theKey, value: dataObject[theKey] });
-          });
-
-          fields = _.sortBy(fields, 'label');
-          return fields;
-        },
-
-        /**
-         * {{ #each }} can't loop over an Object
-         * http://blazejs.org/api/spacebars.html#Each
-         *
-         * @returns {Array}
-         */
-        allEvents() {
-            const eventsObj = Template.instance().events;
-            const eventsArr = [];
-
-            for (let eventName in eventsObj) {
-                eventsArr.push({
-                    name  : eventName,
-                    number: eventsObj[ eventName ].number
-                });
-            }
-
-            return eventsArr;
-        },
-
-        incremented(index) { return (index + 1)},
-
+    this.autorun(() => {
+      // this will rerun each time its dependencies are changed (the ReactiveVar)
+      const eventName   = this.activeEventName.get();
+      const linkedEvent = this.events[ eventName ];
+      this.activeEvent.set( linkedEvent );
     });
 
-    Template.ipsosboard.events({
 
-        'change #event-select'( event, tplInstance ) {
-            const selectedElem = event.currentTarget.selectedOptions[ 0 ];
-            tplInstance.activeEventName.set( selectedElem.value );
-        },
+    this.state = {}; // Make this a ReactiveDict?
 
-        'change #synthtype-select'( event, tplInstance ) {
-            const selectedElem = event.currentTarget.selectedOptions[ 0 ];
-            tplInstance.synthType = selectedElem.value;
-        },
+    this.chordmode = true;
+    this.storedSonifications = [];
+    this.storeIndex = 0;
+    this.synthType = 'sine';
 
-        'click .play': function(event, instance) {
+
+  });
+
+      Template.ipsosboard.helpers({
+
+          listParams: () => Template.instance().listParams,
+
+          synthTypes: () => Template.instance().synthTypes,
+
+          getEventNumber: () => Template.instance().activeEvent.get().eventNumber,
+          getEventData  : () => Template.instance().activeEvent.get().date_time,
+
+          // here we can easily add new data types
+          getSonificationData: function() {
+            return [
+              {type : "Jet", data : Template.instance().activeEvent.get().jets},
+              {type : "Muon", data : Template.instance().activeEvent.get().muons},
+  	    {type: "Electron", data: Template.instance().activeEvent.get().electrons},
+  	    {type: "Photon", data: Template.instance().activeEvent.get().photons}
+            ]
+          },
+
+          getAllFields: function(dataObject) {
+            let fields = [];
+
+            _.each(Object.keys(dataObject), function(theKey) {
+              fields.push({label: theKey, value: dataObject[theKey] });
+            });
+
+            fields = _.sortBy(fields, 'label');
+            return fields;
+          },
+
+          /**
+           * {{ #each }} can't loop over an Object
+           * http://blazejs.org/api/spacebars.html#Each
+           *
+           * @returns {Array}
+           */
+          allEvents() {
+              const eventsObj = Template.instance().events;
+              const eventsArr = [];
+
+              for (let eventName in eventsObj) {
+                  eventsArr.push({
+                      name  : eventName,
+                      number: eventsObj[ eventName ].number
+                  });
+              }
+
+              return eventsArr;
+          },
+
+          incremented(index) { return (index + 1)},
+
+      });
+
+      Template.ipsosboard.events({
+
+          'change #event-select'( event, tplInstance ) {
+              const selectedElem = event.currentTarget.selectedOptions[ 0 ];
+              tplInstance.activeEventName.set( selectedElem.value );
+          },
+
+          'change #synthtype-select'( event, tplInstance ) {
+              const selectedElem = event.currentTarget.selectedOptions[ 0 ];
+              tplInstance.synthType = selectedElem.value;
+          },
+
+          'click .play': function(event, instance) {
+              var synthParameters = getSynthParamsFromGui(instance);
+              var chordMode;
+
+              console.log(`synthpar `, synthParameters);
+
+              if ($("#chord").prop("checked")) {
+                  chordMode = true;
+              } else {
+                  chordMode = false;
+              }
+
+              instance.synthArray = playSynths(synthParameters, instance.synthType, chordMode);
+
+          },
+
+          'click .store': function(event, instance) {
+
             var synthParameters = getSynthParamsFromGui(instance);
-            var chordMode;
-
-            console.log(`synthpar `, synthParameters);
 
             if ($("#chord").prop("checked")) {
-                chordMode = true;
+                instance.chordmode = true;
             } else {
-                chordMode = false;
+                instance.chordmode = false;
             }
 
-            instance.synthArray = playSynths(synthParameters, instance.synthType, chordMode);
+            var storedParams = {};
 
-        },
+            storedParams["synthParams"] = synthParameters;
+            storedParams["chordmode"] = instance.chordmode;
+            storedParams["synthtype"] = instance.synthType;
 
-        'click .store': function(event, instance) {
+            console.log(`storedparams`, storedParams);
 
-          var synthParameters = getSynthParamsFromGui(instance);
+            var storeButton = instance.find('[data-playind=' + instance.storeIndex + ']');
 
-          if ($("#chord").prop("checked")) {
-              instance.chordmode = true;
-          } else {
-              instance.chordmode = false;
-          }
+            $(storeButton).attr('class', "btn btn-success");
+            setTimeout(function() {$(storeButton).attr('class', "btn btn-secondary btn-lg");}, 250);
+            setTimeout(function() {$(storeButton).attr('class', "btn btn-success btn-lg");}, 500);
+            instance.storedSonifications[instance.storeIndex] = storedParams;
+            instance.storeIndex = (instance.storeIndex + 1)%9;
+          },
 
-          var storedParams = {};
-
-          storedParams["synthParams"] = synthParameters;
-          storedParams["chordmode"] = instance.chordmode;
-          storedParams["synthtype"] = instance.synthType;
-
-          console.log(`storedparams`, storedParams);
-
-          var storeButton = instance.find('[data-playind=' + instance.storeIndex + ']');
-
-          $(storeButton).attr('class', "btn btn-success");
-          setTimeout(function() {$(storeButton).attr('class', "btn btn-secondary btn-lg");}, 250);
-          setTimeout(function() {$(storeButton).attr('class', "btn btn-success btn-lg");}, 500);
-          instance.storedSonifications[instance.storeIndex] = storedParams;
-          instance.storeIndex = (instance.storeIndex + 1)%9;
-        },
-
-        'click .stop': function(event, instance) {
-          for (var s in instance.synthArray) {
-            var synth = instance.synthArray[s][0];
-            synth.triggerRelease();
-          }
-        },
-
-        'click .save': function(event, instance) {
-
-	    instance.state.curValue = instance.activeEventName.curValue;
-	    instance.state.checked = [];
-	    instance.state.params = {};
-
-	    var checked = instance.findAll('input[type=radio]:checked');
-
-	    for ( var c in checked ) {
-
-		instance.state.checked.push($(checked[c]).attr('id'));
-
-	    }
-
-	    for ( var pi in instance.listParams ) {
-
-		var param = instance.listParams[pi];
-		instance.state.params[param] = Session.get(param);
-
-	    }
-
-	    var blob = new Blob([EJSON.stringify(instance.state)], {type: 'text/plain'});
-	    var objectURL = URL.createObjectURL(blob);
-
-	    var link = document.createElement('a');
-	    link.style.display = 'none';
-	    document.body.appendChild(link);
-
-	    link.href = objectURL;
-	    link.download = 'state_'+ new Date().valueOf() +'.json';
-	    link.target = '_blank';
-	    link.click();
-
-	},
-
-
-  "click [data-type='playbutton']": ( (event, instance) => {
-    var ind = Number($(event.target).attr("data-playind"));
-
-    console.log(event);
-    var storedParams = instance.storedSonifications[ind];
-    if(typeof storedParams != 'undefined') {
-      var synthParameters = storedParams["synthParams"];
-      var chordMode = storedParams["chordmode"];
-      var synthType = storedParams["synthtype"];
-
-      console.log(`synthType `, synthType);
-
-      instance.synthArray = playSynths(synthParameters, synthType, chordMode);
-    }
-  })
-
-        });
-
-        // helper funcs
-
-        function getSynthParamsFromGui(instance){
-          var rbs = instance.findAll('input[type=radio]:checked');
-          var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
-          var synthParameters = {};
-
-          for ( var c in checked ) {
-            var element = $(checked[c]).attr('data-element');
-            if(typeof synthParameters[element] == 'undefined') {
-              synthParameters[element] = {};
+          'click .stop': function(event, instance) {
+            for (var s in instance.synthArray) {
+              var synth = instance.synthArray[s][0];
+              synth.triggerRelease();
             }
-            var par = $(checked[c]).attr('class');
-            var physpar = $(checked[c]).attr('data-physicsparam');
-            var fieldValue = $(checked[c]).attr('value');
-            synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
-          }
-          return synthParameters;
-        }
+          },
 
-        function playSynths(synthParameters, synthType, chordMode) {
-          var synthArray = [];
+          'click .save': function(event, instance) {
 
-          for (var element in synthParameters) {
-            var params = synthParameters[element];
-            console.log(`params4synth `, params);
-            var synth = new Tone.Synth({
-              "oscillator" : {
-                "type" : synthType,
-                "detune" : Number(params["detune"]),
-                "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
-              },
-              "envelope" : {
-                "attack" : Number(params["attack"]),
-                "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
-                "sustain" : Number(params["sustain"]),
-                "release" : Number(params["release"])
+  	    instance.state.curValue = instance.activeEventName.curValue;
+  	    instance.state.checked = [];
+  	    instance.state.params = {};
+
+  	    var checked = instance.findAll('input[type=radio]:checked');
+
+  	    for ( var c in checked ) {
+
+  		instance.state.checked.push($(checked[c]).attr('id'));
+
+  	    }
+
+  	    for ( var pi in instance.listParams ) {
+
+  		var param = instance.listParams[pi];
+  		instance.state.params[param] = Session.get(param);
+
+  	    }
+
+  	    var blob = new Blob([EJSON.stringify(instance.state)], {type: 'text/plain'});
+  	    var objectURL = URL.createObjectURL(blob);
+
+  	    var link = document.createElement('a');
+  	    link.style.display = 'none';
+  	    document.body.appendChild(link);
+
+  	    link.href = objectURL;
+  	    link.download = 'state_'+ new Date().valueOf() +'.json';
+  	    link.target = '_blank';
+  	    link.click();
+
+  	},
+
+
+    "click [data-type='playbutton']": ( (event, instance) => {
+      var ind = Number($(event.target).attr("data-playind"));
+
+      console.log(event);
+      var storedParams = instance.storedSonifications[ind];
+      if(typeof storedParams != 'undefined') {
+        var synthParameters = storedParams["synthParams"];
+        var chordMode = storedParams["chordmode"];
+        var synthType = storedParams["synthtype"];
+
+        console.log(`synthType `, synthType);
+
+        instance.synthArray = playSynths(synthParameters, synthType, chordMode);
+      }
+    })
+
+          });
+
+          // helper funcs
+
+          function getSynthParamsFromGui(instance){
+            var rbs = instance.findAll('input[type=radio]:checked');
+            var checked = rbs.filter(function(rb) { return $(rb).attr('data-type') == "matrixbutton"})
+            var synthParameters = {};
+
+            for ( var c in checked ) {
+              var element = $(checked[c]).attr('data-element');
+              if(typeof synthParameters[element] == 'undefined') {
+                synthParameters[element] = {};
               }
-            }).toMaster();
-
-            synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
-          }
-          var when = Tone.now();
-          var maxDur = 0.0;
-          var start = when;
-          for (var s in synthArray) {
-            var synth = synthArray[s][0];
-            var dur = synthArray[s][1];
-            var note = synthArray[s][2];
-            console.log(`when `, when);
-            synth.triggerAttackRelease(note, dur, when);
-            if(!chordMode) { when = when + dur; }
-            if(dur > maxDur) {maxDur = dur};
+              var par = $(checked[c]).attr('class');
+              var physpar = $(checked[c]).attr('data-physicsparam');
+              var fieldValue = $(checked[c]).attr('value');
+              synthParameters[element][par] = specs[physpar](fieldValue, Number(Session.get(par)[0]), Number(Session.get(par)[1]));
+            }
+            return synthParameters;
           }
 
-          // cleanup when done
-          if((when - start) > maxDur) { maxDur = when - start; }
-          setTimeout(function() {
-            console.log("disposing");
-            for (var s in synthArray) { synthArray[s][0].dispose(); }
-          }, maxDur * 1500);// a little extra just in case
+          function playSynths(synthParameters, synthType, chordMode) {
+            var synthArray = [];
 
-          return synthArray;
-        }
+            for (var element in synthParameters) {
+              var params = synthParameters[element];
+              console.log(`params4synth `, params);
+              const reverb = new Reverb(reverbSettings).toMaster();
+              var synth = new Synth({
+                "oscillator" : {
+                  "type" : synthType,
+                  "detune" : Number(params["detune"]),
+                  "frequency" : Tone.Frequency.mtof(Number(params["midinote"]))
+                },
+                "envelope" : {
+                  "attack" : Number(params["attack"]),
+                  "decay" : Number(params["decay"]), //some values for 'decay' crash synth error: "not finite floting point value".
+                  "sustain" : Number(params["sustain"]),
+                  "release" : Number(params["release"])
+                }
+              }).connect(reverb);
 
-};
+              synthArray.push([synth, Number(params["duration"]), Tone.Frequency.mtof(Number(params["midinote"]))]);
+            }
+            var when = Tone.now();
+            var maxDur = 0.0;
+            var start = when;
+            for (var s in synthArray) {
+              var synth = synthArray[s][0];
+              var dur = synthArray[s][1];
+              var note = synthArray[s][2];
+              console.log(`when `, when);
+              synth.triggerAttackRelease(note, dur, when);
+              if(!chordMode) { when = when + dur; }
+              if(dur > maxDur) {maxDur = dur};
+            }
+
+            // cleanup when done
+            if((when - start) > maxDur) { maxDur = when - start; }
+            setTimeout(function() {
+              console.log("disposing");
+              for (var s in synthArray) { synthArray[s][0].dispose(); }
+            }, maxDur * 1500);// a little extra just in case
+
+            return synthArray;
+          }
+
+  };

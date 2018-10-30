@@ -1,0 +1,10 @@
+version: 0.0.1
+files:
+  - url: My Meteor App-0.0.1-mac.zip
+    sha512: UzoXOIgBouX9rKnN25H1twES2GmrnRUTovKiY/uBgoa3jUFf8yTsNOnCHvma4B3VSeUS6NW7Tr9m5YyfOrZKvg==
+  - url: My Meteor App-0.0.1.dmg
+    sha512: m+O7GkGZdXCczgx8M+XbVTfNOZd3CMYPn9RpRnov2LWB2PvibOhNSUUuzP2tUB9AJUpG4A/E7gNkQ9lxrIMe5Q==
+    size: 48303464
+path: My Meteor App-0.0.1-mac.zip
+sha512: UzoXOIgBouX9rKnN25H1twES2GmrnRUTovKiY/uBgoa3jUFf8yTsNOnCHvma4B3VSeUS6NW7Tr9m5YyfOrZKvg==
+releaseDate: '2018-10-29T10:04:59.942Z'
