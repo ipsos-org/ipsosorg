@@ -7,7 +7,8 @@ import { EJSON } from 'meteor/ejson';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
-var Tone = require("Tone");
+//var Tone = require("Tone");
+import Tone from "tone";
 
 //Session.setDefault('slider', [0.1, 0.6]);
 Session.setDefault('midinote', [20.0, 60.0]);
