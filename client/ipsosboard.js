@@ -290,4 +290,81 @@ Template.ipsosboard.onCreated(function () {
           return synthArray;
         }
 
+        //This added section handles the keydown events along with relevant CSS class triggers for normal UI button behavior//
+        document.onkeydown = keyMap
+
+        function keyMap(e) {
+          var key;
+          var element;
+          if (window.event)
+           {key = window.event.keyCode;}
+          else if (e)
+           {key = e.which;}
+          switch(key){
+            case 49:
+              element = document.getElementById("cell1");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 50:
+              element = document.getElementById("cell2");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 51:
+              element = document.getElementById("cell3");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 52:
+              element = document.getElementById("cell4");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 53:
+              element = document.getElementById("cell5");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 54:
+              element = document.getElementById("cell6");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 55:
+              element = document.getElementById("cell7");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 56:
+              element = document.getElementById("cell8");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+            case 57:
+              element = document.getElementById("cell9");
+              element.click();
+              element.focus();
+              setTimeout(function() {element.classList.add('active');}, 40);
+              setTimeout(function() {element.classList.remove('active');}, 170);
+              break;
+          }
+        }
+
 };
