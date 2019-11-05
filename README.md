@@ -30,6 +30,6 @@
 ## Install troubleshooting
 
 *   When you first run `meteor` you may encounter the error `Unable to resolve some modules`. This can often be fixed by following the recommendations
-given by `meteor`, e.g. runnig `meteor npm install --save bootstrap tone nouislider` and then `meteor run`.
+given by `meteor`, e.g. running `meteor npm install --save bootstrap tone nouislider` and then `meteor run`.
 
 
