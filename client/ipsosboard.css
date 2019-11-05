@@ -31,16 +31,18 @@ body {
 }
 */
 
+
 #attack {
     position: sticky;
     margin: 20px;
-    margin-left: 0px;
+    margin-left: 20px;
     margin-bottom: 0px;
     float: center;
     display: inline-block;
     height: 200px;
     width: 20px;
-    padding: 0;
+    padding: 0px;
+    box-sizing: border-box;
 }
 
 #decay {
@@ -52,6 +54,7 @@ body {
     height: 200px;
     width: 20px;
     padding: 0;
+    box-sizing: border-box;
 }
 
 #sustain {
@@ -63,6 +66,7 @@ body {
     height: 200px;
     width: 20px;
     padding: 0;
+    box-sizing: border-box;
 }
 
 #release {
@@ -74,6 +78,7 @@ body {
     height: 200px;
     width: 20px;
     padding: 0;
+    box-sizing: border-box;
 }
 
 #detune {
@@ -85,6 +90,7 @@ body {
     height: 200px;
     width: 20px;
     padding: 0;
+    box-sizing: border-box;
 }
 
 #midinote {
@@ -96,6 +102,7 @@ body {
     height: 200px;
     width: 20px;
     padding: 0;
+    box-sizing: border-box;
 }
 
 #duration {
@@ -107,6 +114,7 @@ body {
     height: 200px;
     width: 20px;
     padding: 0;
+    box-sizing: border-box;
 }
 
 /*
@@ -114,16 +122,88 @@ body {
  automatically from bootstrap. Make new class here to
  add
 */
+
 .rowmt {
   margin-top:12px;
+  margin-bottom:20px;
+  box-sizing: border-box;
+
+}
+
+.row {
+  margin-top: inherit;
+  margin-bottom:0px;
+  box-sizing: border-box;
+  max-width: inherit;
+  padding-bottom: inherit;
+  padding-right: 4px;
+  min-width: 600px;
 }
 
 .rowmb {
+  margin-top:30px;
   margin-bottom:12px;
+  box-sizing: border-box;
 }
+
 
 .noUi-connect {
  background: #c8b45a;
+ box-sizing: border-box;
+}
+
+.table-responsive {
+  box-sizing: border-box;
+  position: sticky !important;
+  float: center;
+  overflow-x: scroll ;
+  margin-right: 0px;
+  padding-right: 5px !important;
+  padding left: 5px;
+}
+
+.table-responsive::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.table-responsive::-webkit-scrollbar:vertical {
+    width: 12px;
+}
+
+.table-responsive::-webkit-scrollbar:horizontal {
+    height: 12px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, .5);
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+.col-md-5 {
+  padding: 0px 10px 0px 10px !important;
+  background: transparent;
+  position: sticky !important;
+  overflow-x: scroll;
+  margin-right: 0px;
+  margin-left: 0px;
+  float: right;
+}
+
+.col-md-7 {
+  padding: 0px 6px 0px 15px !important;
+  box-sizing: border-box;
+  background: transparent;
+  position: sticky !important;
+  overflow-x: scroll;
+  margin-right: 0px;
+  margin-left: 0px;
+  float: left;
 }
 
 /*
@@ -177,4 +257,5 @@ input[type=submit] {
 	text-align: center;
 	width: 50px;
  	height: 35px;
+  box-sizing: border-box;
 }
