@@ -445,15 +445,15 @@
 
 							## ADSR envelope
 
-							An envelope describes how a sound changes over time. Using an ASDR envelope we can control and tailor the sound of the synthesizer as we prefer using the parameters below:
+							An envelope describes how a sound changes over time in terms of its amplitude (loudness). Different instruments have different shapes, with for example long, slow starts (like violins slowly fading in), or immediate ones with a slower fadeout (like a drum). Using an ASDR envelope we can control and tailor the sound of the synthesizer as we prefer using the parameters below:
 
-							+ **Attack** is the time taken for initial run-up of level from nil to peak, beginning when the key is pressed.
+							+ **Attack** is the time taken for initial run-up of level from silence to the loudest level.
 
-							+ **Decay** is the time taken for the subsequent run down from the attack level to the designated sustain level.
+							+ **Decay** is the time taken for the subsequent run down from the attack level to the designated sustain level after the initial attack.
 
-							+ **Sustain** is the level during the main sequence of the sound's duration, until the key is released.
+							+ **Sustain** is the level during the main sequence of the sound's duration. This corresponds to the held part of a sound in instruments such as strings or winds.
 
-							+ **Release** is the time taken for the level to decay from the sustain level to zero after the key is released.
+							+ **Release** is the time taken for the level to decay from the sustain level to silence after the note is released. This can be very quick, or fade away slowly, as in a bell for example.
 
 							While, attack, decay, and release refer to time, sustain refers to level.
 
@@ -487,13 +487,13 @@
 
 							+ **Detune**: This describes the effect heard when tuning one oscillator sharp or flat in respect to a second oscillator. This produces a fattening of the sound or it may produce a harmonic effect if the interval of the tuning is wide enough.
 
-							+ **Midinote**: Musical pitch (how low or high). Pitch of the pressed key with a value between 0 and 127.
+							+ **MIDInote**: Musical pitch (how low or high). Pitch of the pressed key with a value between 0 and 127. Higher values correspond to higher pitches. 'Middle C' on a piano is 60.
 
 							+ **Duration**: Amount of time a sound will play for.
 
-							+ **Chord**: Particles sounding simultaneously.
+							+ **Chord**: Sonify all particles simultaneously.
 
-							+ **Sequence**: Particles sounding separately.
+							+ **Sequence**: Sonify all particles one at a time in order, perhaps creating a melody or fragment.
 
 						</textarea>
 					</section>
