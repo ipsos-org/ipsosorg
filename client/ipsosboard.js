@@ -3,12 +3,16 @@ import eventsNew from '../lib/events_new/events.js';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { EJSON } from 'meteor/ejson';
+import { Session } from 'meteor/session';
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 
-//var Tone = require("Tone");
-import Tone from "tone";
+import Tone from 'tone';
+
+UnmuteButton({ tone : Tone }); 
+//https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+
 
 //Session.setDefault('slider', [0.1, 0.6]);
 Session.setDefault('midinote', [20.0, 60.0]);
@@ -109,7 +113,7 @@ Template.ipsosboard.onCreated(function () {
 
     });
 
-    Template.ipsosboard.events({
+    Template.ipsosboard.events({ 
 
         'change #event-select'( event, tplInstance ) {
             const selectedElem = event.currentTarget.selectedOptions[ 0 ];
@@ -122,6 +126,9 @@ Template.ipsosboard.onCreated(function () {
         },
 
         'click .play': function(event, instance) {
+
+
+
             var synthParameters = getSynthParamsFromGui(instance);
             var chordMode;
 
