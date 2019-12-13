@@ -15,7 +15,7 @@
     "meteor-node-stubs": "~0.2.4",
     "node-gyp": "^3.8.0",
     "nouislider": "^11.1.0",
-    "npm": "^6.4.1",
+    "npm": "^6.13.4",
     "popper": "^1.0.1",
     "popper.js": "^1.14.3",
     "scale-value": "^1.0.0",
