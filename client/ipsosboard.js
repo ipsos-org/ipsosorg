@@ -11,13 +11,13 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Tone from "tone";
 
 //Session.setDefault('slider', [0.1, 0.6]);
-Session.setDefault('midinote', [20.0, 60.0]);
-Session.setDefault('attack', [0.01, 0.1]);
-Session.setDefault('decay', [0.1, 0.6]);
-Session.setDefault('sustain', [0.1, 0.6]);
-Session.setDefault('detune', [1.0, 50.0]);
-Session.setDefault('release', [0.1, 0.6]);
-Session.setDefault('duration', [0.1, 1.0]);
+Session.setDefault('midinote', [60.0, 84.0]);
+Session.setDefault('attack', [0.1, 2.0]);
+Session.setDefault('decay', [0.1, 1.0]);
+Session.setDefault('sustain', [0.2, 0.8]);
+Session.setDefault('detune', [0.0, 50.0]);
+Session.setDefault('release', [0.1, 1.0]);
+Session.setDefault('duration', [0.5, 3.0]);
 
 if (Meteor.isClient) {
 
