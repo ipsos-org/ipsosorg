@@ -74,7 +74,7 @@
 
 						CERN
 
-						BEER
+						The Birmingham Ensemble for Electroacoustic Research (BEER)
 
 						art@CMS
 
@@ -381,14 +381,14 @@
 
 							Sound synthesis is the technique of generating sound, using electronic hardware or software, from scratch. The most common use of synthesis is musical, where electronic instruments called synthesizers are used in the performance and recording of music.
 
-							Sound is the perceived vibration (oscillation) of air resulting from the vibration of a sound source. We can describe such regular (periodic) vibration in terms of the sum of simpler vibrations (harmonics). Periodic oscillation and hence resulting waveform can be described in terms of the sum of its harmonics. Each harmonic being a simple sine wave (often called a pure tone) with its own respective frequency and amplitude.
+							Sound is the perceived vibration (oscillation) of air resulting from the vibration of a sound source. Vibration at a regular (periodic) rate can be perceived as a pitch.  A common example of a pitch is the A note that orchestras tune to. This is called A440 as it corresponds to 440 cycles of vibration per second (its frequency). Sounds consisting of vibration at only one rate are called sine waves. In the real world, however, sounds usually consist of multiple vibrations. We can describe such complex sounds in terms of the sum of simpler vibrations (partials) at different rates and loudnesses (amplitude). Each partial is a simple sine wave (often called a pure tone) with its own respective frequency and amplitude.
 
 							<p align="center">
 								<img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Simple_harmonic_motion.png" style="background:none; border:none; box-shadow:none; min-width:900px; max-width:1900px;" title="Simple harmonic motion" width="60%">
 								<figcaption align="center" style="opacity:0.5; font-size:0.75em;"> <em>Image: Wikimedia Commons: Maksim</em></figcaption>
 							</p>
 
-							This oscillator creates sound through looping this waveform at a particular frequency. The shape of its waveform can change the sound produced which furthermore changes the timbre of the sound:
+							This oscillator creates sound through looping this waveform at a particular frequency. The shape of its waveform can change the sound produced which furthermore changes the timbre (tone colour) of the sound:
 
 							**1. Sine Wave**
 							<p align="center">
@@ -445,15 +445,15 @@
 
 							## ADSR envelope
 
-							An envelope describes how a sound changes over time. Using an ASDR envelope we can control and tailor the sound of the synthesizer as we prefer using the parameters below:
+							An envelope describes how a sound changes over time in terms of its amplitude (loudness). Different instruments have different shapes, with for example long, slow starts (like violins slowly fading in), or immediate ones with a slower fadeout (like a drum). Using an ASDR envelope we can control and tailor the sound of the synthesizer as we prefer using the parameters below:
 
-							+ **Attack** is the time taken for initial run-up of level from nil to peak, beginning when the key is pressed.
+							+ **Attack** is the time taken for initial run-up of level from silence to the loudest level.
 
-							+ **Decay** is the time taken for the subsequent run down from the attack level to the designated sustain level.
+							+ **Decay** is the time taken for the subsequent run down from the attack level to the designated sustain level after the initial attack.
 
-							+ **Sustain** is the level during the main sequence of the sound's duration, until the key is released.
+							+ **Sustain** is the level during the main sequence of the sound's duration. This corresponds to the held part of a sound in instruments such as strings or winds.
 
-							+ **Release** is the time taken for the level to decay from the sustain level to zero after the key is released.
+							+ **Release** is the time taken for the level to decay from the sustain level to silence after the note is released. This can be very quick, or fade away slowly, as in a bell for example.
 
 							While, attack, decay, and release refer to time, sustain refers to level.
 
@@ -487,13 +487,13 @@
 
 							+ **Detune**: This describes the effect heard when tuning one oscillator sharp or flat in respect to a second oscillator. This produces a fattening of the sound or it may produce a harmonic effect if the interval of the tuning is wide enough.
 
-							+ **Midinote**: Musical pitch (how low or high). Pitch of the pressed key with a value between 0 and 127.
+							+ **MIDInote**: Musical pitch (how low or high). Pitch of the pressed key with a value between 0 and 127. Higher values correspond to higher pitches. 'Middle C' on a piano is 60.
 
 							+ **Duration**: Amount of time a sound will play for.
 
-							+ **Chord**: Particles sounding simultaneously.
+							+ **Chord**: Sonify all particles simultaneously.
 
-							+ **Sequence**: Particles sounding separately.
+							+ **Sequence**: Sonify all particles one at a time in order, perhaps creating a melody or fragment.
 
 						</textarea>
 					</section>
@@ -513,9 +513,9 @@
 								<img src="https://upload.wikimedia.org/wikipedia/commons/c/c4/Scatter_plot.jpg" style="background:none; border:none; box-shadow:none; min-width:915px; max-width:1400px" title="Data visualization" width="50%">
 							</p>
 
-							Like the one in the above image, data visualisation displays, communicate information (the data) through visual means, e.g. charts, graphs, diagrams, etc. An auditory display is any display that uses sound instead of images (dots, lines, shapes, etc.) to demonstrate the data. Sonification is the transformation of data of any kind (numbers, images, text) into non-speech audio, to represent information.
+							Like the one in the above image, data visualisation displays communicate information (the data) through visual means, e.g. charts, graphs, diagrams, etc. An auditory display is any display that uses sound instead of images (dots, lines, shapes, etc.) to demonstrate the data. Sonification is the transformation of data of any kind (numbers, images, text) into non-speech audio, to represent information.
 
-							Human beings naturally have the superior capability to recognize changes and patterns in the different properties of sound through time, such as pitch (frequency), loudness, timbre, texture, etc. This is called Auditory Perception. Sonification, takes advantage of this ability and translates data relationships into changes in sound properties so that they could be understood by the listener.
+							Human beings naturally have a superior capability to recognize changes and patterns in the different properties of sound through time, such as pitch (frequency), loudness, timbre, texture, etc. This is called Auditory Perception. Sonification, takes advantage of this ability and translates data relationships into changes in sound properties so that they could be understood by the listener.
 
 							A very simple example of sonification is a doorbell! The information, which is the fact that someone is at the door, is being transformed into a distinctive sound so that whenever we hear it, we can immediately interpret and understand it.
 
@@ -616,11 +616,11 @@
 										</audio>
 
 
-								+ **Audification** is the most primary method of direct sonification, whereby waveforms are directly translated into sound. For example, seismic waves, travelling through the Earth’s crust as a result of the vibrations of the tectonic plates over an extended period of time, have been audified so that we can hear actual earthquakes! This approach may require that the waveforms be frequency- or time-shifted [sped up or slowed down] into the range of waveforms which humans can hear.
+								+ **Audification** is the most primary method of direct sonification, whereby waveforms are directly translated into sound. For example, seismic waves, travelling through the Earth’s crust as a result of the vibrations of the tectonic plates over an extended period of time, have been audified so that we can hear actual earthquakes! This approach may require that the waveforms be frequency- or time-shifted [sped up or slowed down] into the range of frequencies which humans can hear and percieve as pitches.
 
-								+ **Model-based sonification** is a more complex technique of sonification whereby using computer simulations, a virtual model of the data is built which produces sounds according to the relationships within the data, as the user interacts with it. A model, then, is like an instrument that the user ‘plays’ and their interaction drives the sonification.
+								+ **Model-based sonification** is a more complex technique of sonification  using computer simulations, whereby a virtual model of the data is built which produces sounds according to the relationships within the data, as the user interacts with it. A model, then, is like an instrument that the user ‘plays’ and their interaction drives the sonification.
 
-								+ **Parameter mapping sonification** represents changes in some dimension of the data with changes in an acoustic dimension (of sound) to produce a sonification. As we have already learned, synthesized sound, has a multitude of changeable dimensions or parameters such as waveform, pitch, duration, ADSR envelope parameters, etc.
+								+ **Parameter mapping sonification** represents changes in some dimension of the data with changes in an acoustic dimension (of sound) to produce a sonification. As we have already learned, synthesized sound has a multitude of changeable dimensions or parameters such as waveform, pitch, duration, ADSR envelope parameters, etc. This is the form of sonification which IPSOS uses.
 
 								<br>
 
@@ -628,7 +628,7 @@
 
 								Mapping or data-mapping is the process of creating direct/indirect relationships between two distinct datasets, whereby a change in one dataset would cause a relative change in the other.
 
-								Remember the earlier example of the sonification of the parabola graph? This is a parameter mapping sonification since the position parameter of y is directly mapped to the pitch of the sound. We can create a different mapping for the same parabola graph, this time to loudness (amplitude) of the sound, instead of its pitch.
+								Remember the earlier example of the sonification of the parabola graph? This is a parameter mapping sonification since the position parameter of y is directly mapped to the pitch of the sound. We can create a different mapping for the same parabola graph, this time to the loudness (amplitude) of the sound, instead of its pitch.
 
 								<p align="center">
 									<img src="media/Parabolic_graph_convex.png" style="background:none; border:none; box-shadow:none; min-width:750px; max-width:1000px" title="Parabolic arc" width="50%" height="auto">
@@ -654,13 +654,13 @@
 
 						 The term <em>topology</em> is used in many different fields of study and has a distinct meaning and application in each. However, in general mathematics, topology tells us how elements of one set relate spatially to each other.
 
-						 Now take for example, the sound produced from the state change of water in a whistling tea kettle as it approaches boiling point. With the rise of the water temperature, the frequency (pitch) of the whistling sound also increases until it reaches a point where the user knows it is time to turn off the stove and pour the boiling water into the teacup. Here, we have a simple **one-to-one mapping** between one parameter, which is the water temperature, and another which is sound frequency/pitch.
+						 Now take for example, the sound produced from the state change of water in a whistling tea kettle as it approaches boiling point. With the rise of the water temperature and increase in steam pressure, the frequency (pitch) of the whistling sound also increases until it reaches a point where the user knows it is time to turn off the stove and pour the boiling water into the teacup. Here, we have a simple **one-to-one mapping** between one parameter, which is the water temperature, and another which is sound frequency/pitch.
 
 						 <p align="center">
 							 <img src="media/onetoonemappnig.png" style="background:none; border:none; box-shadow:none; min-width:920px; max-width:1300px;" title="one-to-one mapping" width="45%">
 						 </p>
 
-						 One-to-one mappings are not the only kind of mapping data features to sound parameters. A second type, is mapping one data feature (the water temperature in the same example) to not one but multiple sound parameters at the same time. For instance, waveform, pitch and duration. This is known as **one-to-many** or **divergent mapping**
+						 One-to-one mappings are not the only kind of mapping data features to sound parameters. A second type, is mapping one data feature (e.g the steam pressure in the same example) to not one but multiple sound parameters at the same time. For instance, waveform, pitch and duration. This is known as **one-to-many** or **divergent mapping**
 
 						 <p align="center">
 							 <img src="media/onetomany.png" style="background:none; border:none; box-shadow:none; min-width:920px; max-width:1300px;" title="one-to-many mapping" width="45%">
@@ -708,7 +708,7 @@
 
 						 -	Jonathan Berger’s _Jiyeh_ (2008), maps the contours of oil dispersion patterns from a catastrophic oil spill in the Mediterranean Sea. Using a sequence of satellite images, the spread of the oil over a period of time was, sonified and scaled to provide a sense of the enormity of the environmental event.
 
-						 -	Chris Chafe’s _Tomato Quintet_ (2007, 2011) sonifies the ripening process of tomatoes. The ripening process mapped carbon dioxide, temperature and light readings from sensors in each vat to synthesis and processing parameters. Subsequently, the duration of the resulting sonification was accelerated to different time scales.
+						 -	Chris Chafe’s _Tomato Quintet_ (2007, 2011) sonifies the ripening process of tomatoes. The sonification process mapped carbon dioxide, temperature and light readings from sensors in each vat to synthesis and processing parameters. Subsequently, the duration of the resulting sonification was accelerated to different time scales.
 					 </textarea>
 				 </section>
 				 <section data-markdown style="text-align: center;" data-menu-title="Mapping in the app">
@@ -736,13 +736,13 @@
 				 	<section id="instructions" data-markdown style="text-align: left;" data-menu-title="The instructions">
 						<textarea data-template>
 
-							1. Choose a Collision Event. There is a drop down menu of 14 events to choose from.
+							1. Choose a Collision Event. There is a drop down menu of events to choose from.
 
-							2. Choose which parameters are addressed to the constituents of each particle. There will be different numbers of particles for each collision.
+							2. Choose which synthesis parameters are addressed to the constituents of each particle. There will be different numbers of particles for each collision, and they may be of different types (e.g. electron or muon)
 
-							3. Choose whether this is to be played as a chord or sequence.
+							3. Choose whether this sonification is to be played as a chord or sequence.
 
-							4. Choose synth type:
+							4. Choose the synth type:
 
 								4.1 Sine <br>
 								4.2 Square <br>
@@ -753,7 +753,7 @@
 
 							6. Press STOP to stop the sound.
 
-							7. Change the parameters to the following:
+							7. Adjust the mapping range of parameters for the following:
 
 								7.1 Attack<br>
 								7.2 Decay<br>
@@ -769,7 +769,7 @@
 
 							10. Create up to 9 sounds. Press the buttons to start to create a rhythm, combination, music sequence from the sounds. You can also use the corresponding keyboard number buttons (1-9) to trigger the sounds.
 
-							<br><strong>NOTE</strong>&#58; You can currently overwrite the sounds chronologically.
+							<br><strong>NOTE</strong>&#58; You can currently overwrite the sounds in order if you go over nine.
 
 							<p align="center">
 								<br>
@@ -821,7 +821,7 @@
 
 							**Activity 4: Practice**
 
- 							- Practice a series of run through’s of the performance. Consider using a tablet/laptop and moving around whilst performing to mirror colliding particles.
+ 							- Practice a series of run throughs of the performance. Consider using a tablet/laptop and moving around whilst performing to mirror colliding particles.
 							<p><br></p>
 
 							----
@@ -845,7 +845,7 @@
 								<br><br>
 								<a href="http://www.beast.bham.ac.uk/offspring/beer/" target="_blank">BEER</a>
 								<br><br>
-								<a href="http://www.beast.bham.ac.uk/offspring/beer/" target="_blank">Dark Matter Project</a>
+								<a href="http://konvas.github.io/DarkMatter/" target="_blank">Dark Matter Project</a>
 								<br><br><br>
 								<a href="#/home">Back to start</a>
 
