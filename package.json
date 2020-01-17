@@ -7,7 +7,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.38",
     "babel-runtime": "^6.26.0",
-    "bootstrap": "^4.1.0",
+    "bootstrap": "^4.4.1",
     "core-js": "^2.5.3",
     "gulp": "^4.0.0",
     "gulp-cli": "^2.0.1",
@@ -19,7 +19,7 @@
     "popper": "^1.0.1",
     "popper.js": "^1.14.3",
     "scale-value": "^1.0.0",
-    "tone": "0.12.80",
+    "tone": "^0.12.80",
     "vue": "^1.0.24",
     "vue-json-tree-view": "^2.1.1",
     "vue-meteor-tracker": "^1.0.3"
