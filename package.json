@@ -12,6 +12,7 @@
     "gulp": "^4.0.0",
     "gulp-cli": "^2.0.1",
     "ion-rangeslider": "^2.2.0",
+    "js-yaml": "^3.13.1",
     "meteor-node-stubs": "~0.2.4",
     "node-gyp": "^3.8.0",
     "nouislider": "^11.1.0",
