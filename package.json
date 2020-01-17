@@ -9,6 +9,7 @@
     "babel-runtime": "^6.26.0",
     "bootstrap": "^4.4.1",
     "core-js": "^2.5.3",
+    "extend": "^3.0.2",
     "gulp": "^4.0.0",
     "gulp-cli": "^2.0.1",
     "ion-rangeslider": "^2.2.0",
