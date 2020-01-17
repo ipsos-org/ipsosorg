@@ -122,9 +122,9 @@ Template.ipsosboard.rendered = function () {
         Session.set(this.id, [val[0], val[1]]);
     });
 
-    var decay = Session.get('attack');
-    $('#decay-low').text(attack[0]);
-    $('#decay-high').text(attack[1]);
+    var decay = Session.get('decay');
+    $('#decay-low').text(decay[0]);
+    $('#decay-high').text(decay[1]);
 
     this.$("#decay").noUiSlider({
         start: decay,
